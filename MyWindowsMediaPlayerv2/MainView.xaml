@@ -10,7 +10,7 @@
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
-    <Grid KeyDown="KeyHandler" Margin="-1,0,1.4,-0.2">
+    <Grid KeyDown="KeyHandler">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -25,9 +25,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ContentControl x:Name="MediaViewer" Grid.Row="0" Grid.Column="0" Content="{Binding Display}"/>
-            <ContentControl x:Name="ExternalView" Grid.Row="0"  Grid.Column="1" Content="{Binding ExternalExternalView}" HorizontalAlignment="Right"/>
+            <ContentControl x:Name="MediaViewer" Grid.Row="0" Grid.Column="0" Content="{Binding Path=Display}"/>
+            <ContentControl x:Name="ExternalView" Grid.Row="0"  Grid.Column="1" Content="{Binding Path=ExternalView}" HorizontalAlignment="Right"/>
         </Grid>
-        <ContentControl x:Name="ToolBar" Grid.Row="2" Grid.Column="0" Content="{Binding ToolBar}" VerticalAlignment="Bottom"/>
+        <ContentControl x:Name="ToolBar" Grid.Row="2" Grid.Column="0" Content="{Binding Path=ToolBar}" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

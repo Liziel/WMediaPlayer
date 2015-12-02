@@ -49,16 +49,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ClassicToolbar.xaml">
+    <Page Include="ClassicToolbarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ClassicToolbar.xaml.cs">
-      <DependentUpon>ClassicToolbar.xaml</DependentUpon>
+    <Compile Include="ClassicToolbarView.xaml.cs">
+      <DependentUpon>ClassicToolbarView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassicToolbarModelView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

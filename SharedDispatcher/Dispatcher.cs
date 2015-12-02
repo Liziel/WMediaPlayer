@@ -11,9 +11,9 @@ namespace SharedDispatcher
         }
 
         /// <summary>
-        /// EventsConsummers is the map where are stocked all event listeners
+        /// _eventsConsummers is the map where are stocked all event listeners
         /// </summary>
-        internal List<Consumer> EventsConsummers = new List<Consumer>();
+        private List<Consumer> _eventsConsummers = new List<Consumer>();
 
 
         /// <summary>
@@ -26,24 +26,30 @@ namespace SharedDispatcher
         public void AddEventListener(Consumer consumer)
         {
             if (consumer == null) throw new ArgumentNullException(nameof(consumer));
-            EventsConsummers.Add(consumer);
+            _eventsConsummers.Add(consumer);
         }
 
         public void RemoveEnventListener(Consumer consumer)
         {
             if (consumer == null) throw new ArgumentNullException(nameof(consumer));
-            EventsConsummers.Remove(consumer);
+            _eventsConsummers.Remove(consumer);
         }
 
-        public void Dispatch(Dispatchable dispatchable)
+        public void Dispatch(string _event, params object[] fwdparams)
         {
-            if (dispatchable == null) throw new ArgumentNullException(nameof(dispatchable));
-            foreach (var consumer in EventsConsummers)
-                (from methods in consumer.GetType().GetMethods()
-                    where
-                        methods.Name == "On" + dispatchable.Name &&
-                        methods.GetParameters().Length == dispatchable.ParamsList.Length
-                    select methods)?.Single().Invoke(consumer, dispatchable.ParamsList);
+            foreach (var consumer in _eventsConsummers)
+                if (consumer.Forward == null)
+                    consumer.GetType().GetMethod("On" + _event)?.Invoke(consumer, fwdparams);
+                else
+                    consumer.Forward.GetType().GetMethod("On" + _event)?.Invoke(consumer.Forward, fwdparams);
+        }
+
+        public void Dispatch(Consumer consumer, string _event, params object[] fwdparams)
+        {
+            if (consumer.Forward == null)
+                consumer.GetType().GetMethod("On" + _event)?.Invoke(consumer, fwdparams);
+            else
+                consumer.Forward.GetType().GetMethod("On" + _event)?.Invoke(consumer.Forward, fwdparams);
         }
     }
 }

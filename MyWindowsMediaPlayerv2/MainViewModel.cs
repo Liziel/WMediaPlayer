@@ -20,13 +20,13 @@ namespace MyWindowsMediaPlayerv2
             private Configuration.PluginConfiguration _pluginConfiguration;
 
             [ImportMany(typeof (IToolBar), AllowRecomposition = true)]
-            public List<Lazy<IToolBar>> ListToolBars { get; set; }
+            private List<Lazy<IToolBar>> ListToolBars { get; set; }
 
             [ImportMany(typeof (IMediaDisplay), AllowRecomposition = true)]
-            public IEnumerable<Lazy<IMediaDisplay>> ListMediaDisplays { get; set; }
+            private IEnumerable<Lazy<IMediaDisplay>> ListMediaDisplays { get; set; }
 
             [ImportMany(typeof (IExternalView), AllowRecomposition = true)]
-            public IEnumerable<Lazy<IExternalView>> ListExternalViews { get; set; }
+            private IEnumerable<Lazy<IExternalView>> ListExternalViews { get; set; }
 
             #endregion
 
@@ -40,7 +40,7 @@ namespace MyWindowsMediaPlayerv2
                 private set
                 {
                     _display = value;
-                    RaisePropertyChanged(nameof(Display));
+                    OnPropertyChanged(nameof(Display));
                 }
             }
 
@@ -52,7 +52,7 @@ namespace MyWindowsMediaPlayerv2
                 private set
                 {
                     _toolbar = value;
-                    RaisePropertyChanged(nameof(ToolBar));
+                    OnPropertyChanged(nameof(ToolBar));
                 }
             }
 
@@ -64,7 +64,7 @@ namespace MyWindowsMediaPlayerv2
                 private set
                 {
                     _externalView = value;
-                    RaisePropertyChanged(nameof(ExternalView));
+                    OnPropertyChanged(nameof(ExternalView));
                 }
             }
 
@@ -78,15 +78,14 @@ namespace MyWindowsMediaPlayerv2
 
             #region Methods
 
-            public void SetupBaseConfiguration()
+            private void SetupBaseConfiguration()
             {
                 _pluginConfiguration = new Configuration.PluginConfiguration();
                 Display = ListMediaDisplays.FirstOrDefault(i => i.Value.Name == _pluginConfiguration.MediaViewPlugin)?.Value;
-                ToolBar = ListToolBars.FirstOrDefault(i => i.Value.Name == _pluginConfiguration.ToolBarPlugin)?.Value;
-                System.Diagnostics.Debug.WriteLine("ToolBars dll :" + ListToolBars.Count);
+                ToolBar = ListToolBars.FirstOrDefault(i => i.Value.ToolbarName == _pluginConfiguration.ToolBarPlugin)?.Value;
             }
 
-            public void LoadPlugin(string path, string pattern)
+            private void LoadPlugin(string path, string pattern)
             {
                 DirectoryCatalog directoryCatalog = new DirectoryCatalog(path, pattern);
                 if (!Directory.Exists(path))
@@ -103,7 +102,7 @@ namespace MyWindowsMediaPlayerv2
             #endregion
 
             [NotifyPropertyChangedInvocator]
-            protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+            private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }

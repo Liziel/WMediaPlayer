@@ -11,7 +11,8 @@ namespace SharedProperties
     {
         public interface IToolBar
         {
-            string Name { get; }
+
+            string ToolbarName { get; }
         }
     }
 }
