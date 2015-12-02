@@ -1,0 +1,33 @@
+﻿<Window x:Class="MyWindowsMediaPlayerv2.MediaControlView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:myWindowsMediaPlayerv2="clr-namespace:MyWindowsMediaPlayerv2"
+        xmlns:viewModel="clr-namespace:MyWindowsMediaPlayerv2.ViewModel"
+        mc:Ignorable="d"
+        Title="MediaPlayer" Height="350" Width="525">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+    <Grid KeyDown="KeyHandler" Margin="-1,0,1.4,-0.2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ContentControl x:Name="MenuBar" Grid.Row="0" Grid.Column="0" Content="MenuBar"/>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ContentControl x:Name="MediaViewer" Grid.Row="0" Grid.Column="0" Content="{Binding Display}"/>
+            <ContentControl x:Name="ExternalView" Grid.Row="0"  Grid.Column="1" Content="{Binding ExternalExternalView}" HorizontalAlignment="Right"/>
+        </Grid>
+        <ContentControl x:Name="ToolBar" Grid.Row="2" Grid.Column="0" Content="{Binding ToolBar}" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>
