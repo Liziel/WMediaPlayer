@@ -6,7 +6,7 @@
         xmlns:myWindowsMediaPlayerv2="clr-namespace:MyWindowsMediaPlayerv2"
         xmlns:viewModel="clr-namespace:MyWindowsMediaPlayerv2.ViewModel"
         mc:Ignorable="d"
-        Title="MediaPlayer" Height="350" Width="525">
+        Title="MediaPlayer" Height="350" Width="525" Background="Black">
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
