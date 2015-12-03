@@ -47,13 +47,13 @@
             <StatusBarItem Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
                     <StackPanel  Orientation="Horizontal">
                         <Button Command="MediaCommands.Pause">
-                            <Image Source="break.png" Height="30" Width="30"/>
+                            <Image Source="Textures/break.png" Height="30" Width="30"/>
                         </Button>
                         <Button Command="MediaCommands.Play">
-                            <Image Source="play.png" Height="50" Width="50" />
+                            <Image Source="Textures/play.png" Height="50" Width="50" />
                         </Button>
                         <Button Command="MediaCommands.Stop">
-                            <Image Source="stop.png"  Height="30" Width="30"/>
+                            <Image Source="Textures/stop.png"  Height="30" Width="30"/>
                         </Button>
                         <StatusBarItem >
                             <Image Source="W:/WpfApplication1/buttons/volume.png" Height="30" Width="30" />

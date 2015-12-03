@@ -96,14 +96,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="break.png" />
-    <Resource Include="fullscreen.png" />
-    <Resource Include="micro.png" />
-    <Resource Include="nextStep.png" />
-    <Resource Include="open.png" />
-    <Resource Include="play.png" />
-    <Resource Include="stop.png" />
-    <Resource Include="volume.png" />
+    <Resource Include="Textures\fullscreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\micro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\nextStep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\volume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Textures\break.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

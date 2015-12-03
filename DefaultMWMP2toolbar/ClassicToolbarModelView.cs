@@ -14,5 +14,6 @@ namespace DefaultMWMP2toolbar
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
