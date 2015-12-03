@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWindowsMediaPlayerv2", "MyWindowsMediaPlayerv2\MyWindowsMediaPlayerv2.csproj", "{2E4D771A-13F4-4381-87A8-EEE7C9CEDD53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E96ABC2-29CF-4D7E-A0C7-554E63CE37F4} = {7E96ABC2-29CF-4D7E-A0C7-554E63CE37F4}
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00} = {7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F85FC2FE-2512-400B-95A8-401D10F51C04}"
 EndProject
