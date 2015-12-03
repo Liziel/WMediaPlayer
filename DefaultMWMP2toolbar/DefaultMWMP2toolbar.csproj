@@ -95,6 +95,16 @@
       <Name>SharedProperties</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="break.png" />
+    <Resource Include="fullscreen.png" />
+    <Resource Include="micro.png" />
+    <Resource Include="nextStep.png" />
+    <Resource Include="open.png" />
+    <Resource Include="play.png" />
+    <Resource Include="stop.png" />
+    <Resource Include="volume.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
