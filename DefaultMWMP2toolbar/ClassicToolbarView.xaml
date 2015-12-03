@@ -50,14 +50,14 @@
                 <Button IsEnabled="False">
                 <Button.Template>
                     <ControlTemplate>
-                        <Image Source="random.png" Height="30" Width="30" />
+                        <Image Source="Textures/random.png" Height="30" Width="30" />
                     </ControlTemplate>
                 </Button.Template>
                 </Button>
                 <Button Command="MediaCommands.Play">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="repeat.png" Height="30" Width="30" />
+                            <Image Source="Textures/repeat.png" Height="30" Width="30" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
@@ -69,7 +69,7 @@
                 <Button Command="MediaCommands.Stop">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="stop.png" Height="30" Width="30" />
+                            <Image Source="Textures/stop.png" Height="30" Width="30" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
@@ -81,21 +81,21 @@
                 <Button Command="MediaCommands.Pause" IsEnabled="False">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="lastStep.png" Height="30" Width="30" />
+                            <Image Source="Textures/lastStep.png" Height="30" Width="30" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
                 <Button Command="MediaCommands.Play">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="play.png" Height="60" Width="60" /> <!-- ici debrouille toi pr alterner entre play et break -->
+                            <Image Source="Textures/play.png" Height="60" Width="60" /> <!-- ici debrouille toi pr alterner entre play et break -->
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
                 <Button Command="MediaCommands.Stop">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="nextStep.png" Height="30" Width="30" />
+                            <Image Source="Textures/nextStep.png" Height="30" Width="30" />
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
