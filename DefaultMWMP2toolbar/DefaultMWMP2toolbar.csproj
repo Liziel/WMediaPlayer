@@ -119,6 +119,15 @@
   <ItemGroup>
     <Resource Include="Textures\break.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="random.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="lastStep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="repeat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
