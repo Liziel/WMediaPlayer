@@ -11,6 +11,7 @@
         <viewModel:MainViewModel/>
     </Window.DataContext>
     <Grid KeyDown="KeyHandler">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -19,13 +20,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <ContentControl x:Name="MenuBar" Grid.Row="0" Grid.Column="0" Content="MenuBar"/>
         <Grid Grid.Row="1" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ContentControl x:Name="MediaViewer" Grid.Row="0" Grid.Column="0" Content="{Binding Path=Display}"/>
+            <ContentControl x:Name="MediaViewer" Grid.Row="0" Grid.Column="0" Content="{Binding Path=ViewerPackage}"/>
             <ContentControl x:Name="ExternalView" Grid.Row="0"  Grid.Column="1" Content="{Binding Path=ExternalView}" HorizontalAlignment="Right"/>
         </Grid>
         <ContentControl x:Name="ToolBar" Grid.Row="2" Grid.Column="0" Content="{Binding Path=ToolBar}" VerticalAlignment="Bottom"/>

@@ -20,10 +20,11 @@ namespace MyWindowsMediaPlayerv2
             private Configuration.PluginConfiguration _pluginConfiguration;
 
             [ImportMany(typeof (IToolBar), AllowRecomposition = true)]
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             private List<Lazy<IToolBar>> ListToolBars { get; set; }
 
-            [ImportMany(typeof (IMediaDisplay), AllowRecomposition = true)]
-            private IEnumerable<Lazy<IMediaDisplay>> ListMediaDisplays { get; set; }
+            [ImportMany(typeof (IMediaViewerPackage), AllowRecomposition = true)]
+            private IEnumerable<Lazy<IMediaViewerPackage>> ListMediaDisplays { get; set; }
 
             [ImportMany(typeof (IExternalView), AllowRecomposition = true)]
             private IEnumerable<Lazy<IExternalView>> ListExternalViews { get; set; }
@@ -32,15 +33,15 @@ namespace MyWindowsMediaPlayerv2
 
             #region WPFContent
 
-            private IMediaDisplay _display = null;
+            private IMediaViewerPackage _viewerPackage = null;
 
-            public IMediaDisplay Display
+            public IMediaViewerPackage ViewerPackage
             {
-                get { return _display; }
+                get { return _viewerPackage; }
                 private set
                 {
-                    _display = value;
-                    OnPropertyChanged(nameof(Display));
+                    _viewerPackage = value;
+                    OnPropertyChanged(nameof(ViewerPackage));
                 }
             }
 
@@ -81,7 +82,7 @@ namespace MyWindowsMediaPlayerv2
             private void SetupBaseConfiguration()
             {
                 _pluginConfiguration = new Configuration.PluginConfiguration();
-                Display = ListMediaDisplays.FirstOrDefault(i => i.Value.Name == _pluginConfiguration.MediaViewPlugin)?.Value;
+                ViewerPackage = ListMediaDisplays.FirstOrDefault(i => i.Value.MediaViewerPackageName == _pluginConfiguration.MediaViewPlugin)?.Value;
                 ToolBar = ListToolBars.FirstOrDefault(i => i.Value.ToolbarName == _pluginConfiguration.ToolBarPlugin)?.Value;
             }
 

@@ -1,13 +1,18 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using DefaultMWMP2toolbar.Annotations;
+using SharedDispatcher;
 
 namespace DefaultMWMP2toolbar
 {
-    public class ClassicToolbarModelView
+    public class ClassicToolbarModelView : Listener, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public ClassicToolbarModelView()
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

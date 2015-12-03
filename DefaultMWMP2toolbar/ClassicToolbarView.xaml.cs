@@ -12,7 +12,6 @@ namespace DefaultMWMP2toolbar
         public ClassicToolbarView()
         {
             InitializeComponent();
-            var modelview = (ClassicToolbarModelView) DataContext;
             ToolbarName = "DefaultMWMP2toolbar";
         }
 

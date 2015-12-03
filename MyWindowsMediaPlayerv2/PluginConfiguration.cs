@@ -27,7 +27,6 @@ namespace MyWindowsMediaPlayerv2
                 }
                 return xmlDocument.InnerXml;
             }
-
             private static PluginConfiguration      Deserialize(string xmlString)
             {
                 XmlSerializer oXmlSerializer = new XmlSerializer( typeof (PluginConfiguration) );
