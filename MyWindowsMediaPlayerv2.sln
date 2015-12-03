@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultMWMP2toolbar", "Defa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedDispatcher", "SharedDispatcher\SharedDispatcher.csproj", "{48E9024E-1FE5-4403-9ED1-581E1484DC7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultMWMP2MediaView", "DefaultMWMP2MediaView\DefaultMWMP2MediaView.csproj", "{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,11 +41,16 @@ Global
 		{48E9024E-1FE5-4403-9ED1-581E1484DC7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48E9024E-1FE5-4403-9ED1-581E1484DC7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48E9024E-1FE5-4403-9ED1-581E1484DC7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7E96ABC2-29CF-4D7E-A0C7-554E63CE37F4} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
+		{7B3EA6FE-1F3B-44D4-B522-87A5CD8AFA00} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
 	EndGlobalSection
 EndGlobal
