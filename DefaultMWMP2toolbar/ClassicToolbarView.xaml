@@ -9,7 +9,7 @@
     <UserControl.DataContext>
         <local:ClassicToolbarModelView />
     </UserControl.DataContext>
-    <Grid Background="Fuchsia">
+    <Grid Background="Black">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -19,6 +19,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- barre lecture et timers -->
         <StatusBar Grid.Row="0" Grid.Column="0">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -31,29 +32,78 @@
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-
-            <StatusBarItem>
+            <StatusBarItem Grid.Column="0">
                 <TextBlock Name="lblProgressStatus">00:00:00</TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
                 <Slider Name="sliProgress" />
             </StatusBarItem>
-            <StatusBarItem>
+            <StatusBarItem Grid.Column="2">
                 <TextBlock Name="lblMediaDuration">00:00:00</TextBlock>
             </StatusBarItem>
         </StatusBar>
 
+        <!-- boutons d'actions -play, stop...- -->
         <StatusBarItem Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Button Command="MediaCommands.Pause">
-                    <Image Source="break.png" Height="30" Width="30" />
+
+                <Button IsEnabled="False">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Image Source="random.png" Height="30" Width="30" />
+                    </ControlTemplate>
+                </Button.Template>
                 </Button>
                 <Button Command="MediaCommands.Play">
-                    <Image Source="play.png" Height="50" Width="50" />
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="repeat.png" Height="30" Width="30" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+
+                <Button Command="MediaCommands.Stop">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="stop.png" Height="30" Width="30" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+
+                <Button Command="MediaCommands.Pause" IsEnabled="False">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="lastStep.png" Height="30" Width="30" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Command="MediaCommands.Play">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="play.png" Height="60" Width="60" /> <!-- ici debrouille toi pr alterner entre play et break -->
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
                 <Button Command="MediaCommands.Stop">
-                    <Image Source="stop.png" Height="30" Width="30" />
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="nextStep.png" Height="30" Width="30" />
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
+
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+
                 <StatusBarItem>
                     <Image Source="volume.png" Height="30" Width="30" />
                 </StatusBarItem>
