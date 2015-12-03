@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SharedDispatcher
 {
@@ -13,43 +12,35 @@ namespace SharedDispatcher
         /// <summary>
         /// _eventsConsummers is the map where are stocked all event listeners
         /// </summary>
-        private List<Consumer> _eventsConsummers = new List<Consumer>();
+        private readonly List<Listener> _eventsConsummers = new List<Listener>();
 
 
         /// <summary>
-        /// _instance is a singleton pattern
+        /// _instance for a singleton pattern
         /// </summary>
         public static Dispatcher GetInstance => _instance ?? (_instance = new Dispatcher());
-
         private static Dispatcher _instance;
 
-        public void AddEventListener(Consumer consumer)
+        internal void AddEventListener(Listener listener)
         {
-            if (consumer == null) throw new ArgumentNullException(nameof(consumer));
-            _eventsConsummers.Add(consumer);
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
+            _eventsConsummers.Add(listener);
         }
-
-        public void RemoveEnventListener(Consumer consumer)
+        internal void RemoveEnventListener(Listener listener)
         {
-            if (consumer == null) throw new ArgumentNullException(nameof(consumer));
-            _eventsConsummers.Remove(consumer);
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
+            _eventsConsummers.Remove(listener);
         }
 
         public void Dispatch(string _event, params object[] fwdparams)
         {
             foreach (var consumer in _eventsConsummers)
-                if (consumer.Forward == null)
-                    consumer.GetType().GetMethod("On" + _event)?.Invoke(consumer, fwdparams);
-                else
-                    consumer.Forward.GetType().GetMethod("On" + _event)?.Invoke(consumer.Forward, fwdparams);
+                consumer.DispatchInternal(_event, fwdparams);
         }
 
-        public void Dispatch(Consumer consumer, string _event, params object[] fwdparams)
+        public void Dispatch(Listener target, string _event, params object[] fwdparams)
         {
-            if (consumer.Forward == null)
-                consumer.GetType().GetMethod("On" + _event)?.Invoke(consumer, fwdparams);
-            else
-                consumer.Forward.GetType().GetMethod("On" + _event)?.Invoke(consumer.Forward, fwdparams);
+            target.DispatchInternal(_event, fwdparams);
         }
     }
 }
