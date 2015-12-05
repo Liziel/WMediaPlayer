@@ -13,23 +13,40 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SharedProperties.Interfaces;
+using SharedDispatcher;
+using SharedProperties.Customization;
 
 namespace DefaultMWMP2MediaView
 {
     /// <summary>
     /// Interaction logic for MediaViewer.xaml
     /// </summary>
-    [Export(typeof(IMediaViewerPackage))]
-    public partial class MediaViewer : UserControl, IMediaViewerPackage
+    [Export(typeof(IPlugin))]
+    public partial class MediaViewer : UserControl, IPlugin, IForwardDispatcher
     {
-        public string MediaViewerPackageName { get; }
+        #region IForwardDispatcher Implementation
 
+        public List<object> ForwardListeners { get; }
+
+        #endregion
+
+        #region Constructor
 
         public MediaViewer()
         {
             InitializeComponent();
-            MediaViewerPackageName = "DefaultMWMP2mediaview";
+            ForwardListeners = new List<object>() {this.DataContext};
         }
+
+        #endregion
+
+        #region IPlugin Implementation
+
+        public Position Position { get; } = Position.Center;
+        public bool Optional { get; } = false;
+        public string PluginName { get; } = nameof(MediaViewer);
+        public Uri PluginIcon { get; } = null;
+
+        #endregion
     }
 }

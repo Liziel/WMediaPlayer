@@ -1,20 +1,42 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using SharedDispatcher;
+using SharedProperties.Customization;
 
 namespace DefaultMWMP2toolbar
 {
     /// <summary>
     /// Interaction logic for ClassicToolbarView.xaml
     /// </summary>
-    [Export(typeof(SharedProperties.Interfaces.IToolBar))]
-    public partial class ClassicToolbarView : UserControl, SharedProperties.Interfaces.IToolBar
+    [Export(typeof(IPlugin))]
+    public partial class ClassicToolbarView : UserControl, IPlugin, IForwardDispatcher
     {
+        #region IForwardDispatcher Implementation
+
+        public List<object> ForwardListeners { get; }
+
+        #endregion
+
+        #region Constructor
+
         public ClassicToolbarView()
         {
             InitializeComponent();
-            ToolbarName = "DefaultMWMP2toolbar";
+            ForwardListeners = new List<object>() {this.DataContext};
         }
 
-        public string ToolbarName { get; }
+        #endregion
+
+
+        #region IPlugin Implementation
+
+        public Position Position { get; } = Position.Bottom;
+        public bool Optional { get; } = false;
+        public string PluginName { get; } = nameof(ClassicToolbarView);
+        public Uri PluginIcon { get; } = null;
+
+        #endregion
     }
 }

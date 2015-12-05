@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Web;
 using DefaultMWMP2MediaView.Annotations;
 using SharedDispatcher;
 
@@ -12,6 +14,7 @@ namespace DefaultMWMP2MediaView
 
         private object _currentViewModel;
 
+        [ForwardDispatch]
         public object CurrentViewModel
         {
             get { return _currentViewModel; }
@@ -36,14 +39,21 @@ namespace DefaultMWMP2MediaView
 
         #endregion
 
-        public MediaViewerModel()
+        public MediaViewerModel() : base()
         {
             this.CurrentViewModel = new StaticViewModel();
         }
 
         [EventHook("Media Opening")]
-        void OnMediaLoad(Uri media)
+        public void OnMediaLoad(Uri media)
         {
+            this.CurrentViewModel = new MediaDisplayViewModel(media);
+        }
+
+        [EventHook("Media Closing")]
+        public void OnMediaClose()
+        {
+            this.CurrentViewModel = new StaticViewModel();
         }
     }
 }

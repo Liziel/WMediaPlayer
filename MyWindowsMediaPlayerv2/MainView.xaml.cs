@@ -14,10 +14,5 @@ namespace MyWindowsMediaPlayerv2
         {
             InitializeComponent();
         }
-
-        private void KeyHandler(object sender, KeyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

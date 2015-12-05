@@ -85,10 +85,10 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Command="MediaCommands.Play">
+                <Button Command="{Binding Path=PlayPause}">
                     <Button.Template>
                         <ControlTemplate>
-                            <Image Source="Textures/play.png" Height="60" Width="60" /> <!-- ici debrouille toi pr alterner entre play et break -->
+                            <Image Source="{Binding Path=ImageSource}" Height="60" Width="60" /> <!-- ici debrouille toi pr alterner entre play et break -->
                         </ControlTemplate>
                     </Button.Template>
                 </Button>

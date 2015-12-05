@@ -7,65 +7,69 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using MyWindowsMediaPlayerv2.Annotations;
-using SharedProperties.Interfaces;
+using SharedDispatcher;
+using SharedProperties.Customization;
 
 namespace MyWindowsMediaPlayerv2
 {
     namespace ViewModel
     {
-        class MainViewModel : INotifyPropertyChanged
+        class MainViewModel : Listener, INotifyPropertyChanged
         {
-            #region PluginsList
+            #region Models
+            private PluginManager _pluginManager = new PluginManager();
+            #endregion
 
-            private Configuration.PluginConfiguration _pluginConfiguration;
+            #region WPF Plugins
 
-            [ImportMany(typeof (IToolBar), AllowRecomposition = true)]
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            private List<Lazy<IToolBar>> ListToolBars { get; set; }
+            private IPlugin _rightView;
+            [ForwardDispatch]
+            public IPlugin RightView { get { return _rightView; } set { _rightView = value; OnPropertyChanged(nameof(RightView)); } }
 
-            [ImportMany(typeof (IMediaViewerPackage), AllowRecomposition = true)]
-            private IEnumerable<Lazy<IMediaViewerPackage>> ListMediaDisplays { get; set; }
+            private IPlugin _leftView;
+            [ForwardDispatch]
+            public IPlugin LeftView { get { return _leftView; } set { _leftView = value; OnPropertyChanged(nameof(LeftView)); } }
 
-            [ImportMany(typeof (IExternalView), AllowRecomposition = true)]
-            private IEnumerable<Lazy<IExternalView>> ListExternalViews { get; set; }
+            private IPlugin _topView;
+            [ForwardDispatch]
+            public IPlugin TopView { get { return _topView; } set { _topView = value; OnPropertyChanged(nameof(TopView)); } }
+
+            private IPlugin _bottomView;
+            [ForwardDispatch]
+            public IPlugin BottomView { get { return _bottomView; } set { _bottomView = value; OnPropertyChanged(nameof(BottomView)); } }
+
+            private IPlugin _centerView;
+            [ForwardDispatch]
+            public IPlugin CenterView { get { return _centerView; } set { _centerView = value; OnPropertyChanged(nameof(CenterView)); } }
+
+            [CollectionForwardDispatch]
+            public List<IPlugin> HiddenPlugins { get; } = new List<IPlugin>();
 
             #endregion
 
-            #region WPFContent
+            #region Wpf Visibility
 
-            private IMediaViewerPackage _viewerPackage = null;
+            private string _windowState = "normal";
 
-            public IMediaViewerPackage ViewerPackage
+            public string WindowState
             {
-                get { return _viewerPackage; }
-                private set
+                get { return _windowState; }
+                set
                 {
-                    _viewerPackage = value;
-                    OnPropertyChanged(nameof(ViewerPackage));
+                    _windowState = value;
+                    OnPropertyChanged(nameof(WindowState));
                 }
             }
 
-            private IToolBar _toolbar = null;
+            private string _windowStyle = "SingleBorderWindow";
 
-            public IToolBar ToolBar
+            public string WindowStyle
             {
-                get { return _toolbar; }
-                private set
+                get { return _windowStyle; }
+                set
                 {
-                    _toolbar = value;
-                    OnPropertyChanged(nameof(ToolBar));
-                }
-            }
-
-            private IExternalView _externalView = null;
-
-            public IExternalView ExternalView
-            {
-                get { return _externalView; }
-                private set
-                {
-                    _externalView = value;
-                    OnPropertyChanged(nameof(ExternalView));
+                    _windowStyle = value;
+                    OnPropertyChanged(nameof(WindowStyle));
                 }
             }
 
@@ -75,38 +79,36 @@ namespace MyWindowsMediaPlayerv2
 
             public event PropertyChangedEventHandler PropertyChanged;
 
-            #endregion
-
-            #region Methods
-
-            private void SetupBaseConfiguration()
-            {
-                _pluginConfiguration = new Configuration.PluginConfiguration();
-                ViewerPackage = ListMediaDisplays.FirstOrDefault(i => i.Value.MediaViewerPackageName == _pluginConfiguration.MediaViewPlugin)?.Value;
-                ToolBar = ListToolBars.FirstOrDefault(i => i.Value.ToolbarName == _pluginConfiguration.ToolBarPlugin)?.Value;
-            }
-
-            private void LoadPlugin(string path, string pattern)
-            {
-                DirectoryCatalog directoryCatalog = new DirectoryCatalog(path, pattern);
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                AttributedModelServices.ComposeParts(new CompositionContainer(directoryCatalog), this);
-            }
-
-            public MainViewModel()
-            {
-                LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
-                SetupBaseConfiguration();
-            }
-
-            #endregion
-
             [NotifyPropertyChangedInvocator]
             private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
+
+            #endregion
+
+            #region Constructor
+
+            public MainViewModel()
+            {
+                _pluginManager.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
+
+                CenterView = _pluginManager.SingleQuery(Position.Center, false);
+                RightView = _pluginManager.SingleQuery(Position.Right, false);
+                LeftView = _pluginManager.SingleQuery(Position.Left, false);
+                BottomView = _pluginManager.SingleQuery(Position.Bottom, false);
+                TopView = _pluginManager.SingleQuery(Position.Top, false);
+
+                HiddenPlugins = _pluginManager.Query(Position.Invisible, false).ToList();
+
+                Dispatcher.GetInstance.AddEventListener(this);
+                Dispatcher.GetInstance.Dispatch("Media Opening",
+                    new Uri("C:\\Users\\Colliot Vincent\\Music\\Begin Again OST\\a.mp3"));
+
+            }
+
+            #endregion
+
         }
     }
 }

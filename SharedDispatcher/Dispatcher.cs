@@ -21,12 +21,12 @@ namespace SharedDispatcher
         public static Dispatcher GetInstance => _instance ?? (_instance = new Dispatcher());
         private static Dispatcher _instance;
 
-        internal void AddEventListener(Listener listener)
+        public void AddEventListener(Listener listener)
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
             _eventsConsummers.Add(listener);
         }
-        internal void RemoveEnventListener(Listener listener)
+        public void RemoveEnventListener(Listener listener)
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
             _eventsConsummers.Remove(listener);

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 
@@ -16,20 +18,26 @@ namespace SharedDispatcher
         internal string Hook { get; }
     }
 
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class ForwardDispatch : Attribute
     {
     }
 
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class CollectionForwardDispatch : Attribute
     {
     }
 
+    public interface IForwardDispatcher
+    {
+        List<Object> ForwardListeners { get; }
+    }
+
     public class Listener
     {
-        private readonly Dictionary<string, MethodInfo>      _hookDictionary = new Dictionary<string, MethodInfo>();
-        private readonly Dictionary<string, List<FieldInfo>> _hookedForwards = new Dictionary<string, List<FieldInfo>>();
+        private readonly Dictionary<string, MethodInfo> _hookDictionary = new Dictionary<string, MethodInfo>();
+        private readonly List<PropertyInfo> _forwards = new List<PropertyInfo>();
+        private readonly List<PropertyInfo> _forwardsCollection = new List<PropertyInfo>();
 
         protected Listener()
         {
@@ -40,27 +48,41 @@ namespace SharedDispatcher
                 foreach (EventHook hook in methodInfo.GetCustomAttributes(typeof (EventHook), true))
                     _hookDictionary[hook.Hook] = methodInfo;
 
+            _forwards = (from propertyInfo in GetType().GetProperties()
+                let attr = propertyInfo.GetCustomAttributes(typeof (ForwardDispatch), true)
+                where attr.Length > 0
+                select propertyInfo).ToList();
 
-            foreach (var attributeInfo in GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
-            {
+            _forwardsCollection = (from propertyInfo in GetType().GetProperties()
+                let attr = propertyInfo.GetCustomAttributes(typeof (CollectionForwardDispatch), true)
+                where attr.Length > 0
+                select propertyInfo).ToList();
+        }
+
+        private void DispatchToMembers(object target, string _event, object[] fwdparams)
+        {
+            if (target == null)
+                return;
+            var listener = target as Listener;
+            var forward = target as IForwardDispatcher;
+            if (listener != null)
+                listener?.DispatchInternal(_event, fwdparams);
+            else if (forward != null)
+                // ReSharper disable once PossibleNullReferenceException
+                foreach (var forwardListener in forward.ForwardListeners)
                 {
-                    var attr = attributeInfo.GetCustomAttributes(typeof (ForwardDispatch), true);
-                    if (attr.Length <= 0) continue;
-                    foreach (var pair in ((Listener) attributeInfo.GetValue(this))._hookDictionary)
-                    {
-                        if (!_hookedForwards.ContainsKey(pair.Key))
-                            _hookedForwards.Add(pair.Key, new List<FieldInfo>());
-                        _hookedForwards[pair.Key].Add(attributeInfo);
-                    }
-                    
+                    DispatchToMembers(forwardListener, _event, fwdparams);
                 }
-            }
         }
 
         internal void DispatchInternal(string _event, object[] fwdparams)
         {
             if (_hookDictionary.ContainsKey(_event))
                 _hookDictionary[_event].Invoke(this, fwdparams);
+            foreach (var propertyInfo in _forwards)
+                DispatchToMembers(propertyInfo.GetValue(this), _event, fwdparams);
+            foreach (var forwards in _forwardsCollection.SelectMany(propertyInfo => (IEnumerable<object>) propertyInfo.GetValue(this)))
+                DispatchToMembers(forwards, _event, fwdparams);
         }
     }
 }

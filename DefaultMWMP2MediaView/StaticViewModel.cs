@@ -1,7 +1,8 @@
-﻿namespace DefaultMWMP2MediaView
+﻿using SharedDispatcher;
+
+namespace DefaultMWMP2MediaView
 {
-    public class StaticViewModel
+    public class StaticViewModel : Listener
     {
-         
     }
 }
