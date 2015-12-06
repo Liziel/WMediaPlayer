@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
-using SharedProperties.Customization;
+using PluginLibrary.Customization;
 
 namespace MyWindowsMediaPlayerv2
 {

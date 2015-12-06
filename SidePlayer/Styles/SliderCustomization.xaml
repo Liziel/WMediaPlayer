@@ -11,7 +11,7 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Grid x:Name="PART_SelectionRange" Margin="0,0,-7,0">
                         <Border x:Name="TrackBackground"
-                                Background="LimeGreen"
+                                Background="DodgerBlue"
                                 CornerRadius="3.0"
                                 VerticalAlignment="Center" Height="6.0">
                             <Canvas>
@@ -34,7 +34,7 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Grid x:Name="PART_SelectionRange" Margin="0,0,-8,0">
                         <Border x:Name="TrackBackground"
-                                Background="LimeGreen"
+                                Background="DodgerBlue"
                                 CornerRadius="4.0"
                                 VerticalAlignment="Center" Height="8.0">
                             <Canvas>

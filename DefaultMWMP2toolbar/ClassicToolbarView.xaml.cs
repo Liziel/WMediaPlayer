@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
-using SharedDispatcher;
-using SharedProperties.Customization;
+using DispatcherLibrary;
+using PluginLibrary.Customization;
 
 namespace DefaultMWMP2toolbar
 {

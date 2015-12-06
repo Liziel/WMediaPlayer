@@ -87,13 +87,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharedDispatcher\SharedDispatcher.csproj">
+    <ProjectReference Include="..\SharedDispatcher\DispatcherLibrary.csproj">
       <Project>{48e9024e-1fe5-4403-9ed1-581e1484dc7c}</Project>
-      <Name>SharedDispatcher</Name>
+      <Name>DispatcherLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharedProperties\SharedProperties.csproj">
+    <ProjectReference Include="..\SharedProperties\PluginLibrary.csproj">
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
-      <Name>SharedProperties</Name>
+      <Name>PluginLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

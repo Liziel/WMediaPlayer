@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Web;
 using DefaultMWMP2MediaView.Annotations;
-using SharedDispatcher;
+using DispatcherLibrary;
 
 namespace DefaultMWMP2MediaView
 {

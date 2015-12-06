@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using DefaultMWMP2MediaView.Annotations;
-using SharedDispatcher;
+using DispatcherLibrary;
 
 namespace DefaultMWMP2MediaView
 {

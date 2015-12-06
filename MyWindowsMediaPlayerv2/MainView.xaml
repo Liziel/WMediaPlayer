@@ -6,8 +6,10 @@
         xmlns:viewModel="clr-namespace:MyWindowsMediaPlayerv2.ViewModel"
         xmlns:myWindowsMediaPlayerv2="clr-namespace:MyWindowsMediaPlayerv2"
         mc:Ignorable="d"
-        Title="MediaPlayer" Height="350" Width="525" Background="Black"
-        WindowState="{Binding WindowState}" WindowStyle="{Binding WindowStyle}">
+        Title="MediaPlayer" Height="800" Width="800" Background="Black"
+        WindowState="{Binding WindowState}" WindowStyle="{Binding WindowStyle}"
+        WindowStartupLocation="CenterScreen"
+        >
     <Window.DataContext>
         <viewModel:MainViewModel />
     </Window.DataContext>

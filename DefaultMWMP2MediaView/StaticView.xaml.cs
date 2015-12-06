@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LoadablePlugin;
+using PluginLibrary.Customization;
 
 namespace DefaultMWMP2MediaView
 {
     /// <summary>
     /// Interaction logic for StaticView.xaml
     /// </summary>
-    public partial class StaticView : UserControl
+    [Export(typeof(IPlugin))]
+    public partial class StaticView : UserControl, ILoadablePlugin
     {
         public StaticView()
         {
             InitializeComponent();
         }
+
+        public Position Position { get; } = Position.Center;
+        public int Layer { get; } = 0;
+        public bool Optional { get; } = true;
+        public string PluginName { get; } = "You Fucking Tube";
+        public object Logo { get; } = new YTLogo();
+        public string PresentationName { get; } = "YouTube";
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using DefaultMWMP2toolbar.Annotations;
-using SharedDispatcher;
+using DispatcherLibrary;
 
 namespace DefaultMWMP2toolbar
 {

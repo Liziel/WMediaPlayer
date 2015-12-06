@@ -4,8 +4,11 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using SharedDispatcher;
+using System.Windows.Threading;
+using DispatcherLibrary;
 using SidePlayer.Annotations;
+using Dispatcher = DispatcherLibrary.Dispatcher;
+using File = TagLib.File;
 
 namespace SidePlayer.MediaPlayer
 {
@@ -23,25 +26,34 @@ namespace SidePlayer.MediaPlayer
 
         #endregion
 
+        #region Metadata Fields
+
         private BitmapImage _albumCover = null;
-        public BitmapImage AlbumCover { get { return _albumCover; } set { _albumCover = value; OnPropertyChanged(nameof(AlbumCover)); } }
+
+        public BitmapImage AlbumCover
+        {
+            get { return _albumCover; }
+            set
+            {
+                _albumCover = value;
+                OnPropertyChanged(nameof(AlbumCover));
+            }
+        }
 
         private string _mediaName = "";
-        public string MediaName { get { return _mediaName; } set { _mediaName = value; OnPropertyChanged(nameof(MediaName)); } }
 
-        private MediaElement    _music;
-        public MediaElement     Music { get { return _music; } set { _music = value; OnPropertyChanged(nameof(Music)); } }
-
-        private TagLib.File     _tag;
-    
-        public MusicPlayerPluginViewModel(Uri media, TagLib.File tag)
+        public string MediaName
         {
-            _music = new MediaElement {Source = media, LoadedBehavior = MediaState.Manual};
-            _tag = tag;
-
-            InitializeCover();
-            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
+            get { return _mediaName; }
+            set
+            {
+                _mediaName = value;
+                OnPropertyChanged(nameof(MediaName));
+            }
         }
+
+
+        private File _tag;
 
         private void InitializeCover()
         {
@@ -67,5 +79,65 @@ namespace SidePlayer.MediaPlayer
             else
                 MediaName = filename;
         }
+
+        #endregion
+
+        #region Music Fields
+
+        private MediaElement _music;
+
+        public MediaElement Music
+        {
+            get { return _music; }
+            set
+            {
+                _music = value;
+                OnPropertyChanged(nameof(Music));
+            }
+        }
+
+        [EventHook("Play")]
+        public void Play()
+        {
+            _music.Play();
+            _tick.Start();
+            Dispatcher.GetInstance.Dispatch("Media Playing");
+        }
+
+        [EventHook("Pause")]
+        public void Pause()
+        {
+            _music.Pause();
+            _tick.Stop();
+            Dispatcher.GetInstance.Dispatch("Media Paused");
+        }
+
+        #endregion
+
+        #region Media Posiion Fields
+
+        private DispatcherTimer _tick = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+
+        private void OnTick(object sender, EventArgs e)
+        {
+            Dispatcher.GetInstance.Dispatch("Media Position Actualization", _music.Position.TotalSeconds);
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public MusicPlayerPluginViewModel(Uri media, File tag)
+        {
+            _music = new MediaElement {Source = media, LoadedBehavior = MediaState.Manual};
+            _tag = tag;
+
+            InitializeCover();
+            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
+
+            _tick.Tick += OnTick;
+        }
+
+        #endregion
     }
 }

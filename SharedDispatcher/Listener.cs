@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace SharedDispatcher
+namespace DispatcherLibrary
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class EventHook : Attribute

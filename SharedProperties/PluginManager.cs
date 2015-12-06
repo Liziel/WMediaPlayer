@@ -4,9 +4,9 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
-using SharedProperties.Customization;
+using PluginLibrary.Customization;
 
-namespace SharedProperties
+namespace PluginLibrary
 {
     public class PluginManager
     {
@@ -31,9 +31,9 @@ namespace SharedProperties
 
         #region Plugins List
 
-        [ImportMany(typeof (IPlugin), AllowRecomposition = true)]
+        [ImportMany(typeof (IPlugin))] private IEnumerable<Lazy<IPlugin>> _importedPlugins;
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        private List<Lazy<IPlugin>> ListPlugins { get; set; }
+        private readonly List<IPlugin> _listPlugins = new List<IPlugin>();
 
         public void LoadPlugin(string path, string pattern)
         {
@@ -41,6 +41,8 @@ namespace SharedProperties
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             AttributedModelServices.ComposeParts(new CompositionContainer(directoryCatalog), this);
+            foreach (var importedPlugin in _importedPlugins)
+                _listPlugins.Add(importedPlugin.Value);
         }
 
         #endregion
@@ -49,14 +51,14 @@ namespace SharedProperties
 
         public IPlugin SingleQuery(Predicate<IPlugin> predicate)
         {
-            return ListPlugins.Find(plugin => predicate(plugin.Value))?.Value;
+            return _listPlugins.Find(plugin => predicate(plugin));
         }
 
         public IEnumerable<IPlugin> Query(Predicate<IPlugin> predicate)
         {
-            return from plugin in ListPlugins
-                where predicate(plugin.Value)
-                select plugin.Value;
+            return from plugin in _listPlugins
+                where predicate(plugin)
+                select plugin;
         }
 
         #endregion

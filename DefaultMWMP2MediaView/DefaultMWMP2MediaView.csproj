@@ -50,6 +50,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="YTLogo.xaml.cs">
+      <DependentUpon>YTLogo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MediaViewerModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -87,6 +90,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="YTLogo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MediaViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,13 +108,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharedDispatcher\SharedDispatcher.csproj">
-      <Project>{48e9024e-1fe5-4403-9ed1-581e1484dc7c}</Project>
-      <Name>SharedDispatcher</Name>
+    <ProjectReference Include="..\LoadablePlugin\LoadablePlugin.csproj">
+      <Project>{4f30687e-5934-4f1d-8ca2-b092f6fd3059}</Project>
+      <Name>LoadablePlugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharedProperties\SharedProperties.csproj">
+    <ProjectReference Include="..\SharedDispatcher\DispatcherLibrary.csproj">
+      <Project>{48e9024e-1fe5-4403-9ed1-581e1484dc7c}</Project>
+      <Name>DispatcherLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharedProperties\PluginLibrary.csproj">
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
-      <Name>SharedProperties</Name>
+      <Name>PluginLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using SharedDispatcher;
+﻿using DispatcherLibrary;
 
 namespace DefaultMWMP2MediaView
 {

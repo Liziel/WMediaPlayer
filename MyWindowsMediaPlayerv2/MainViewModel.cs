@@ -9,9 +9,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using MyWindowsMediaPlayerv2.Annotations;
-using SharedDispatcher;
-using SharedProperties;
-using SharedProperties.Customization;
+using DispatcherLibrary;
+using PluginLibrary;
+using PluginLibrary.Customization;
 
 namespace MyWindowsMediaPlayerv2
 {
@@ -42,9 +42,14 @@ namespace MyWindowsMediaPlayerv2
 
             #endregion
 
+            #region Non Optional Plugins Event Forwarding
+
             [CollectionForwardDispatch]
             public List<IPlugin> NonOptionalPlugins => _nonOptionalPlugins;
+
             private List<IPlugin> _nonOptionalPlugins;
+
+            #endregion
 
             #region Wpf Visibility
 

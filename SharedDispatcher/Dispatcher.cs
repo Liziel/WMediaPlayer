@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharedDispatcher
+namespace DispatcherLibrary
 {
     public class Dispatcher
     {
