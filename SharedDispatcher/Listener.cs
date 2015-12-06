@@ -66,7 +66,7 @@ namespace SharedDispatcher
             var listener = target as Listener;
             var forward = target as IForwardDispatcher;
             if (listener != null)
-                listener?.DispatchInternal(_event, fwdparams);
+                listener.DispatchInternal(_event, fwdparams);
             else if (forward != null)
                 // ReSharper disable once PossibleNullReferenceException
                 foreach (var forwardListener in forward.ForwardListeners)

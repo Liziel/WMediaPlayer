@@ -12,33 +12,6 @@
         <viewModel:MainViewModel />
     </Window.DataContext>
 
-    <Grid>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-
-        <ContentControl Grid.Row="0" Grid.Column="0"
-                        Content="{Binding Path=LeftView}" />
-
-        <Grid Grid.Row="0" Grid.Column="1">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding Path=TopView}" />
-            <ContentControl Grid.Row="1" Grid.Column="0"
-                            Content="{Binding Path=CenterView}" />
-            <ContentControl Grid.Row="2" Grid.Column="0" Content="{Binding Path=BottomView}" />
-        </Grid>
-
-        <ContentControl Grid.Row="0" Grid.Column="2"
-                        Content="{Binding Path=RightView}" />
-    </Grid>
+    <ContentControl Content="{Binding Path=RootElement}"/>
 
 </Window>

@@ -42,8 +42,9 @@ namespace DefaultMWMP2MediaView
 
         #region IPlugin Implementation
 
-        public Position Position { get; } = Position.Center;
-        public bool Optional { get; } = false;
+        public Position Position { get; } = Position.All;
+        public int Layer { get; } = 1;
+        public bool Optional { get; } = true;
         public string PluginName { get; } = nameof(MediaViewer);
         public Uri PluginIcon { get; } = null;
 

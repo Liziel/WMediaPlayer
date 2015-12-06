@@ -10,9 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWindowsMediaPlayerv2", "M
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F85FC2FE-2512-400B-95A8-401D10F51C04}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Downloads\play128(1).png = ..\..\..\..\Downloads\play128(1).png
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedProperties", "SharedProperties\SharedProperties.csproj", "{16A9F836-1667-4F22-B8EB-D21A13CB428D}"
 EndProject

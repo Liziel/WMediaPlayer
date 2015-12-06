@@ -32,8 +32,9 @@ namespace DefaultMWMP2toolbar
 
         #region IPlugin Implementation
 
-        public Position Position { get; } = Position.Bottom;
-        public bool Optional { get; } = false;
+        public Position Position { get; } = Position.Invisible;
+        public int Layer { get; } = 0;
+        public bool Optional { get; } = true;
         public string PluginName { get; } = nameof(ClassicToolbarView);
         public Uri PluginIcon { get; } = null;
 

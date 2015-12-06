@@ -7,8 +7,16 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <ResourceDictionary Source="../Styles/SliderCustomization.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/SliderCustomization.xaml"/>
+                <ResourceDictionary Source="../Styles/ControlPlayPauseButtonCustomization.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:MediaControlBarViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.Margin>
             0,
@@ -18,17 +26,17 @@
         </Grid.Margin>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" /> <!-- Slider -->
-            <RowDefinition Height="Auto" /> <!-- Time -->
-            <RowDefinition Height="Auto" /> <!-- Control -->
-            <RowDefinition Height="Auto" /> <!-- Sub Control -->
+            <RowDefinition Height="Auto" />
+            <!-- Slider -->
+            <RowDefinition Height="Auto" />
+            <!-- Time -->
+            <RowDefinition Height="Auto" />
+            <!-- Control -->
+            <RowDefinition Height="Auto" />
+            <!-- Sub Control -->
         </Grid.RowDefinitions>
 
-        <Slider Grid.Row="1" Style="{StaticResource CustomSlider}">
-            <Slider.Margin>
-                10
-            </Slider.Margin>
-        </Slider>
+        <Slider Grid.Row="1" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True"/>
         <Grid Grid.Row="2" HorizontalAlignment="Center">
 
             <Grid.Resources>
@@ -79,43 +87,19 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Grid.Column="1">
-
-                <Button.Margin>10</Button.Margin>
-
-                <Button.Template>
-                    <ControlTemplate>
-
-                        <Grid Width="50" Height="50">
-                            <Path Stretch="Fill" x:Name="PlayPauseBackgroundPath"
-                                  Stroke="LightGray"
-                                  Fill="Black"
-                                  StrokeThickness="2"
-                                  Data="M 0,0 A 180,180 180 1 1 1,1 Z" />
-                            <Path Stretch="Fill" HorizontalAlignment="Center"
-                                  Data="F0 M 0,0 L -54.188,-34.208 C -55.904,-35.168 -57.888,-35.08 -59.392,-35.008 -65.424,-35.008 -65.392,-30.352 -65.392,-29.184
-		L -65.392,40.752 C -65.392,41.744 -65.424,46.576 -59.392,46.576 -57.888,46.576 -55.904,46.736 -54.288,45.776
-		L 0,11.568 C 4.464,8.912 3.696,5.776 3.696,5.776 3.696,5.776 4.464,2.656 0,0 z"
-                                  Fill="LightGray" RenderTransformOrigin="0.366,0.489">
-                                <Path.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                        <SkewTransform />
-                                        <RotateTransform />
-                                        <TranslateTransform X="6" />
-                                    </TransformGroup>
-                                </Path.RenderTransform>
-                            </Path>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Stroke" Value="LimeGreen" TargetName="PlayPauseBackgroundPath"></Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-
-                    </ControlTemplate>
-                </Button.Template>
+            <Button Grid.Column="1" Margin="10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MediaState}" Value="Play">
+                                <Setter Property="Template" Value="{StaticResource PauseButtonState}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=MediaState}" Value="Pause">
+                                <Setter Property="Template" Value="{StaticResource PlayButtonState}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
             <Button Grid.Column="2">
                 <Button.Template>

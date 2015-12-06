@@ -7,8 +7,7 @@ namespace SharedProperties
         public enum Position
         {
             Invisible,
-            Top,
-            Bottom,
+            All,
             Right,
             Left,
             Center
@@ -29,10 +28,10 @@ namespace SharedProperties
             /// 444222222222333
             /// </summary>
             Position    Position { get; }
+            int         Layer { get; }
             bool        Optional { get; }
 
             string      PluginName { get; }
-            Uri         PluginIcon { get; }
         }
     }
 }

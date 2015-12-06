@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,9 +63,17 @@
       <DependentUpon>MediaControlBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediaControlBar\MediaControlBarViewModel.cs" />
+    <Compile Include="MediaPlayer\MusicPlayerPluginView.xaml.cs">
+      <DependentUpon>MusicPlayerPluginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediaPlayer\MusicPlayerPluginViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SidePlayerPluginMainViewModel.cs" />
     <Page Include="MediaControlBar\MediaControlBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MediaPlayer\MusicPlayerPluginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -75,6 +85,14 @@
       <DependentUpon>SidePlayerPluginMainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Styles\ControlPlayPauseButtonCustomization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\MusicDisplayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\SliderCustomization.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -98,8 +116,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="MediaControlBar\Paths\prev.fpage" />
-    <None Include="MediaControlBar\Paths\skip.fpage" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
