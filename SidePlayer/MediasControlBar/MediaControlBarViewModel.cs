@@ -93,7 +93,6 @@ namespace SidePlayer.MediaControlBar
         #region Slider Property
 
         private double _sliderMaxValue = 100;
-
         public double SliderMaxValue
         {
             get { return _sliderMaxValue; }
@@ -105,7 +104,6 @@ namespace SidePlayer.MediaControlBar
         }
 
         private double _sliderCurrentValue = 0;
-
         public double SliderCurrentValue
         {
             get { return _sliderCurrentValue; }

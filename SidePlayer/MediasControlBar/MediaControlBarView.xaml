@@ -36,7 +36,8 @@
         </Grid.RowDefinitions>
 
         <Slider Grid.Row="1" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True" Margin="10,0,10,0"
-                Value="{Binding Path=SliderCurrentValue}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0">
+                Value="{Binding Path=SliderCurrentValue}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0"
+                ValueChanged="RangeBase_OnValueChanged">
         </Slider>
 
         <Grid Grid.Row="2" Margin="0,0,0,5">

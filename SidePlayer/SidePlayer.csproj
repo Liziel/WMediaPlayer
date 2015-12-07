@@ -59,21 +59,51 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MediaControlBar\MediaControlBarView.xaml.cs">
+    <Compile Include="MaximizedMediaPlayer\MaximizedMediaPlayerView.xaml.cs">
+      <DependentUpon>MaximizedMediaPlayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MaximizedMediaPlayer\MaximizedMediaPlayerViewModel.cs" />
+    <Compile Include="MediasControlBar\MediaControlBarView.xaml.cs">
       <DependentUpon>MediaControlBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MediaControlBar\MediaControlBarViewModel.cs" />
-    <Compile Include="MediaPlayer\MusicPlayerPluginView.xaml.cs">
+    <Compile Include="MediasControlBar\MediaControlBarViewModel.cs" />
+    <Compile Include="MediasPlayer\Audio\MusicPlayerPluginView.xaml.cs">
       <DependentUpon>MusicPlayerPluginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MediaPlayer\MusicPlayerPluginViewModel.cs" />
+    <Compile Include="MediasPlayer\Audio\MusicPlayerPluginViewModel.cs" />
+    <Compile Include="MediasPlayer\Audio\MusicView.xaml.cs">
+      <DependentUpon>MusicView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediasPlayer\Video\VideoPlayerPluginView.xaml.cs">
+      <DependentUpon>VideoPlayerPluginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediasPlayer\Video\VideoPlayerPluginViewModel.cs" />
+    <Compile Include="MediasPlayer\Video\VideoView.xaml.cs">
+      <DependentUpon>VideoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SidePlayerPluginMainViewModel.cs" />
-    <Page Include="MediaControlBar\MediaControlBarView.xaml">
+    <Page Include="MaximizedMediaPlayer\MaximizedMediaPlayerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MediaPlayer\MusicPlayerPluginView.xaml">
+    <Page Include="MediasControlBar\MediaControlBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MediasPlayer\Audio\MusicPlayerPluginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MediasPlayer\Audio\MusicView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MediasPlayer\Video\VideoPlayerPluginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MediasPlayer\Video\VideoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +166,9 @@
       <Project>{b0664bf6-6b73-46e3-9a18-fa1ad61464fb}</Project>
       <Name>UiLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MediasPlayer\Picture\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

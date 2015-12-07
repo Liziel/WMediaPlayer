@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="SidePlayer.MediasPlayer.Audio.MusicPlayerPluginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:defaultMwmp2Toolbar="clr-namespace:DefaultMWMP2toolbar;assembly=UiLibrary"
+             mc:Ignorable="d"
+             d:DesignHeight="900" d:DesignWidth="300">
+    <Grid VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ContentControl Content="{Binding Path=Music}" Visibility="Collapsed" />
+
+        <Button Grid.Row="0" MouseDoubleClick="MaximizeVideoPlayer">
+            <Button.Template>
+                <ControlTemplate>
+                    <Border BorderBrush="LightGray" Background="#111111" BorderThickness="1.5" Margin="10">
+                        <ContentControl Content="{Binding AlbumCoverView}"/>
+                    </Border>
+                    </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Grid Margin="10,0,10,0" Grid.Row="1" MouseDown="AlbumResearch">
+            <TextBlock Text="{Binding Path=MediaName}" HorizontalAlignment="Center"
+                       Foreground="LightGray"
+                       FontSize="16" FontStretch="UltraExpanded" FontWeight="Black"
+                       Name="TitleTestSize" LayoutUpdated="OnTitleTextUpdated" />
+
+            <Grid Height="35" VerticalAlignment="Center"
+                  x:Name="TitleBlock">
+                <Grid.Resources>
+                    <defaultMwmp2Toolbar:NegatingConverter x:Key="NegatingConverter" />
+                    <Storyboard x:Key="TitleSlide" Completed="OnTitleAnimationCompleted">
+                        <DoubleAnimation From="0"
+                                         To="{Binding ActualWidth, ElementName=Title, Converter={StaticResource NegatingConverter}}"
+                                         Duration="00:00:05"
+                                         Storyboard.TargetProperty="X"
+                                         Storyboard.TargetName="TitleBlockTransfer">
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Grid.Resources>
+
+                <Rectangle Fill="Aqua" Opacity="0" />
+
+                <Canvas x:Name="TitleCanvas"
+                        Width="{Binding ActualWidth, ElementName=TitleBlock}"
+                        ClipToBounds="True">
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform x:Name="TitleBlockTransfer" X="0" />
+                        </StackPanel.RenderTransform>
+
+                        <TextBlock Text="{Binding Path=MediaName}"
+                                   HorizontalAlignment="Center"
+                                   Foreground="LightGray"
+                                   FontSize="16" FontStretch="UltraExpanded"
+                                   FontWeight="Black"
+                                   x:Name="Title" />
+                        <TextBlock Text="{Binding Text, ElementName=Title}"
+                                   Foreground="LightGray" FontSize="16"
+                                   FontStretch="UltraExpanded"
+                                   FontWeight="Black"
+                                   Margin="30,0,0,0" />
+                    </StackPanel>
+                </Canvas>
+
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="StackPanel.MouseEnter">
+                        <BeginStoryboard Storyboard="{StaticResource TitleSlide}"
+                                         HandoffBehavior="Compose" />
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </Grid>
+
+        <Grid Margin="10,0,10,0" Grid.Row="2" MouseDown="ArtistResearch">
+            <TextBlock Text="{Binding Path=MediaArtists}" HorizontalAlignment="Center"
+                       Foreground="LightGray"
+                       FontSize="11" FontStretch="UltraExpanded" FontWeight="Black"
+                       Name="ArtistTestSize" LayoutUpdated="OnArtistTextUpdated" />
+
+            <Grid Height="35" VerticalAlignment="Center"
+                  x:Name="ArtistBlock">
+                <Grid.Resources>
+                    <defaultMwmp2Toolbar:NegatingConverter x:Key="NegatingConverter" />
+                    <Storyboard x:Key="ArtistSlide" Completed="OnArtistAnimationCompleted">
+                        <DoubleAnimation From="0"
+                                         To="{Binding ActualWidth, ElementName=Artist, Converter={StaticResource NegatingConverter}}"
+                                         Duration="00:00:05"
+                                         Storyboard.TargetProperty="X"
+                                         Storyboard.TargetName="ArtistBlockTransfer">
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Grid.Resources>
+
+                <Rectangle Fill="Aqua" Opacity="0" />
+
+                <Canvas x:Name="ArtistCanvas"
+                        Width="{Binding ActualWidth, ElementName=ArtistBlock}"
+                        ClipToBounds="True">
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform x:Name="ArtistBlockTransfer" X="0" />
+                        </StackPanel.RenderTransform>
+
+                        <TextBlock Text="{Binding Path=MediaArtists}"
+                                   HorizontalAlignment="Center"
+                                   Foreground="LightGray"
+                                   FontSize="11" FontStretch="UltraExpanded"
+                                   FontWeight="Black"
+                                   x:Name="Artist" />
+                        <TextBlock Text="{Binding Text, ElementName=Artist}"
+                                   Foreground="LightGray" FontSize="11"
+                                   FontStretch="UltraExpanded"
+                                   FontWeight="Black"
+                                   Margin="30,0,0,0" />
+                    </StackPanel>
+                </Canvas>
+
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="StackPanel.MouseEnter">
+                        <BeginStoryboard Storyboard="{StaticResource ArtistSlide}"
+                                         HandoffBehavior="Compose" />
+                    </EventTrigger>
+                </Grid.Triggers>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
