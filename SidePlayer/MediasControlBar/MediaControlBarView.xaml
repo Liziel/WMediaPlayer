@@ -9,14 +9,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/SliderCustomization.xaml"/>
-                <ResourceDictionary Source="../Styles/ControlPlayPauseButtonCustomization.xaml"/>
+                <ResourceDictionary Source="../Ressources/SliderCustomization.xaml"/>
+                <ResourceDictionary Source="../Ressources/ControlPlayPauseButtonCustomization.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:MediaControlBarViewModel/>
-    </UserControl.DataContext>
     <Grid VerticalAlignment="Bottom">
         <Grid.Margin>
             0,

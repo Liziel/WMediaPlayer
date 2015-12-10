@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NEbml.Core, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEbml.0.1.4\lib\NEbml.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +63,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MaximizedMediaPlayer\MaximizedMediaControlView.xaml.cs">
+      <DependentUpon>MaximizedMediaControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MaximizedMediaPlayer\MaximizedMediaPlayerView.xaml.cs">
       <DependentUpon>MaximizedMediaPlayerView.xaml</DependentUpon>
     </Compile>
@@ -67,22 +74,32 @@
       <DependentUpon>MediaControlBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediasControlBar\MediaControlBarViewModel.cs" />
-    <Compile Include="MediasPlayer\Audio\MusicPlayerPluginView.xaml.cs">
-      <DependentUpon>MusicPlayerPluginView.xaml</DependentUpon>
+    <Compile Include="MediasPlayer\Audio\MusicPlayerViewPluginView.xaml.cs">
+      <DependentUpon>MusicPlayerViewPluginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediasPlayer\Audio\MusicPlayerPluginViewModel.cs" />
     <Compile Include="MediasPlayer\Audio\MusicView.xaml.cs">
       <DependentUpon>MusicView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MediasPlayer\Video\VideoPlayerPluginView.xaml.cs">
-      <DependentUpon>VideoPlayerPluginView.xaml</DependentUpon>
+    <Compile Include="MediasPlayer\IMediaPlayer.cs" />
+    <Compile Include="MediasPlayer\Video\Subtitles.cs" />
+    <Compile Include="MediasPlayer\Video\SubtitleView.xaml.cs">
+      <DependentUpon>SubtitleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediasPlayer\Video\VideoPlayerViewPluginView.xaml.cs">
+      <DependentUpon>VideoPlayerViewPluginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediasPlayer\Video\VideoPlayerPluginViewModel.cs" />
     <Compile Include="MediasPlayer\Video\VideoView.xaml.cs">
       <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="SidePlayerInstanciator.cs" />
     <Compile Include="SidePlayerPluginMainViewModel.cs" />
+    <Page Include="MaximizedMediaPlayer\MaximizedMediaControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MaximizedMediaPlayer\MaximizedMediaPlayerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,7 +108,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MediasPlayer\Audio\MusicPlayerPluginView.xaml">
+    <Page Include="MediasPlayer\Audio\MusicPlayerViewPluginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -99,7 +116,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MediasPlayer\Video\VideoPlayerPluginView.xaml">
+    <Page Include="MediasPlayer\Video\SubtitleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MediasPlayer\Video\VideoPlayerViewPluginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -107,23 +128,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SidePlayerPluginMainView.xaml">
+    <Page Include="SidePlayerViewPluginMainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="SidePlayerPluginMainView.xaml.cs">
-      <DependentUpon>SidePlayerPluginMainView.xaml</DependentUpon>
+    <Compile Include="SidePlayerViewPluginMainView.xaml.cs">
+      <DependentUpon>SidePlayerViewPluginMainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\ControlPlayPauseButtonCustomization.xaml">
+    <Page Include="Ressources\ControlPlayPauseButtonCustomization.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\MusicDisplayer.xaml">
+    <Page Include="Ressources\MusicDisplayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\SliderCustomization.xaml">
+    <Page Include="Ressources\SliderCustomization.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

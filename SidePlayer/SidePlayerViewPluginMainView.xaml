@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="SidePlayer.SidePlayerViewPluginMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SidePlayer"
+             xmlns:mediaControlBar="clr-namespace:SidePlayer.MediaControlBar"
+             xmlns:video="clr-namespace:SidePlayer.MediasPlayer.Video"
+             xmlns:audio="clr-namespace:SidePlayer.MediasPlayer.Audio"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Ressources/MusicDisplayer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="#222222" MaxWidth="250">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ContentControl Content="{Binding Path=MediaViewer}" Grid.Row="0" VerticalAlignment="Top">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type video:VideoPlayerPluginViewModel}">
+                    <video:VideoPlayerViewPluginView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type audio:MusicPlayerPluginViewModel}">
+                    <audio:MusicPlayerViewPluginView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+        <ContentControl Content="{Binding Path=MediaControlBar}" Grid.Row="1" VerticalAlignment="Bottom">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type mediaControlBar:MediaControlBarViewModel}">
+                    <mediaControlBar:MediaControlBarView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+    </Grid>
+</UserControl>

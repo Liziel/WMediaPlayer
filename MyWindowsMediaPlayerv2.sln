@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryView", "LibraryView\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UiLibrary", "UiLibrary\UiLibrary.csproj", "{B0664BF6-6B73-46E3-9A18-FA1AD61464FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeStreamer", "YoutubeStreamer\YoutubeStreamer.csproj", "{8CDE2F73-C521-4BF0-8182-901B9DF968F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{B0664BF6-6B73-46E3-9A18-FA1AD61464FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0664BF6-6B73-46E3-9A18-FA1AD61464FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0664BF6-6B73-46E3-9A18-FA1AD61464FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDE2F73-C521-4BF0-8182-901B9DF968F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDE2F73-C521-4BF0-8182-901B9DF968F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDE2F73-C521-4BF0-8182-901B9DF968F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDE2F73-C521-4BF0-8182-901B9DF968F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +92,6 @@ Global
 		{FB9B4965-0F37-4E86-A441-78E417F5A275} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
 		{4F30687E-5934-4F1D-8CA2-B092F6FD3059} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
 		{38203F66-EAB9-4004-828A-EB40F8AB2F82} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
+		{8CDE2F73-C521-4BF0-8182-901B9DF968F1} = {F85FC2FE-2512-400B-95A8-401D10F51C04}
 	EndGlobalSection
 EndGlobal

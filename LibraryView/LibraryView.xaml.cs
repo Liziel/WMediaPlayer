@@ -8,15 +8,15 @@ namespace LibraryView
     /// <summary>
     /// Interaction logic for LibraryView.xaml
     /// </summary>
-    [Export(typeof(IPlugin))]
-    public partial class LibraryView : UserControl, ILoadablePlugin
+    [Export(typeof(IViewPlugin))]
+    public partial class LibraryView : UserControl, ILoadableViewPlugin
     {
         public LibraryView()
         {
             InitializeComponent();
         }
 
-        #region IPlugin Implementation
+        #region IViewPlugin Implementation
 
         public Position Position { get; } = Position.Invisible;
         public int Layer { get; } = 0;

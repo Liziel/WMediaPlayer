@@ -64,8 +64,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SidePluginLoaderView.xaml.cs">
-      <DependentUpon>SidePluginLoaderView.xaml</DependentUpon>
+    <Compile Include="SideViewPluginLoaderView.xaml.cs">
+      <DependentUpon>SideViewPluginLoaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePluginLoaderViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -98,7 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SidePluginLoaderView.xaml">
+    <Page Include="SideViewPluginLoaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

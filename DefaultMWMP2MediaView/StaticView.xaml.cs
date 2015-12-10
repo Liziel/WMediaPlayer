@@ -8,8 +8,8 @@ namespace DefaultMWMP2MediaView
     /// <summary>
     /// Interaction logic for StaticView.xaml
     /// </summary>
-    [Export(typeof(IPlugin))]
-    public partial class StaticView : UserControl, ILoadablePlugin
+    [Export(typeof(IViewPlugin))]
+    public partial class StaticView : UserControl, ILoadableViewPlugin
     {
         public StaticView()
         {

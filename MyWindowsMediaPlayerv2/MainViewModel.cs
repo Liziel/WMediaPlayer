@@ -36,47 +36,39 @@ namespace MyWindowsMediaPlayerv2
             }
 
             [EventHook("Attach Plugin")]
-            public void AttachPlugin(IPlugin plugin) { _viewAnchorer.AttachPlugin(plugin);}
+            public void AttachPlugin(IViewPlugin viewPlugin) { _viewAnchorer.AttachPlugin(viewPlugin);}
             [EventHook("Force Attach Plugin")]
-            public void ForceAttachPlugin(IPlugin plugin, Position position, int layer) { _viewAnchorer.ForceAttachPlugin(plugin, position, layer); }
+            public void ForceAttachPlugin(IViewPlugin viewPlugin, Position position, int layer) { _viewAnchorer.ForceAttachPlugin(viewPlugin, position, layer); }
+            [EventHook("Attach Plugin On Top")]
+            public void PutPluginOnTop(IViewPlugin viewPlugin) {  _viewAnchorer.PutPluginOnTop(viewPlugin); }
+            [EventHook("Remove Plugin")]
+            public void RemovePlugin(IViewPlugin viewPlugin) { _viewAnchorer.DesattachPlugin(viewPlugin); }
 
             #endregion
 
             #region Non Optional Plugins Event Forwarding
 
             [CollectionForwardDispatch]
-            public List<IPlugin> NonOptionalPlugins => _nonOptionalPlugins;
-
-            private List<IPlugin> _nonOptionalPlugins;
+            public List<IMessageablePlugin> MessageablePlugins { get; }
 
             #endregion
 
             #region Wpf Visibility
 
-            private string _windowState = "normal";
+            private bool _fullScreenState = false;
+            public bool FullScreenState { get { return _fullScreenState; } set { _fullScreenState = value; OnPropertyChanged(nameof(FullScreenState)); } }
 
-            public string WindowState
+            [EventHook("Enter Fullscreen")]
+            public void EnterFullScreen()
             {
-                get { return _windowState; }
-                set
-                {
-                    _windowState = value;
-                    OnPropertyChanged(nameof(WindowState));
-                }
+                FullScreenState = true;
             }
 
-            private string _windowStyle = "SingleBorderWindow";
-
-            public string WindowStyle
+            [EventHook("Exit Fullscreen")]
+            public void ExitFullScreen()
             {
-                get { return _windowStyle; }
-                set
-                {
-                    _windowStyle = value;
-                    OnPropertyChanged(nameof(WindowStyle));
-                }
+                FullScreenState = false;
             }
-
             #endregion
 
             #region INotifyPropertyChanged Members
@@ -95,20 +87,21 @@ namespace MyWindowsMediaPlayerv2
 
             public MainViewModel()
             {
-                PluginManager.GetInstance.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
+                ViewPluginManager.GetInstance.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
+                MessageablePluginManager.GetInstance.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
 
                 RootElement = _viewAnchorer.RootElement;
                 foreach (
                     var plugin in
-                        PluginManager.GetInstance.Query(
+                        ViewPluginManager.GetInstance.Query(
                             plugin => plugin.Optional == false && plugin.Position != Position.Invisible))
                     _viewAnchorer.AttachPlugin(plugin);
-                _nonOptionalPlugins = PluginManager.GetInstance.Query(plugin => plugin.Optional == false).ToList();
+                MessageablePlugins = MessageablePluginManager.GetInstance.Query(plugin => plugin.Optional == false).ToList();
 
                 Dispatcher.GetInstance.AddEventListener(this);
                 Dispatcher.GetInstance.Dispatch("Media Opening",
-                    new Uri(@"C:\Users\Colliot Vincent\Music\Hiroyuki Sawano\KILL la KILL ORIGINAL SOUND TRACK\01 澤野 弘之 - Before my body is dry.mp3"));
-
+                    //new Uri(@"C:\Users\Colliot Vincent\Music\Hiroyuki Sawano\KILL la KILL ORIGINAL SOUND TRACK\01 澤野 弘之 - Before my body is dry.mp3"));
+                    new Uri(@"C:\Users\Colliot Vincent\Documents\Downloads\[HorribleSubs] Mobile Suit Gundam - Iron-Blooded Orphans - 10 [480p].mkv"));
             }
 
             #endregion

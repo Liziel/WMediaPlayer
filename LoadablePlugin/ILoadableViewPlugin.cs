@@ -2,7 +2,7 @@
 
 namespace LoadablePlugin
 {
-    public interface ILoadablePlugin : IPlugin
+    public interface ILoadableViewPlugin : IViewPlugin
     {
         #region Graphical Representation
 

@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using DefaultMWMP2toolbar;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
+using SidePlayer.MediasPlayer;
 using TagLib;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 
@@ -146,13 +147,6 @@ namespace SidePlayer.MediaControlBar
 
         #region Interface Change on Events
 
-        [EventHook("Media Tag Created")]
-        public void SliderInitialize(File file)
-        {
-            SliderMaxValue = file.Properties.Duration.TotalSeconds;
-            MediaDuration = TimeSpan.FromSeconds(file.Properties.Duration.TotalSeconds).ToString(@"hh\:mm\:ss");
-        }
-
         [EventHook("Media Position Actualization")]
         public void TickResponse(double position)
         {
@@ -164,8 +158,11 @@ namespace SidePlayer.MediaControlBar
 
         #region Constructor
 
-        public MediaControlBarViewModel()
+        public MediaControlBarViewModel(TagLib.File file)
         {
+            SliderMaxValue = file.Properties.Duration.TotalSeconds;
+            MediaDuration = TimeSpan.FromSeconds(file.Properties.Duration.TotalSeconds).ToString(@"hh\:mm\:ss");
+
             Play = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Play"); },
                 o => MediaState == MediaState.Pause);
             Pause = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Pause"); },
@@ -173,5 +170,7 @@ namespace SidePlayer.MediaControlBar
         }
 
         #endregion
+
+        public UserControl MediaView { get; }
     }
 }

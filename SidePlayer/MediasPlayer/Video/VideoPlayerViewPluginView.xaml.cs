@@ -13,30 +13,20 @@ using SidePlayer.Annotations;
 namespace SidePlayer.MediasPlayer.Video
 {
     /// <summary>
-    /// Interaction logic for VideoPlayerPluginView.xaml
+    /// Interaction logic for VideoPlayerViewPluginView.xaml
     /// </summary>
-    public partial class VideoPlayerPluginView : UserControl, IPlugin, IForwardDispatcher, INotifyPropertyChanged
+    public partial class VideoPlayerViewPluginView : UserControl, IViewPlugin, INotifyPropertyChanged
     {
-        public VideoPlayerPluginView(Uri media, TagLib.File tag)
+        public VideoPlayerViewPluginView()
         {
-            this.DataContext = new VideoPlayerPluginViewModel(media, tag);
-            this.ForwardListeners.Add(this.DataContext);
             InitializeComponent();
         }
 
-        #region IPlugin Properties
+        #region IViewPlugin Properties
 
         public Position Position { get; } = Position.Center;
         public int Layer { get; } = 0;
         public bool Optional { get; } = true;
-        public string PluginName { get; } = "Video Player";
-        public Uri PluginIcon { get; } = null;
-
-        #endregion
-
-        #region IForward Dispatcher Properties
-
-        public List<object> ForwardListeners { get; } = new List<object>();
 
         #endregion
 
@@ -106,6 +96,7 @@ namespace SidePlayer.MediasPlayer.Video
 
         private void MaximizeVideoPlayer(object sender, MouseButtonEventArgs e)
         {
+            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Maximize Media View");
         }
     }
 }

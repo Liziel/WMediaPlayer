@@ -13,13 +13,12 @@ namespace PluginLibrary
             Center
         }
 
-        public interface IPlugin
+        public interface IViewPlugin
         {
             Position    Position { get; }
             int         Layer { get; }
-            bool        Optional { get; }
 
-            string      PluginName { get; }
+            bool        Optional { get; }
         }
     }
 }

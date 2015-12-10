@@ -10,27 +10,18 @@ namespace SidePlayer.MediaControlBar
     /// <summary>
     /// Interaction logic for MediaControlBarView.xaml
     /// </summary>
-    public partial class MediaControlBarView : UserControl, IPlugin, IForwardDispatcher
+    public partial class MediaControlBarView : UserControl, IViewPlugin
     {
         public MediaControlBarView()
         {
             InitializeComponent();
-            ForwardListeners.Add(DataContext);
         }
 
-        #region IPlugin Implementation
+        #region IViewPlugin Implementation
 
         public Position Position { get; } = Position.Invisible;
         public int Layer { get; } = 0;
         public bool Optional { get; } = true;
-        public string PluginName { get; } = "Media Control Bar";
-        public Uri PluginIcon { get; } = null;
-
-        #endregion
-
-        #region Forward Dispatcher Implementation
-
-        public List<object> ForwardListeners { get; } = new List<object>();
 
         #endregion
 

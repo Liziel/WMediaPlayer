@@ -10,8 +10,8 @@ namespace DefaultMWMP2toolbar
     /// <summary>
     /// Interaction logic for ClassicToolbarView.xaml
     /// </summary>
-    [Export(typeof(IPlugin))]
-    public partial class ClassicToolbarView : UserControl, IPlugin, IForwardDispatcher
+    [Export(typeof(IViewPlugin))]
+    public partial class ClassicToolbarView : UserControl, IViewPlugin
     {
         #region IForwardDispatcher Implementation
 
@@ -30,7 +30,7 @@ namespace DefaultMWMP2toolbar
         #endregion
 
 
-        #region IPlugin Implementation
+        #region IViewPlugin Implementation
 
         public Position Position { get; } = Position.Invisible;
         public int Layer { get; } = 0;

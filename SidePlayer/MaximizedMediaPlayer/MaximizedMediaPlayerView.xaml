@@ -1,12 +1,66 @@
 ﻿<UserControl x:Class="SidePlayer.MaximizedMediaPlayer.MaximizedMediaPlayerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SidePlayer.MaximizedMediaPlayer"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+
+        <Grid.Resources>
+            <Storyboard x:Key="HidingStoryBoard">
+                <DoubleAnimation BeginTime="0:0:3.0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlBar" From="1" To="0" Duration="0:0:1.0"/>
+            </Storyboard>
+        </Grid.Resources>
+
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard Name="HiddenAnimation" Storyboard="{StaticResource HidingStoryBoard}"></BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="UserControl.MouseMove">
+                <SeekStoryboard BeginStoryboardName="HiddenAnimation" Origin="BeginTime" Offset="0"></SeekStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.ZIndex="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid Width="40" Height="40">
+                        <Path Stretch="Fill"
+                            Data="F1 M 0,0 L 0,102.08 50.88,102.08 50.88,0 152.96,0 152.96,-50.88 50.88,-50.88
+		C 22.88,-50.88 0,-28 0,0 z
+		M 50.88,255.04 L 0,255.04 0,357.12 C 0,385.12 22.88,408 50.88,408 L 152.96,408
+		 152.96,357.12 50.88,357.12 z
+		M 408,357.12 L 305.92,357.12 305.92,408 408,408 C 436,408 458.88,385.12 458.88,357.12
+		L 458.88,255.04 408,255.04 z
+		M 408,-50.88 L 305.92,-50.88 305.92,0 408,0 408,102.08 458.88,102.08 458.88,0
+		C 458.88,-28 436,-50.88 408,-50.88 z"
+                            
+                            Fill="White" />
+                        </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
+        <Button Command="{Binding Path=Minimize}">
+            <Button.Template>
+                <ControlTemplate>
+                    <Rectangle Fill="Black" Opacity="1.0" />
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <ContentControl Grid.ZIndex="1" Content="{Binding Path=MediaDisplay}" Grid.Row="0" Grid.Column="0"/>
+
+        <ContentControl Grid.ZIndex="2" Content="{Binding Path=MediaControl}" VerticalAlignment="Bottom"
+                        Grid.Column="0" Grid.Row="0" MaxWidth="600" RenderTransformOrigin="0.5,0.5" x:Name="ControlBar"/>
+
     </Grid>
 </UserControl>

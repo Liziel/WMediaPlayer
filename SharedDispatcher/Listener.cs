@@ -28,11 +28,6 @@ namespace DispatcherLibrary
     {
     }
 
-    public interface IForwardDispatcher
-    {
-        List<Object> ForwardListeners { get; }
-    }
-
     public class Listener
     {
         private readonly Dictionary<string, MethodInfo> _hookDictionary = new Dictionary<string, MethodInfo>();
@@ -64,15 +59,8 @@ namespace DispatcherLibrary
             if (target == null)
                 return;
             var listener = target as Listener;
-            var forward = target as IForwardDispatcher;
             if (listener != null)
                 listener.DispatchInternal(_event, fwdparams);
-            else if (forward != null)
-                // ReSharper disable once PossibleNullReferenceException
-                foreach (var forwardListener in forward.ForwardListeners)
-                {
-                    DispatchToMembers(forwardListener, _event, fwdparams);
-                }
         }
 
         internal void DispatchInternal(string _event, object[] fwdparams)

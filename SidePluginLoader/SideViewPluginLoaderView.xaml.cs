@@ -7,29 +7,21 @@ using System.ComponentModel.Composition;
 namespace SidePluginLoader
 {
     /// <summary>
-    /// Interaction logic for SidePluginLoaderView.xaml
+    /// Interaction logic for SideViewPluginLoaderView.xaml
     /// </summary>
-    [Export(typeof(IPlugin))]
-    public partial class SidePluginLoaderView : UserControl, IForwardDispatcher, IPlugin
+    [Export(typeof(IViewPlugin))]
+    public partial class SideViewPluginLoaderView : UserControl, IViewPlugin
     {
-        public SidePluginLoaderView()
+        public SideViewPluginLoaderView()
         {
             InitializeComponent();
-            ForwardListeners = new List<object> {DataContext};
         }
 
-        #region Forward Dispatcher
-
-        public List<object> ForwardListeners { get; }
-
-        #endregion
-
-        #region IPlugin
+        #region IViewPlugin
 
         public Position Position { get; } = Position.Left;
         public int Layer { get; } = 0;
         public bool Optional { get; } = false;
-        public string PluginName { get; } = "Plugin Loader";
 
         #endregion
     }

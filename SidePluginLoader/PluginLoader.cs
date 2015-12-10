@@ -14,18 +14,18 @@ namespace SidePluginLoader
     {
         #region Constructor
 
-        public PluginLoader(ILoadablePlugin loadable, Action<PluginLoader> onSelection)
+        public PluginLoader(ILoadableViewPlugin loadableView, Action<PluginLoader> onSelection)
         {
-            PluginName = loadable.PresentationName;
-            PluginLogo = loadable.Logo as UIElement;
-            Plugin = loadable;
+            PluginName = loadableView.PresentationName;
+            PluginLogo = loadableView.Logo as UIElement;
+            ViewPlugin = loadableView;
 
             OnSelect = new UiCommand(delegate { onSelection(this); });
         }
 
         #endregion
 
-        #region Ui Plugin based
+        #region Ui viewPlugin based
 
         public string PluginName { get; }
         public UIElement PluginLogo { get; }
@@ -39,9 +39,9 @@ namespace SidePluginLoader
 
         #endregion
 
-        #region Loadable Plugin
+        #region Loadable viewPlugin
 
-        public ILoadablePlugin Plugin;
+        public ILoadableViewPlugin ViewPlugin;
 
         #endregion
 

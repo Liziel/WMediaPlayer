@@ -12,14 +12,14 @@ using File = TagLib.File;
 
 namespace SidePlayer.MediasPlayer.Audio
 {
-    public class MusicPlayerPluginViewModel : Listener, INotifyPropertyChanged
+    public sealed class MusicPlayerPluginViewModel : Listener, INotifyPropertyChanged, IMediaPlayer
     {
         #region Notifier Properties
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -30,6 +30,18 @@ namespace SidePlayer.MediasPlayer.Audio
 
         private MusicView _albumCoverView;
         public MusicView AlbumCoverView { get { return _albumCoverView; } set { _albumCoverView = value; OnPropertyChanged(nameof(AlbumCoverView)); } }
+        public UserControl MediaView { get { return AlbumCoverView; } }
+
+        public void OnMaximize()
+        {
+        }
+
+        public void OnMinimize()
+        {
+            var tmp = AlbumCoverView;
+            AlbumCoverView = null;
+            AlbumCoverView = tmp;
+        }
 
         private BitmapImage _albumCover = null;
         public BitmapImage AlbumCover

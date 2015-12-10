@@ -7,13 +7,24 @@
         xmlns:myWindowsMediaPlayerv2="clr-namespace:MyWindowsMediaPlayerv2"
         mc:Ignorable="d"
         Title="MediaPlayer" Height="800" Width="800" Background="Black"
-        WindowState="{Binding WindowState}" WindowStyle="{Binding WindowStyle}"
         WindowStartupLocation="CenterScreen"
         >
     <Window.DataContext>
-        <viewModel:MainViewModel />
+        <viewModel:MainViewModel/>
     </Window.DataContext>
-
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+            <DataTrigger Binding="{Binding FullScreenState}" Value="True">
+                <Setter Property="WindowState" Value="Maximized" />
+                <Setter Property="WindowStyle" Value="None" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding FullScreenState}" Value="False">
+                <Setter Property="WindowState" Value="Maximized" />
+                <Setter Property="WindowStyle" Value="SingleBorderWindow" />
+            </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
     <ContentControl Content="{Binding Path=RootElement}"/>
-
 </Window>

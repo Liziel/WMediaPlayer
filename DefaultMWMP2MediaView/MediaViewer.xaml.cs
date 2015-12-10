@@ -21,8 +21,8 @@ namespace DefaultMWMP2MediaView
     /// <summary>
     /// Interaction logic for MediaViewer.xaml
     /// </summary>
-    [Export(typeof(IPlugin))]
-    public partial class MediaViewer : UserControl, IPlugin, IForwardDispatcher
+    [Export(typeof(IViewPlugin))]
+    public partial class MediaViewer : UserControl, IViewPlugin
     {
         #region IForwardDispatcher Implementation
 
@@ -40,7 +40,7 @@ namespace DefaultMWMP2MediaView
 
         #endregion
 
-        #region IPlugin Implementation
+        #region IViewPlugin Implementation
 
         public Position Position { get; } = Position.All;
         public int Layer { get; } = 1;

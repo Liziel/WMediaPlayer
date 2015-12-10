@@ -13,24 +13,21 @@ using SidePlayer.Annotations;
 namespace SidePlayer.MediasPlayer.Audio
 {
     /// <summary>
-    /// Interaction logic for MusicPlayerPluginView.xaml
+    /// Interaction logic for MusicPlayerViewPluginView.xaml
     /// </summary>
-    public partial class MusicPlayerPluginView : UserControl, IPlugin, IForwardDispatcher, INotifyPropertyChanged
+    public partial class MusicPlayerViewPluginView : UserControl
     {
-        public MusicPlayerPluginView(Uri media, TagLib.File tag)
+
+        public MusicPlayerViewPluginView()
         {
-            this.DataContext = new MusicPlayerPluginViewModel(media, tag);
-            this.ForwardListeners.Add(this.DataContext);
             InitializeComponent();
         }
 
-        #region IPlugin Properties
+        #region IViewPlugin Properties
 
         public Position Position { get; } = Position.Center;
         public int Layer { get; } = 0;
         public bool Optional { get; } = true;
-        public string PluginName { get; } = "Video Player";
-        public Uri PluginIcon { get; } = null;
 
         #endregion
 
@@ -84,18 +81,6 @@ namespace SidePlayer.MediasPlayer.Audio
 
         #endregion
 
-        #region Notifier Properties
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
         private void AlbumResearch(object sender, MouseButtonEventArgs e)
         {
 
@@ -106,8 +91,10 @@ namespace SidePlayer.MediasPlayer.Audio
 
         }
 
-        private void MaximizeVideoPlayer(object sender, MouseButtonEventArgs e)
+        private void MaximizeAudioPlayer(object sender, MouseButtonEventArgs e)
         {
+            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Maximize Media View");
         }
+
     }
 }

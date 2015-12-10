@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using PluginLibrary.Customization;
 
 namespace SidePlayer.MaximizedMediaPlayer
 {
     /// <summary>
     /// Interaction logic for MaximizedMediaPlayerView.xaml
-    /// </summary>
-    public partial class MaximizedMediaPlayerView : UserControl
+    /// </summary> 
+    public partial class MaximizedMediaPlayerView : UserControl, IViewPlugin
     {
-        public MaximizedMediaPlayerView()
+        public MaximizedMediaPlayerView(MaximizedMediaPlayerViewModel model)
         {
+            DataContext = model;
             InitializeComponent();
         }
+
+        public Position Position { get; } = Position.All;
+        public int Layer { get; } = 0;
+        public bool Optional { get; } = true;
     }
 }

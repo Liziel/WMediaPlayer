@@ -9,26 +9,26 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Styles/MusicDisplayer.xaml" />
+                <ResourceDictionary Source="../../Ressources/MusicDisplayer.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ContentControl Grid.ZIndex="0">
-        <ContentControl.Style>
-            <Style TargetType="ContentControl">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=Video}" Value="{x:Null}">
-                        <Setter Property="Template" Value="{StaticResource DefaultAlbumCover}" />
-                    </DataTrigger>
-                </Style.Triggers>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <ContentControl Content="{Binding Path=Video}" />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ContentControl.Style>
-    </ContentControl>
+    <Grid>
+        <ContentControl Content="{Binding Path=SubtitleView}" Grid.ZIndex ="1">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Maximized}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Maximized}" Value="true">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <ContentControl Grid.ZIndex="0" Content="{Binding Path=Video}">
+        </ContentControl>
+        </Grid>
 </UserControl>
