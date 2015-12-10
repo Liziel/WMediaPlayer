@@ -13,15 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DefaultMWMP2MediaView
+namespace SidePlayer.MediasPlayer.Video
 {
     /// <summary>
-    /// Interaction logic for YTLogo.xaml
+    /// Interaction logic for SubtitleView.xaml
     /// </summary>
-    public partial class YTLogo : UserControl
+    public partial class SubtitleView : UserControl
     {
-        public YTLogo()
+        public SubtitleView(Subtitles context)
         {
+            DataContext = context;
             InitializeComponent();
         }
     }

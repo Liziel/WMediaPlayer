@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DefaultMWMP2MediaView.Properties
+namespace MediaLibrary.Properties
 {
     
     

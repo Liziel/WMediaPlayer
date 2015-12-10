@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DefaultMWMP2MediaView
+namespace MediaLibrary
 {
     /// <summary>
-    /// Interaction logic for MediaDisplayView.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class MediaDisplayView : UserControl
+    public partial class UserControl1 : UserControl
     {
-        public MediaDisplayView()
+        public UserControl1()
         {
             InitializeComponent();
         }
