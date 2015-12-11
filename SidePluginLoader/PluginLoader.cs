@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using DefaultMWMP2toolbar;
-using LoadablePlugin;
+using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
 
@@ -14,11 +14,11 @@ namespace SidePluginLoader
     {
         #region Constructor
 
-        public PluginLoader(ILoadableViewPlugin loadableView, Action<PluginLoader> onSelection)
+        public PluginLoader(ILoadablePlugin loadableView, Action<PluginLoader> onSelection)
         {
             PluginName = loadableView.PresentationName;
             PluginLogo = loadableView.Logo as UIElement;
-            ViewPlugin = loadableView;
+            ViewPlugin = loadableView.View;
 
             OnSelect = new UiCommand(delegate { onSelection(this); });
         }
@@ -41,7 +41,7 @@ namespace SidePluginLoader
 
         #region Loadable viewPlugin
 
-        public ILoadableViewPlugin ViewPlugin;
+        public IViewPlugin ViewPlugin;
 
         #endregion
 

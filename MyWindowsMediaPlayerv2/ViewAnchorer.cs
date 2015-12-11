@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using PluginLibrary.Customization;
 
 namespace MyWindowsMediaPlayerv2
@@ -33,15 +34,21 @@ namespace MyWindowsMediaPlayerv2
             {
                 ColumnDefinitions =
                 {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
+                    new ColumnDefinition {Width = new GridLength(100)},
+                    new ColumnDefinition {Width = new GridLength(5)},
                     new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)}
+                    new ColumnDefinition {Width = new GridLength(5)},
+                    new ColumnDefinition {Width = new GridLength(250), MaxWidth = 400}
                 },
             };
 
             public UIElement RootElement => _grid;
 
             #endregion
+
+            private readonly GridSplitter _rightSplitter = new GridSplitter { Background = Brushes.White, Opacity = 0.2, HorizontalAlignment = HorizontalAlignment.Stretch, Visibility = Visibility.Collapsed};
+            private readonly GridSplitter _leftSplitter = new GridSplitter { Background = Brushes.White, Opacity = 0.2, HorizontalAlignment = HorizontalAlignment.Stretch, Visibility = Visibility.Collapsed};
+
 
             #region Constructor
 
@@ -53,14 +60,18 @@ namespace MyWindowsMediaPlayerv2
                 Grid.SetRow(_divisedGrid, 0);
 
                 Grid.SetColumn(_leftControl, 0);
-                Grid.SetColumn(_centerControl, 1);
-                Grid.SetColumn(_rightControl, 2);
+                Grid.SetColumn(_leftSplitter, 1);
+                Grid.SetColumn(_centerControl, 2);
+                Grid.SetColumn(_rightSplitter, 3);
+                Grid.SetColumn(_rightControl, 4);
 
                 _grid.Children.Add(_allControl);
                 _grid.Children.Add(_divisedGrid);
 
                 _divisedGrid.Children.Add(_leftControl);
+                _divisedGrid.Children.Add(_leftSplitter);
                 _divisedGrid.Children.Add(_centerControl);
+                _divisedGrid.Children.Add(_rightSplitter);
                 _divisedGrid.Children.Add(_rightControl);
 
                 Panel.SetZIndex(RootElement, zindex);
@@ -70,7 +81,7 @@ namespace MyWindowsMediaPlayerv2
 
             #region Attach Plugin
 
-            public bool Empty() =>
+            private bool Empty() =>
                 _allControl.Content == null && _centerControl.Content == null && _leftControl.Content == null &&
                 _rightControl.Content == null;
 
@@ -95,9 +106,11 @@ namespace MyWindowsMediaPlayerv2
                         break;
                     case Position.Left:
                         _leftControl.Content = viewPlugin;
+                        _leftSplitter.Visibility = Visibility.Visible;
                         break;
                     case Position.Right:
                         _rightControl.Content = viewPlugin;
+                        _rightSplitter.Visibility = Visibility.Visible;
                         break;
                 }
             }
@@ -146,7 +159,10 @@ namespace MyWindowsMediaPlayerv2
         public void DesattachPlugin(IViewPlugin viewPlugin)
         {
             foreach (var kv in _anchorsByZindex.Where(kv => kv.Value.RemovePlugin(viewPlugin)).ToList())
+            {
+                RootElement.Children.Remove(_anchorsByZindex[kv.Key].RootElement);
                 _anchorsByZindex.Remove(kv.Key);
+            }
         }
     }
 }

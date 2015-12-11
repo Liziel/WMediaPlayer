@@ -80,10 +80,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LoadablePlugin\LoadablePlugin.csproj">
-      <Project>{4f30687e-5934-4f1d-8ca2-b092f6fd3059}</Project>
-      <Name>LoadablePlugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharedDispatcher\DispatcherLibrary.csproj">
       <Project>{48e9024e-1fe5-4403-9ed1-581e1484dc7c}</Project>
       <Name>DispatcherLibrary</Name>

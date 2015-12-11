@@ -682,7 +682,7 @@ namespace SidePlayer.Annotations
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC
-  /// partial view. If applied to a method, the MVC partial view name is calculated implicitly
+  /// partial View. If applied to a method, the MVC partial View name is calculated implicitly
   /// from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>.
   /// </summary>
@@ -721,7 +721,7 @@ namespace SidePlayer.Annotations
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component. If applied to a method, the MVC view name is calculated implicitly
+  /// is an MVC View component. If applied to a method, the MVC View name is calculated implicitly
   /// from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Controller.View(Object)</c>.
   /// </summary>
@@ -730,14 +730,14 @@ namespace SidePlayer.Annotations
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component name.
+  /// is an MVC View component name.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
   public sealed class AspMvcViewComponentAttribute : Attribute { }
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component view. If applied to a method, the MVC view component view name is default.
+  /// is an MVC View component View. If applied to a method, the MVC View component View name is default.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
   public sealed class AspMvcViewComponentViewAttribute : Attribute { }

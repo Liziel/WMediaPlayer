@@ -15,7 +15,6 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type local:PluginLoader}">
                 <Button Command="{Binding Path=OnSelect}" x:Name="ControlButton">
-
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>

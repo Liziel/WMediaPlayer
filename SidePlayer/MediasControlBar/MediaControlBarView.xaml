@@ -31,6 +31,8 @@
             <RowDefinition Height="Auto" />
             <!-- Sub Control -->
         </Grid.RowDefinitions>
+        <GridSplitter>
+        </GridSplitter>
 
         <Slider Grid.Row="1" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True" Margin="10,0,10,0"
                 Value="{Binding Path=SliderCurrentValue}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0"

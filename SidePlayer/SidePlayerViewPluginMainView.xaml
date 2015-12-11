@@ -16,7 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="#222222" MaxWidth="250">
+    <Grid Background="#222222">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

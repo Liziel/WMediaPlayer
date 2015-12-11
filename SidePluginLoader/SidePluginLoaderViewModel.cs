@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using DispatcherLibrary;
-using LoadablePlugin;
 using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
@@ -43,8 +42,8 @@ namespace SidePluginLoader
 
         public SidePluginLoaderViewModel()
         {
-            PluginLoaders = ViewPluginManager.GetInstance.Query(plugin => plugin is ILoadableViewPlugin)
-                .Select(plugin => new PluginLoader(plugin as ILoadableViewPlugin, this.OnPluginSelected))
+            PluginLoaders = ViewPluginManager.GetInstance.Query(plugin => plugin is ILoadablePlugin)
+                .Select(plugin => new PluginLoader(plugin as ILoadablePlugin, this.OnPluginSelected))
                 .ToList();
         }
 
