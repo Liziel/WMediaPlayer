@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using DefaultMWMP2toolbar;
 using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
+using UiLibrary;
 
 namespace SidePluginLoader
 {
@@ -41,7 +41,7 @@ namespace SidePluginLoader
 
         #region Loadable viewPlugin
 
-        public IViewPlugin ViewPlugin;
+        public readonly IViewPlugin ViewPlugin;
 
         #endregion
 

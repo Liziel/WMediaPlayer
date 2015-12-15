@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using DefaultMWMP2toolbar;
 using SidePlayer.Annotations;
+using UiLibrary;
 
 namespace SidePlayer.MaximizedMediaPlayer
 {

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using DispatcherLibrary;
+using MediaPropertiesLibrary.Audio;
 using SidePlayer.Annotations;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 using File = TagLib.File;
@@ -130,6 +131,13 @@ namespace SidePlayer.MediasPlayer.Audio
             Dispatcher.GetInstance.Dispatch("Media Paused");
         }
 
+        [EventHook("Stop")]
+        public void Stop()
+        {
+            _music.Stop();
+            _tick.Stop();
+        }
+
         [EventHook("Media Position Set")]
         public void ForceSetPosition(double duration)
         {
@@ -150,10 +158,14 @@ namespace SidePlayer.MediasPlayer.Audio
 
         #region Constructor
 
-        public MusicPlayerPluginViewModel(Uri media, File tag)
+        public MusicPlayerPluginViewModel()
         {
             AlbumCoverView = new MusicView(this);
-            Music = new MediaElement {Source = media, LoadedBehavior = MediaState.Manual};
+            Music = new MediaElement { LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual };
+        }
+
+        public void AssignUri(Uri media, TagLib.File tag)
+        {
             _tag = tag;
 
             InitializeCover();
@@ -162,6 +174,17 @@ namespace SidePlayer.MediasPlayer.Audio
             _tick.Tick += OnTick;
         }
 
+        public void AssignMedia(object media)
+        {
+            Track track = media as Track;
+
+            Music.Source = new Uri(track.Path);
+            ForceSetPosition(0);
+            AlbumCover = track.Album?.Cover;
+
+            MediaName = track.Name;
+            _tick.Tick += OnTick;
+        }
         #endregion
     }
 }

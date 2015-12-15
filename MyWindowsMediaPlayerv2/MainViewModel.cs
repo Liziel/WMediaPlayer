@@ -36,13 +36,22 @@ namespace MyWindowsMediaPlayerv2
             }
 
             [EventHook("Attach Plugin")]
-            public void AttachPlugin(IViewPlugin viewPlugin) { _viewAnchorer.AttachPlugin(viewPlugin);}
-            [EventHook("Force Attach Plugin")]
-            public void ForceAttachPlugin(IViewPlugin viewPlugin, Position position, int layer) { _viewAnchorer.ForceAttachPlugin(viewPlugin, position, layer); }
+            public void AttachPlugin(IViewPlugin viewPlugin)
+            {
+                _viewAnchorer.AttachPlugin(viewPlugin);
+            }
+
             [EventHook("Attach Plugin On Top")]
-            public void PutPluginOnTop(IViewPlugin viewPlugin) {  _viewAnchorer.PutPluginOnTop(viewPlugin); }
+            public void PutPluginOnTop(IViewPlugin viewPlugin)
+            {
+                _viewAnchorer.PutPluginOnTop(viewPlugin);
+            }
+
             [EventHook("Remove Plugin")]
-            public void RemovePlugin(IViewPlugin viewPlugin) { _viewAnchorer.DesattachPlugin(viewPlugin); }
+            public void RemovePlugin(IViewPlugin viewPlugin)
+            {
+                _viewAnchorer.DesattachPlugin(viewPlugin);
+            }
 
             #endregion
 
@@ -51,12 +60,23 @@ namespace MyWindowsMediaPlayerv2
             [CollectionForwardDispatch]
             public List<IMessageablePlugin> MessageablePlugins { get; }
 
+            private List<ILoadablePlugin> LoadablePlugins { get; }
+
             #endregion
 
             #region Wpf Visibility
 
             private bool _fullScreenState = false;
-            public bool FullScreenState { get { return _fullScreenState; } set { _fullScreenState = value; OnPropertyChanged(nameof(FullScreenState)); } }
+
+            public bool FullScreenState
+            {
+                get { return _fullScreenState; }
+                set
+                {
+                    _fullScreenState = value;
+                    OnPropertyChanged(nameof(FullScreenState));
+                }
+            }
 
             [EventHook("Enter Fullscreen")]
             public void EnterFullScreen()
@@ -69,6 +89,7 @@ namespace MyWindowsMediaPlayerv2
             {
                 FullScreenState = false;
             }
+
             #endregion
 
             #region INotifyPropertyChanged Members
@@ -87,8 +108,7 @@ namespace MyWindowsMediaPlayerv2
 
             public MainViewModel()
             {
-                ViewPluginManager.GetInstance.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
-                MessageablePluginManager.GetInstance.LoadPlugin(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
+                StaticRessourcesManager.StaticRessourcesInitialization();
 
                 RootElement = _viewAnchorer.RootElement;
                 foreach (
@@ -96,16 +116,14 @@ namespace MyWindowsMediaPlayerv2
                         ViewPluginManager.GetInstance.Query(
                             plugin => plugin.Optional == false && plugin.Position != Position.Invisible))
                     _viewAnchorer.AttachPlugin(plugin);
-                MessageablePlugins = MessageablePluginManager.GetInstance.Query(plugin => plugin.Optional == false).ToList();
+                MessageablePlugins =
+                    MessageablePluginManager.GetInstance.Query(plugin => plugin.Optional == false).ToList();
+                LoadablePlugins = LoadablePluginManager.GetInstance.Query(plugin => true).ToList();
 
                 Dispatcher.GetInstance.AddEventListener(this);
-                Dispatcher.GetInstance.Dispatch("Media Opening",
-                    //new Uri(@"C:\Users\Colliot Vincent\Music\Hiroyuki Sawano\KILL la KILL ORIGINAL SOUND TRACK\01 澤野 弘之 - Before my body is dry.mp3"));
-                    new Uri(@"C:\Users\Colliot Vincent\Documents\Downloads\[HorribleSubs] Mobile Suit Gundam - Iron-Blooded Orphans - 10 [480p].mkv"));
             }
 
             #endregion
-
         }
     }
 }

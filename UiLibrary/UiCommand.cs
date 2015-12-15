@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace DefaultMWMP2toolbar
+namespace UiLibrary
 {
     public class UiCommand : ICommand
     {

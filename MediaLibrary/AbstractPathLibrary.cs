@@ -10,7 +10,7 @@ namespace MediaLibrary
     {
         #region Save Locations
 
-        public static string DataFolderLocation
+        private static string DataFolderLocation
         {
             get
             {
@@ -21,7 +21,7 @@ namespace MediaLibrary
             }
         }
 
-        protected static string LibrariesLocation
+        protected internal static string LibrariesLocation
         {
             get
             {
@@ -42,7 +42,7 @@ namespace MediaLibrary
         #region Load Save Synchronize
 
         protected void BaseSave(FileStream libraryConfigFile)
-            => new XmlSerializer(GetType()).Serialize(libraryConfigFile, Paths);
+            => new XmlSerializer(Paths.GetType()).Serialize(libraryConfigFile, Paths);
 
         protected void BaseLoad(FileStream libraryConfigFile)
             => Paths = (List<string>) new XmlSerializer(typeof (List<string>)).Deserialize(libraryConfigFile);

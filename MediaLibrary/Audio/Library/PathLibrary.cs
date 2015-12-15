@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Serialization;
 
-namespace MediaLibrary.Audio
+namespace MediaLibrary.Audio.Library
 {
     internal sealed class PathLibrary : AbstractPathLibrary
     {
@@ -18,6 +17,17 @@ namespace MediaLibrary.Audio
         private static readonly PathLibrary _instance = new PathLibrary();
         private PathLibrary()
         {
+            try
+            {
+                using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
+                    BaseLoad(stream);
+            } catch(InvalidOperationException)
+            {
+                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) };
+            }
+
+            using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
+                BaseSave(stream);
         }
 
         #endregion

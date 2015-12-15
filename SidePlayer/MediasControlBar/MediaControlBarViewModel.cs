@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using DefaultMWMP2toolbar;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
 using SidePlayer.MediasPlayer;
 using TagLib;
+using UiLibrary;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediaControlBar
@@ -158,15 +158,22 @@ namespace SidePlayer.MediaControlBar
 
         #region Constructor
 
-        public MediaControlBarViewModel(TagLib.File file)
+        public MediaControlBarViewModel()
         {
-            SliderMaxValue = file.Properties.Duration.TotalSeconds;
-            MediaDuration = TimeSpan.FromSeconds(file.Properties.Duration.TotalSeconds).ToString(@"hh\:mm\:ss");
+            SliderMaxValue = 0;
+            MediaDuration = TimeSpan.FromSeconds(0).ToString(@"hh\:mm\:ss");
 
             Play = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Play"); },
                 o => MediaState == MediaState.Pause);
             Pause = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Pause"); },
                 o => MediaState == MediaState.Play);
+        }
+
+        public void SetDuration(double duration)
+        {
+            SliderCurrentValue = 0;
+            SliderMaxValue = duration;
+            MediaDuration = TimeSpan.FromSeconds(duration).ToString(@"hh\:mm\:ss");
         }
 
         #endregion

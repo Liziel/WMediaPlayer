@@ -38,7 +38,7 @@ namespace MyWindowsMediaPlayerv2
                     new ColumnDefinition {Width = new GridLength(5)},
                     new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                     new ColumnDefinition {Width = new GridLength(5)},
-                    new ColumnDefinition {Width = new GridLength(250), MaxWidth = 400}
+                    new ColumnDefinition {Width = new GridLength(0), MaxWidth = 400}
                 },
             };
 
@@ -111,6 +111,7 @@ namespace MyWindowsMediaPlayerv2
                     case Position.Right:
                         _rightControl.Content = viewPlugin;
                         _rightSplitter.Visibility = Visibility.Visible;
+                        _divisedGrid.ColumnDefinitions[4].Width = new GridLength(250);
                         break;
                 }
             }

@@ -42,8 +42,8 @@ namespace SidePluginLoader
 
         public SidePluginLoaderViewModel()
         {
-            PluginLoaders = ViewPluginManager.GetInstance.Query(plugin => plugin is ILoadablePlugin)
-                .Select(plugin => new PluginLoader(plugin as ILoadablePlugin, this.OnPluginSelected))
+            PluginLoaders = LoadablePluginManager.GetInstance.Query(plugin => true)
+                .Select(plugin => new PluginLoader(plugin, OnPluginSelected))
                 .ToList();
         }
 
@@ -52,8 +52,7 @@ namespace SidePluginLoader
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;
-            Dispatcher.GetInstance.Dispatch("Force Attach viewPlugin", pluginLoader.ViewPlugin, Position.Center,
-                pluginLoader.ViewPlugin.Layer);
+            Dispatcher.GetInstance.Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
         }
     }
 }

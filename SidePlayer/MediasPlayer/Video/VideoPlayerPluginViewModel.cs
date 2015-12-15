@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
 using Dispatcher = DispatcherLibrary.Dispatcher;
+using File = TagLib.File;
 
 namespace SidePlayer.MediasPlayer.Video
 {
@@ -63,7 +64,7 @@ namespace SidePlayer.MediasPlayer.Video
         public VideoView VideoView { get { return _videoView; } set { _videoView = value; OnPropertyChanged(nameof(VideoView)); } }
         public UserControl MediaView => VideoView;
 
-        private MediaElement _video;
+        private MediaElement _video = new MediaElement {LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual};
 
         public MediaElement Video
         {
@@ -134,7 +135,7 @@ namespace SidePlayer.MediasPlayer.Video
 
         private readonly DispatcherTimer _subtitleTick = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
 
-        private readonly Subtitles _subtitles;
+        private Subtitles _subtitles = new Subtitles();
 
         private SubtitleView _subtitleViewDisplay;
         public SubtitleView SubtitleView
@@ -160,15 +161,14 @@ namespace SidePlayer.MediasPlayer.Video
 
         #region Constructor
 
-        public VideoPlayerPluginViewModel(Uri media, TagLib.File tag)
+        public VideoPlayerPluginViewModel()
         {
-            _subtitles = new Subtitles();
             SubtitleView = new SubtitleView(_subtitles);
-
             VideoView = new VideoView(this);
-            Video = new MediaElement { Source = media, LoadedBehavior = MediaState.Pause, ScrubbingEnabled = true, UnloadedBehavior = MediaState.Manual};
-            _tag = tag;
+        }
 
+        private void LoadSubtitles(Uri media)
+        {
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -180,7 +180,7 @@ namespace SidePlayer.MediasPlayer.Video
                 },
             };
 
-            
+
             process.Exited += (o, args) =>
             {
                 Debug.WriteLine("Process Exited");
@@ -193,11 +193,24 @@ namespace SidePlayer.MediasPlayer.Video
 
             process.EnableRaisingEvents = true;
             process.Start();
+        }
+
+        public void AssignUri(Uri media, File tag)
+        {
+            Video.Source = media;
+            _tag = tag;
+
+            LoadSubtitles(media);
 
             InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
 
             _senderTick.Tick += OnSenderTick;
             _subtitleTick.Tick += RefreshSubtitles;
+        }
+
+        public void AssignMedia(object media)
+        {
+            
         }
 
         #endregion

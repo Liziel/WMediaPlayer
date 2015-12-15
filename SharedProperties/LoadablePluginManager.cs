@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
-using System.Linq;
 using PluginLibrary.Customization;
 
 namespace PluginLibrary
 {
-    public class ViewPluginManager : AbstractPluginManager
+    public class LoadablePluginManager : AbstractPluginManager
     {
         #region Singleton Properties and Constructor
 
-        private static ViewPluginManager _instance;
+        private static LoadablePluginManager _instance;
 
-        public static ViewPluginManager GetInstance
+        public static LoadablePluginManager GetInstance
         {
             get
             {
-                if (_instance == null) _instance = new ViewPluginManager();
+                if (_instance == null) _instance = new LoadablePluginManager();
                 return _instance;
             }
         }
 
-        private ViewPluginManager()
+        private LoadablePluginManager()
         {
         }
 
@@ -31,9 +28,10 @@ namespace PluginLibrary
 
         #region Plugins List
 
-        [ImportMany(typeof (IViewPlugin))] private IEnumerable<Lazy<IViewPlugin>> _importedPlugins;
+        [ImportMany(typeof(ILoadablePlugin))]
+        private IEnumerable<Lazy<ILoadablePlugin>> _importedPlugins;
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        private readonly List<IViewPlugin> _listPlugins = new List<IViewPlugin>();
+        private readonly List<ILoadablePlugin> _listPlugins = new List<ILoadablePlugin>(); //TODO: ça merde saloooooope
 
         protected sealed override void OnPluginComposed()
         {
@@ -45,16 +43,17 @@ namespace PluginLibrary
 
         #region Query Methods
 
-        public IViewPlugin SingleQuery(Predicate<IViewPlugin> predicate)
+        public ILoadablePlugin SingleQuery(Predicate<ILoadablePlugin> predicate)
         {
             return BaseSingleQuery(predicate, _listPlugins);
         }
 
-        public IEnumerable<IViewPlugin> Query(Predicate<IViewPlugin> predicate)
+        public IEnumerable<ILoadablePlugin> Query(Predicate<ILoadablePlugin> predicate)
         {
             return BaseQuery(predicate, _listPlugins);
         }
 
         #endregion
+
     }
 }

@@ -128,12 +128,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SidePlayerViewPluginMainView.xaml">
+    <Page Include="SidePlayerPluginMainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="SidePlayerViewPluginMainView.xaml.cs">
-      <DependentUpon>SidePlayerViewPluginMainView.xaml</DependentUpon>
+    <Compile Include="SidePlayerPluginMainView.xaml.cs">
+      <DependentUpon>SidePlayerPluginMainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Ressources\ControlPlayPauseButtonCustomization.xaml">
@@ -175,6 +175,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MediaPropertiesLibrary\MediaPropertiesLibrary.csproj">
+      <Project>{8bc656eb-0ea4-4d03-b9f8-135904c9976b}</Project>
+      <Name>MediaPropertiesLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharedDispatcher\DispatcherLibrary.csproj">
       <Project>{48e9024e-1fe5-4403-9ed1-581e1484dc7c}</Project>
       <Name>DispatcherLibrary</Name>

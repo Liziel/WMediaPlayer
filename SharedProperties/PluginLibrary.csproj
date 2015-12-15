@@ -47,6 +47,9 @@
     <Compile Include="AbstractPluginManager.cs" />
     <Compile Include="ILoadablePlugin.cs" />
     <Compile Include="IMessageablePlugin.cs" />
+    <Compile Include="IStaticRessource.cs" />
+    <Compile Include="LoadablePluginManager.cs" />
+    <Compile Include="StaticRessourcesManager.cs" />
     <Compile Include="IViewPlugin.cs" />
     <Compile Include="MessageablePluginManager.cs" />
     <Compile Include="ViewPluginManager.cs" />

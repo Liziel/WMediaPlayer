@@ -8,15 +8,14 @@ using PluginLibrary.Customization;
 namespace SidePlayer
 {
     /// <summary>
-    /// Interaction logic for SidePlayerViewPluginMainView.xaml
+    /// Interaction logic for SidePlayerPluginMainView.xaml
     /// </summary>
-    public partial class SidePlayerViewPluginMainView : UserControl, IViewPlugin
+    public partial class SidePlayerPluginMainView : UserControl, IViewPlugin
     {
         #region Constructor
 
-        public SidePlayerViewPluginMainView(object viewModel)
+        public SidePlayerPluginMainView()
         {
-            DataContext = viewModel;
             InitializeComponent();
         }
 
