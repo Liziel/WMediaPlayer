@@ -9,7 +9,7 @@ namespace MediaLibrary.Video.Library
     {
         #region Location
 
-        private static string AudioLibraryLocation => LibrariesLocation + "/audioLibrary.xml";
+        private static string AudioLibraryLocation => LibrariesLocation + "/videoLibrary.xml";
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace MediaLibrary.Video.Library
             }
             catch (InvalidOperationException)
             {
-                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) };
+                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) };
             }
 
             using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))

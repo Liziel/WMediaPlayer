@@ -12,10 +12,7 @@ namespace MediaLibrary.Audio.SubViews
 {
     public class AudioAlbumViewModel : Listener, INotifyPropertyChanged
     {
-        private List<Album> _albumsAccess = new List<Album>
-        {
-            new Album {Name = "Test", Cover = null}
-        };
+        private List<Album> _albumsAccess = null;
         public List<Album> AlbumsAccess => _albumsAccess;
 
         public AudioAlbumViewModel()

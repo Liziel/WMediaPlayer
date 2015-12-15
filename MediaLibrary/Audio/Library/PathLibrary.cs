@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
+using PluginLibrary;
 
 namespace MediaLibrary.Audio.Library
 {

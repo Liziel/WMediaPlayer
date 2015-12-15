@@ -91,11 +91,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Video\LibraryClassView.xaml.cs">
+      <DependentUpon>LibraryClassView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Video\LibraryClassViewModel.cs" />
     <Compile Include="Video\Library\Library.cs" />
     <Compile Include="Video\Library\PathLibrary.cs" />
+    <Compile Include="Video\LoadableVideoLibraryPlugin.cs" />
     <Compile Include="Video\Logo.xaml.cs">
       <DependentUpon>Logo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Video\SubViews\VideoTrackView.xaml.cs">
+      <DependentUpon>VideoTrackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Video\SubViews\VideoTrackViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -150,7 +159,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Video\LibraryClassView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Video\Logo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Video\SubViews\VideoTrackView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

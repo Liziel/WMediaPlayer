@@ -55,8 +55,11 @@ namespace MediaLibrary.Audio.Library
             }
         }
 
-        private int _triggerTracksLoaded = 0;
         public static event OnAllTracksLoaded TracksLoaded;
+        private static void OnTracksLoaded()
+        {
+            TracksLoaded?.Invoke();
+        }
 
         #endregion
 
@@ -92,10 +95,9 @@ namespace MediaLibrary.Audio.Library
                 {
                     {"*.mp3", Instance.OnFoundFile}
                 });
-                //Instance.SaveUsertags(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate));
                 OnTracksLoaded();
             })).Start();
-        }
+         }
 
         private BitmapImage CreateCover(File metaData)
         {
@@ -217,17 +219,12 @@ namespace MediaLibrary.Audio.Library
         }
 
         #endregion
-
-        private static void OnTracksLoaded()
-        {
-            TracksLoaded?.Invoke();
-        }
     }
 
     [Export(typeof (IStaticRessource))]
-    public class LibraryInstantiator : IStaticRessource
+    public class AudioLibraryInstantiator : IStaticRessource
     {
-        public LibraryInstantiator()
+        public AudioLibraryInstantiator()
         {
             Library.Initialize();
         }

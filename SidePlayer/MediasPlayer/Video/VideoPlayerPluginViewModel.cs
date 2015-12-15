@@ -8,8 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
+using TagLib.Matroska;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 using File = TagLib.File;
+using Track = MediaPropertiesLibrary.Video.Track;
 
 namespace SidePlayer.MediasPlayer.Video
 {
@@ -94,6 +96,13 @@ namespace SidePlayer.MediasPlayer.Video
             Dispatcher.GetInstance.Dispatch("Media Paused");
         }
 
+        [EventHook("Stop")]
+        public void Stop()
+        {
+            _video.Stop();
+            _senderTick.Stop();
+            _subtitleTick.Stop();
+        }
         [EventHook("Media Position Set")]
         public void ForceSetPosition(double duration)
         {
@@ -153,23 +162,26 @@ namespace SidePlayer.MediasPlayer.Video
 
         public void RefreshSubtitles(object sender, EventArgs eventArgs)
         {
-            if (_subtitles != null)
-                _subtitles.Refresh(_video.Position);
+            lock(_subtitles)
+                if (_subtitles != null)
+                    _subtitles.Refresh(_video.Position);
         }
 
         #endregion
 
-        #region Constructor
-
-        public VideoPlayerPluginViewModel()
-        {
-            SubtitleView = new SubtitleView(_subtitles);
-            VideoView = new VideoView(this);
-        }
+        #region Subtitles Loading
 
         private void LoadSubtitles(Uri media)
         {
-            Process process = new Process
+            TagLib.File f = TagLib.File.Create(media.LocalPath);
+            bool hasSubtitle = false;
+
+            foreach (var codec in f.Properties.Codecs)
+                if (codec is SubtitleTrack)
+                    hasSubtitle = true;
+            if (!hasSubtitle)
+                return;
+            _process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -181,36 +193,72 @@ namespace SidePlayer.MediasPlayer.Video
             };
 
 
-            process.Exited += (o, args) =>
-            {
-                Debug.WriteLine("Process Exited");
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                {
-                    _subtitles.UpdateSubtitles(new Uri("./.currently_playing.srt", UriKind.Relative));
-                    _subtitleTick.Start();
-                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle, null);
-            };
+            _process.Exited += OnProcessOnExited;
 
-            process.EnableRaisingEvents = true;
-            process.Start();
+            _process.EnableRaisingEvents = true;
+            _process.Start();
         }
 
-        public void AssignUri(Uri media, File tag)
+        private Process _process;
+
+        private void OnProcessOnExited(object o, EventArgs args)
         {
-            Video.Source = media;
-            _tag = tag;
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                lock (_subtitles)
+                    _subtitles.UpdateSubtitles(new Uri("./.currently_playing.srt", UriKind.Relative));
+                lock (_subtitles)
+                    _subtitleTick.Start();
 
-            LoadSubtitles(media);
+            });
+            _process.Close();
+            _process.Exited -= OnProcessOnExited;
+            _process = null;
+        }
 
-            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
+        #endregion
+
+        #region Constructor
+
+        public VideoPlayerPluginViewModel()
+        {
+            SubtitleView = new SubtitleView(_subtitles);
+            VideoView = new VideoView(this);
 
             _senderTick.Tick += OnSenderTick;
             _subtitleTick.Tick += RefreshSubtitles;
         }
 
+        public void AssignUri(Uri media, File tag)
+        {
+            if (_process != null)
+            {
+                _process.Exited -= OnProcessOnExited;
+                _process.Kill();
+            }
+            Video.Source = media;
+            _tag = tag;
+            LoadSubtitles(media);
+            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
+        }
+
         public void AssignMedia(object media)
         {
-            
+            Track track = media as Track;
+
+            if (track == null)
+                return;
+            if (_process != null)
+            {
+                _process.Kill();
+            }
+            _subtitles.Clear();
+            var trackUri = new Uri(track.Path);
+            Video.Source = trackUri;
+            LoadSubtitles(trackUri);
+            ForceSetPosition(0);
+            MediaName = track.Name;
+            MediaArtists = track.SerieName;
         }
 
         #endregion

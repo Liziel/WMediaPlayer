@@ -10,7 +10,7 @@ namespace MediaPropertiesLibrary.Video
         public BitmapImage Cover { get; set; }
     }
 
-    public class UserSerie
+    public class UserSerieDefinition
     {
         public string Name { get; set; }
         public string CoverPath { get; set; }

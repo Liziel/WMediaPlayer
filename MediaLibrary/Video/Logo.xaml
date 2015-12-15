@@ -6,7 +6,11 @@
              xmlns:local="clr-namespace:MediaLibrary.Video"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+    <Grid Width="50" Height="50">
+        <Path Data="F1 M 0,0 L -2.08,0 -2.08,14.08 C -2.08,15.04 -1.12,16 0,16 L 13.92,16
+		 13.92,14.08 0,14.08 z
+		M 16,-4 L 4,-4 C 2.88,-4 1.92,-3.04 1.92,-1.92 L 1.92,10.08 C 1.92,11.04 2.88,12 4,12
+		L 16,12 C 16.96,12 17.92,11.04 17.92,10.08 L 17.92,-1.92 C 17.92,-3.04 16.96,-4 16,-4 z
+		M 8,8.48 L 8,-0.48 13.92,4 z" Fill="White" Stretch="Fill"/>
     </Grid>
 </UserControl>
