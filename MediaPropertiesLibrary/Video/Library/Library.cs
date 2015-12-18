@@ -6,10 +6,9 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
-using MediaPropertiesLibrary.Video;
 using PluginLibrary;
 
-namespace MediaLibrary.Video.Library
+namespace MediaPropertiesLibrary.Video.Library
 {
     public delegate void OnAllTracksLoaded();
 
@@ -196,6 +195,10 @@ namespace MediaLibrary.Video.Library
         }
 
         #endregion
+        public static Track SingleQueryOnTrack(Predicate<Track> predicate)
+        {
+            return null;
+        }
     }
 
     [Export(typeof (IStaticRessource))]

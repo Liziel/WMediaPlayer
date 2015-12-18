@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
-using MediaLibrary.Audio.SubViews;
+using MediaLibrary.Video.SubViews;
 using UiLibrary;
 
-namespace MediaLibrary.Audio
+namespace MediaLibrary.Video
 {
     public class TabItem : INotifyPropertyChanged
     {
@@ -47,6 +46,18 @@ namespace MediaLibrary.Audio
 
     public class LibraryClassViewModel : INotifyPropertyChanged
     {
+        #region Notifier properties
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         #region TabItems List
 
         private List<TabItem> _tabItems = null;
@@ -77,8 +88,6 @@ namespace MediaLibrary.Audio
             }
         }
 
-        public UserControl SearchBox { get; } = new SearchBox();
-
         private UserControl _subView = null;
 
         public UserControl SubView
@@ -93,7 +102,7 @@ namespace MediaLibrary.Audio
 
         private readonly Listener[] _subViewModels =
         {
-            new AudioTrackViewModel(), new AudioAlbumViewModel(), null
+            new VideoTrackViewModel(), null, null
         };
 
         private readonly UserControl[] _subViews = null;
@@ -104,9 +113,9 @@ namespace MediaLibrary.Audio
 
         public LibraryClassViewModel()
         {
-            _subViews = new UserControl[] { new AudioTrackView(_subViewModels[0] as AudioTrackViewModel), new AudioAlbumView(_subViewModels[1] as AudioAlbumViewModel), null };
+            _subViews = new UserControl[] { new VideoTrackView(_subViewModels[0]), null, null };
             TabItemsInitialization();
-            SelectTab(0);
+            SubView = _subViews[0];
         }
 
         private void TabItemsInitialization()
@@ -115,22 +124,16 @@ namespace MediaLibrary.Audio
             {
                 new TabItem
                 {
-                    Selected = false,
+                    Selected = true,
                     Name = "Tracks",
                     OnSelected = new UiCommand(delegate { SelectTab(0); })
                 },
                 new TabItem
                 {
                     Selected = false,
-                    Name = "Albums",
+                    Name = "Series",
                     OnSelected = new UiCommand(delegate { SelectTab(1); })
                 },
-                new TabItem
-                {
-                    Selected = false,
-                    Name = "Artists",
-                    OnSelected = new UiCommand(delegate { SelectTab(2); })
-                }
             };
         }
 
@@ -143,20 +146,6 @@ namespace MediaLibrary.Audio
             TabItems[item].Selected = true;
             SubViewModel = _subViewModels[item];
             SubView = _subViews[item];
-            SearchBox.DataContext = _subViewModels[item];
-        }
-
-        #endregion
-
-        #region Notifier Properties
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

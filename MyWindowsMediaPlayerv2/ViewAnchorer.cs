@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PluginLibrary.Customization;
 
-namespace MyWindowsMediaPlayerv2
+namespace MyWindowsMediaPlayerv2 //TODO: FOCUS GIVE AWAY
 {
     public class ViewAnchorer
     {

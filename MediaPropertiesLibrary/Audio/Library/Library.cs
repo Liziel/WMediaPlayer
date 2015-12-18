@@ -5,22 +5,34 @@ using System.IO;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
-using MediaPropertiesLibrary.Audio;
 using PluginLibrary;
 using File = TagLib.File;
 
-namespace MediaLibrary.Audio.Library
+namespace MediaPropertiesLibrary.Audio.Library
 { 
 
     public delegate void OnAllTracksLoaded();
 
     public class Library
     {
+        private static string AudioLibraryLocation => AbstractPathLibrary.LibrariesLocation + "/SavedAudioLibrary.xml";
+
+        [XmlElement("Tracks")]
+        public List<Track> SerializableTracks { get { return _tracks; } set { _tracks = value; } }
+        [XmlElement("Albums")]
+        public List<Album> SerializableAlbums { get { return _albums; } set { _albums = value; } }
+        [XmlElement("Artists")]
+        public List<Artist> SerializableArtists { get { return _artists; } set { _artists = value; } }
+
         #region Library Tracks Artists & Albums
 
-        private readonly List<Track> _tracks = new List<Track>();
-        private readonly List<Album> _albums = new List<Album>();
-        private readonly List<Artist> _artists = new List<Artist>();
+        private List<Track> _tracks = new List<Track>();
+        private List<Album> _albums = new List<Album>();
+        private List<Artist> _artists = new List<Artist>();
+
+        private List<Track> _workingtracks = new List<Track>();
+        private List<Album> _workingalbums = new List<Album>();
+        private List<Artist> _workingartists = new List<Artist>();
 
         public static List<Track> Tracks
         {
@@ -58,30 +70,32 @@ namespace MediaLibrary.Audio.Library
         public static event OnAllTracksLoaded TracksLoaded;
         private static void OnTracksLoaded()
         {
+            Instance._tracks = Instance._workingtracks;
+            Instance._albums = Instance._workingalbums;
+            Instance._artists = Instance._workingartists;
+            Instance._workingtracks = null;
+            Instance._workingartists = null;
+            Instance._workingalbums = null;
+            Stream audioLibraryStream = null;
+            using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
+                new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
             TracksLoaded?.Invoke();
         }
 
         #endregion
 
-        #region Library UserTags
-
-        private static string AudioLibraryLocation => AbstractPathLibrary.LibrariesLocation + "/audioLibrary.xml";
-
-        private readonly Dictionary<string, TrackUserTag> _userTags = new Dictionary<string, TrackUserTag>();
-//            CreateUserTags(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate));
-
-        private static Dictionary<string, TrackUserTag> CreateUserTags(Stream libraryConfigFile) =>
-            (Dictionary<string, TrackUserTag>)
-                new XmlSerializer(typeof (Dictionary<string, TrackUserTag>)).Deserialize(libraryConfigFile);
-
-        private void SaveUsertags(Stream libraryConfigFile) =>
-            new XmlSerializer(_userTags.GetType()).Serialize(libraryConfigFile, _userTags);
-
-        #endregion
 
         #region Singleton Creation
 
-        private static readonly Library Instance = new Library();
+        private static Library CreateInstance()
+        {
+            Stream audioLibraryStream = null;
+            using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
+                return (Library)
+                new XmlSerializer(typeof(Library)).Deserialize(audioLibraryStream);
+        }
+
+        private static readonly Library Instance = CreateInstance();
 
         private Library()
         {
@@ -141,16 +155,16 @@ namespace MediaLibrary.Audio.Library
             Album album = null;
             if (!metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Album))
             {
-                album = _albums.Find(searchedAlbum => searchedAlbum.Name == metaData.Tag.Album);
+                album = _workingalbums.Find(searchedAlbum => searchedAlbum.Name == metaData.Tag.Album);
                 if (album != null && album.Cover == null && metaData.Tag.Pictures.Length > 0)
                     lock (album)
                     {
                         album.Cover = CreateCover(metaData);
                     }
                 if (album == null)
-                    lock (_albums)
+                    lock (_workingalbums)
                     {
-                        _albums.Add(album = new Album
+                        _workingalbums.Add(album = new Album
                         {
                             Name = metaData.Tag.Album,
                             Cover = CreateCover(metaData)
@@ -162,10 +176,10 @@ namespace MediaLibrary.Audio.Library
             {
                 foreach (var performer in metaData.Tag.Performers)
                 {
-                    var artist = _artists.Find(searchedArtist => searchedArtist.Name == performer);
+                    var artist = _workingartists.Find(searchedArtist => searchedArtist.Name == performer);
                     if (artist == null)
-                        lock (_artists)
-                            _artists.Add(artist = new Artist
+                        lock (_workingartists)
+                            _workingartists.Add(artist = new Artist
                             {
                                 Name = performer
                             });
@@ -173,7 +187,6 @@ namespace MediaLibrary.Audio.Library
                 }
             }
             TrackUserTag userTag = null;
-            _userTags.TryGetValue(file, out userTag);
             Track track = new Track
             {
                 Album = album,
@@ -183,12 +196,12 @@ namespace MediaLibrary.Audio.Library
                         ? metaData.Tag.Title
                         : Path.GetFileNameWithoutExtension(file),
                 Duration = metaData.Properties.Duration,
-                UserTag = userTag ?? (_userTags[file] = new TrackUserTag()),
+                UserTag = new TrackUserTag(),
                 RelativePaths = path,
                 Path = file
             };
-            lock (_artists)
-                _tracks.Add(track);
+            lock (_workingartists)
+                _workingtracks.Add(track);
             if (album != null)
                 lock (album)
                 {
@@ -218,6 +231,10 @@ namespace MediaLibrary.Audio.Library
             Instance.InstanciedQuery();
         }
 
+        public static Track SingleQueryOnTrack(Predicate<Track> predicate)
+        {
+            return null;
+        }
         #endregion
     }
 

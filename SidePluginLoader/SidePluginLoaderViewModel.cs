@@ -10,7 +10,7 @@ using SidePluginLoader.Annotations;
 
 namespace SidePluginLoader
 {
-    public class SidePluginLoaderViewModel : Listener, INotifyPropertyChanged
+    public sealed class SidePluginLoaderViewModel : Listener, INotifyPropertyChanged
     {
         #region Loadable Plugins
 
@@ -33,7 +33,7 @@ namespace SidePluginLoader
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -49,6 +49,17 @@ namespace SidePluginLoader
 
         private void OnPluginSelected(PluginLoader pluginLoader)
         {
+            foreach (var loader in PluginLoaders)
+                loader.PluginSelected = false;
+            pluginLoader.PluginSelected = true;
+            Dispatcher.GetInstance.Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
+        }
+
+        [EventHook("Force Load Plugin")]
+        public void OnForceLoadPlugin(string pluginName)
+        {
+            var pluginLoader = PluginLoaders.First(plugin => plugin.PluginName == pluginName);
+
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;

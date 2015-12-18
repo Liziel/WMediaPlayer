@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MediaPropertiesLibrary.Video
 {
-    public class Track
+    public class Track : ITrack
     {
         public string Name { get; set; }
         public string Path { get; set; }
@@ -17,6 +17,12 @@ namespace MediaPropertiesLibrary.Video
         public string SerieName => Serie?.Name;
 
         public UserTrackDefinition UserTrackDefinition { get; set; }
+
+        #region Herited From ITracks
+
+        public string MediaLibraryKey => Path;
+
+        #endregion
     }
 
     public class UserTrackDefinition

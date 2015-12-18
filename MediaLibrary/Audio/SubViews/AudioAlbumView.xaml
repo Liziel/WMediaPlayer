@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MediaLibrary.Audio.SubViews"
              xmlns:uiLibrary="clr-namespace:UiLibrary;assembly=UiLibrary"
-             xmlns:library="clr-namespace:MediaLibrary.Audio.Library"
              xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{local:AudioAlbumViewModel}">
@@ -19,10 +18,11 @@
     </UserControl.Resources>
     <Grid x:Name="GridContainer">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Path=AlbumsAccess}">
+            <ItemsControl ItemsSource="{Binding Path=AlbumsView}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsPanelTemplate.Resources>
+                            <uiLibrary:CountToRow x:Key="CountToRow"/>
                             <uiLibrary:WidthToColumnConverter x:Key="WidthToColumnConverter" />
                         </ItemsPanelTemplate.Resources>
                         <UniformGrid
@@ -31,7 +31,17 @@
                             VirtualizingPanel.CacheLengthUnit="Page"
                             VirtualizingPanel.CacheLength="2,2"
                             VirtualizingPanel.IsContainerVirtualizable="True"
-                            VirtualizingPanel.VirtualizationMode="Recycling" />
+                            VirtualizingPanel.VirtualizationMode="Recycling">
+                            <UniformGrid.Style>
+                                <Style TargetType="UniformGrid">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=AlbumsViewCount, Converter={StaticResource CountToRow}}" Value="False">
+                                            <Setter Property="Rows" Value="3"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </UniformGrid.Style>
+                        </UniformGrid>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

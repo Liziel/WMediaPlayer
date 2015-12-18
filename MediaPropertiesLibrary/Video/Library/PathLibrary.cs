@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
-using PluginLibrary;
 
-namespace MediaLibrary.Audio.Library
+namespace MediaPropertiesLibrary.Video.Library
 {
+
     internal sealed class PathLibrary : AbstractPathLibrary
     {
         #region Location
 
-        private static string AudioLibraryLocation => LibrariesLocation + "/audioLibrary.xml";
+        private static string AudioLibraryLocation => LibrariesLocation + "/videoLibrary.xml";
 
         #endregion
 
@@ -23,9 +22,10 @@ namespace MediaLibrary.Audio.Library
             {
                 using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
                     BaseLoad(stream);
-            } catch(InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
-                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) };
+                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) };
             }
 
             using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
@@ -50,6 +50,5 @@ namespace MediaLibrary.Audio.Library
         }
 
         #endregion
-
     }
 }

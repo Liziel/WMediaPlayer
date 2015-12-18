@@ -8,7 +8,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Grid x:Name="PART_SelectionRange" Margin="0,0,-7,0">
+                    <Grid x:Name="PART_SelectionRange" Margin="0,0,-15,0">
                         <Border x:Name="TrackBackground"
                                 Background="DodgerBlue"
                                 CornerRadius="3.0"

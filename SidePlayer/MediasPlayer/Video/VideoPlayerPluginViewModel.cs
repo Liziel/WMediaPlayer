@@ -248,10 +248,7 @@ namespace SidePlayer.MediasPlayer.Video
 
             if (track == null)
                 return;
-            if (_process != null)
-            {
-                _process.Kill();
-            }
+            _process?.Kill();
             _subtitles.Clear();
             var trackUri = new Uri(track.Path);
             Video.Source = trackUri;

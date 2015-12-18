@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessFirstMember.cs" />
+    <Compile Include="CountToRow.cs" />
     <Compile Include="NegatingConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UiCommand.cs" />

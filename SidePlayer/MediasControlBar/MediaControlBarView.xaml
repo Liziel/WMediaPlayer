@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SidePlayer.MediaControlBar"
-             mc:Ignorable="d"
+             mc:Ignorable="d" d:DataContext="{local:MediaControlBarViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -35,8 +35,7 @@
         </GridSplitter>
 
         <Slider Grid.Row="1" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True" Margin="10,0,10,0"
-                Value="{Binding Path=SliderCurrentValue}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0"
-                ValueChanged="RangeBase_OnValueChanged">
+                Value="{Binding Path=SliderCurrentValue, Mode=TwoWay}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0">
         </Slider>
 
         <Grid Grid.Row="2" Margin="0,0,0,5">

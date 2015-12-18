@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ControlTemplate x:Key="PlayButtonState">
+
+        <Grid Opacity="0.6" x:Name="PlayButtonStateGrid">
+            <Path Stretch="Fill" x:Name="PlayPauseBackgroundPath"
+                  Stroke="LightGray"
+                  Fill="Black"
+                  StrokeThickness="0.5"
+                  Data="M 0,0 A 180,180 180 1 1 1,1 Z" />
+            <Path Stretch="Fill" HorizontalAlignment="Center"
+                  Data="F0 M 0,0 L -54.188,-34.208 C -55.904,-35.168 -57.888,-35.08 -59.392,-35.008 -65.424,-35.008 -65.392,-30.352 -65.392,-29.184
+		L -65.392,40.752 C -65.392,41.744 -65.424,46.576 -59.392,46.576 -57.888,46.576 -55.904,46.736 -54.288,45.776
+		L 0,11.568 C 4.464,8.912 3.696,5.776 3.696,5.776 3.696,5.776 4.464,2.656 0,0 z"
+                  Fill="LightGray" RenderTransformOrigin="0.366,0.489">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform X="2.5" />
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Stroke" Value="DodgerBlue" TargetName="PlayPauseBackgroundPath"/>
+                <Setter Property="Opacity" Value="0.9" TargetName="PlayButtonStateGrid"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>
+
+</ResourceDictionary>

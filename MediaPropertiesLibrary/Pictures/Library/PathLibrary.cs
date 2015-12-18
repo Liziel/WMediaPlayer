@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace MediaLibrary.Video.Library
+namespace MediaPropertiesLibrary.Pictures.Library
 {
-
     internal sealed class PathLibrary : AbstractPathLibrary
     {
         #region Location
 
-        private static string AudioLibraryLocation => LibrariesLocation + "/videoLibrary.xml";
+        private static string AudioLibraryLocation => LibrariesLocation + "/picturesLibrary.xml";
 
         #endregion
 
@@ -17,26 +16,13 @@ namespace MediaLibrary.Video.Library
 
         private static readonly PathLibrary _instance = new PathLibrary();
         private PathLibrary()
-        {
-            try
-            {
-                using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
-                    BaseLoad(stream);
-            }
-            catch (InvalidOperationException)
-            {
-                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyVideos) };
-            }
-
-            using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
-                BaseSave(stream);
-        }
+        { BaseLoad(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate)); }
 
         #endregion
 
         #region Xml Load / Save
 
-        private List<string> _paths;
+        private List<string> _paths; 
         protected override List<string> Paths { get { return _paths; } set { _paths = value; } }
 
         public static void Save()
@@ -50,5 +36,6 @@ namespace MediaLibrary.Video.Library
         }
 
         #endregion
+
     }
 }

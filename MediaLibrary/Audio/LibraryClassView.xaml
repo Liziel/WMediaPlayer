@@ -17,6 +17,7 @@
             </Grid.RowDefinitions>
 
             <Border Background="Black" Opacity="0.6" Grid.Row="0" />
+            <ContentControl Content="{Binding Path=SearchBox}" Grid.Row="0" HorizontalAlignment="Right"/>
             <ItemsControl ItemsSource="{Binding Path=TabItems}" Grid.Row="0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

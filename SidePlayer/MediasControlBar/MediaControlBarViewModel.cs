@@ -112,6 +112,7 @@ namespace SidePlayer.MediaControlBar
             {
                 _sliderCurrentValue = value;
                 OnPropertyChanged(nameof(SliderCurrentValue));
+                Dispatcher.GetInstance.Dispatch("Media Position Set", _sliderCurrentValue);
             }
         }
 
