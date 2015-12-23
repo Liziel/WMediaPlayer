@@ -5,20 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MediaLibrary.Audio"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300" Name="SearchUserControl">
+             d:DesignHeight="300" d:DesignWidth="410" Name="SearchUserControl">
     <Grid>
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=CanBeSearched, FallbackValue=False}" Value="True">
-                        <Setter Property="Visibility" Value="Collapsed"></Setter>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=CanBeSearched, FallbackValue=False}" Value="True">
-                        <Setter Property="Visibility" Value="Visible"></Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
         <Border Background="LightGray" CornerRadius="10" BorderBrush="#333333" BorderThickness="2"
                 Height="40" Width="400"
                 Margin="5 0 5 0">
@@ -62,6 +50,26 @@
                     </Button.Style>
                 </Button>
             </Grid>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=SearchTextBox, Path=IsKeyboardFocusWithin}" Value="True">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="DeepSkyBlue" BlurRadius="20" ShadowDepth="0" Opacity="0.5" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=SearchTextBox, Path=IsKeyboardFocusWithin}" Value="False">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="DeepSkyBlue" BlurRadius="20" ShadowDepth="0" Opacity="0" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
         </Border>
     </Grid>
 </UserControl>

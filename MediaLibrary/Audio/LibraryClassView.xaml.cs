@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PluginLibrary;
 using PluginLibrary.Customization;
 
 namespace MediaLibrary.Audio
@@ -20,7 +21,6 @@ namespace MediaLibrary.Audio
     /// <summary>
     /// Interaction logic for LibraryClassView.xaml
     /// </summary>
-    [Export(typeof(IViewPlugin))]
     public partial class LibraryClassView : UserControl, IViewPlugin
     {
         public LibraryClassView()

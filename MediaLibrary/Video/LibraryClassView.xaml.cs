@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using PluginLibrary;
 using PluginLibrary.Customization;
 
 namespace MediaLibrary.Video
@@ -8,8 +9,9 @@ namespace MediaLibrary.Video
     /// </summary>
     public partial class LibraryClassView : UserControl, IViewPlugin
     {
-        public LibraryClassView()
+        public LibraryClassView(LibraryClassViewModel model)
         {
+            DataContext = model;
             InitializeComponent();
         }
 

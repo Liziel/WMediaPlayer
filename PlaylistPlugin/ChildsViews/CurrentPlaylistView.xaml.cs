@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PlaylistPlugin.SubViews
+namespace PlaylistPlugin.ChildsViews
 {
     /// <summary>
     /// Interaction logic for CurrentPlaylistView.xaml

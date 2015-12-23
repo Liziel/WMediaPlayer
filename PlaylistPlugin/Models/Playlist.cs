@@ -17,18 +17,11 @@ namespace PlaylistPlugin.Models
         {
             #region Properties
 
-            private ITrack _track;
-            private long _position;
-
-            #endregion
-
-            #region Public Accessors
+            [XmlIgnore]
+            public ITrack Track { get; private set; }
 
             [XmlIgnore]
-            public ITrack Track => _track;
-
-            [XmlIgnore]
-            public long Position => _position;
+            public long Position { get; private set; }
 
             #endregion
 
@@ -36,14 +29,14 @@ namespace PlaylistPlugin.Models
 
             public Member(ITrack track, long position)
             {
-                _track = track;
-                _position = position;
+                Track = track;
+                Position = position;
             }
 
             public Member()
             {
-                _track = null;
-                _position = 0;
+                Track = null;
+                Position = 0;
             }
 
             #endregion
@@ -53,17 +46,17 @@ namespace PlaylistPlugin.Models
             [XmlElement("Position")]
             public long SerializePosition
             {
-                get { return _position; }
-                set { _position = value; }
+                get { return Position; }
+                set { Position = value; }
             }
 
             [XmlElement("Track")]
             public string TrackSerial
             {
-                get { return _track.MediaLibraryKey; }
+                get { return Track.MediaLibraryKey; }
                 set
                 {
-                    _track =
+                    Track =
                         (ITrack) Library.SingleQueryOnTrack(
                             track => track.MediaLibraryKey == value) ??
                         MediaPropertiesLibrary.Video.Library.Library.SingleQueryOnTrack(
@@ -123,5 +116,10 @@ namespace PlaylistPlugin.Models
         }
 
         #endregion
+
+        public void AddTrack(ITrack track)
+        {
+            Tracks.Add(new Member(track, Tracks.Count + 1));
+        }
     }
 }

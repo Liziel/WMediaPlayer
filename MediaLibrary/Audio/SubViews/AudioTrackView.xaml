@@ -36,7 +36,6 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBox Name="TextIndex" Text="" Visibility="Hidden"/>
                                     <Border Background="LightGray" Grid.Row="0" Opacity="0.3"></Border>
                                     <Border BorderThickness="0" Grid.Row="1"
                                             Padding="{TemplateBinding Control.Padding}"
@@ -190,7 +189,7 @@
                     <DataTemplate.Resources>
                         <audio:TrackAccessAlbumName x:Key="TrackAccessAlbumName" />
                         <audio:TrackDurationStylized x:Key="DurationStylized" />
-                        <audio:TrackAccessArtistName x:Key="TrackAccessArtist"></audio:TrackAccessArtistName>
+                        <audio:TrackAccessArtistName x:Key="TrackAccessArtist"/>
                     </DataTemplate.Resources>
                     <Grid Name="ContainerGrid">
                         <Grid Height="40">

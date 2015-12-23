@@ -42,8 +42,8 @@ namespace SidePlayer.MediasPlayer.Video
             }
         }
 
-        private string _mediaArtists = "";
-        public string MediaArtists { get { return _mediaArtists; } set { _mediaArtists = value; OnPropertyChanged(nameof(MediaArtists)); } }
+        private string _serieName = "";
+        public string SerieName { get { return _serieName; } set { _serieName = value; OnPropertyChanged(nameof(SerieName)); } }
 
         private TagLib.File _tag;
 
@@ -55,7 +55,7 @@ namespace SidePlayer.MediasPlayer.Video
                 MediaName = filename;
 
             if (!_tag.Tag.IsEmpty)
-                MediaArtists = string.Join(", ", _tag.Tag.Performers);
+                SerieName = string.Join(", ", _tag.Tag.Performers);
         }
 
         #endregion
@@ -255,7 +255,6 @@ namespace SidePlayer.MediasPlayer.Video
             LoadSubtitles(trackUri);
             ForceSetPosition(0);
             MediaName = track.Name;
-            MediaArtists = track.SerieName;
         }
 
         #endregion

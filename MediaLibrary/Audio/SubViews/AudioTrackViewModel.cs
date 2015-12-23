@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
+using MediaPropertiesLibrary;
 using MediaPropertiesLibrary.Audio;
 using UiLibrary;
 
@@ -130,10 +131,10 @@ namespace MediaLibrary.Audio.SubViews
         private UiCommand _playTrack = null;
         public UiCommand PlayTrack { get { return _playTrack; } set { _playTrack = value; OnPropertyChanged(nameof(PlayTrack)); } }
 
-        void Play(Track track)
+        private void Play(Track track)
         {
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Audio Track Selected", track);
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Play");
+            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Multiple Track Selected For Play",
+                TracksView.Cast<ITrack>(), TracksView.Cast<ITrack>().ToList().FindIndex(o => o == track));
         }
 
         #region Notifier Properties

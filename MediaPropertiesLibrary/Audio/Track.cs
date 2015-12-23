@@ -14,9 +14,6 @@ namespace MediaPropertiesLibrary.Audio
         public string Path { get; set; }
         public TrackUserTag UserTag { get; set; }
 
-        [XmlIgnore]
-        public TimeSpan Duration { get; set; }
-
         [XmlElement("Duration")]
         public long TimeSpanDuration { get { return Duration.Ticks; } set { Duration = new TimeSpan(value); } }
 
@@ -24,6 +21,12 @@ namespace MediaPropertiesLibrary.Audio
 
         #region Attached Members
 
+        public event TrackPaused TrackPaused;
+        public event TrackPlayed TrackPlayed;
+        public event TrackStopped TrackStopped;
+
+        [XmlIgnore]
+        public TimeSpan Duration { get; set; }
         [XmlIgnore]
         public Album Album { get; set; }
         [XmlIgnore]

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
 using MediaLibrary.Video.SubViews;
+using PluginLibrary;
 using UiLibrary;
 
 namespace MediaLibrary.Video
@@ -44,7 +45,7 @@ namespace MediaLibrary.Video
         #endregion
     }
 
-    public class LibraryClassViewModel : INotifyPropertyChanged
+    public class LibraryClassViewModel : INotifyPropertyChanged, IMessageablePlugin
     {
         #region Notifier properties
 
@@ -147,6 +148,13 @@ namespace MediaLibrary.Video
             SubViewModel = _subViewModels[item];
             SubView = _subViews[item];
         }
+
+        #endregion
+
+        #region Messageable Plugin Implementation
+
+        public event MessageableStatusChanged StatusChanged;
+        public bool Optional { get; } = false;
 
         #endregion
     }

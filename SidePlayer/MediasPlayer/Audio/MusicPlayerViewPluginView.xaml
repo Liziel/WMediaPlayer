@@ -4,8 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:uiLibrary="clr-namespace:UiLibrary;assembly=UiLibrary"
+             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:audio1="clr-namespace:SidePlayer.MediasPlayer.Audio"
+             xmlns:mediasPlayer="clr-namespace:SidePlayer.MediasPlayer"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
-             d:DesignHeight="900" d:DesignWidth="300">
+             d:DesignHeight="900" d:DesignWidth="300" d:DataContext="{audio1:MusicPlayerPluginViewModel}">
+    <UserControl.Resources>
+        <mediasPlayer:SliderSizeConverter x:Key="SliderSizeConverter"/>
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+    </UserControl.Resources>
     <Grid VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -24,69 +33,105 @@
                     </ControlTemplate>
             </Button.Template>
         </Button>
-        <Grid Margin="10,0,10,0" Grid.Row="1" MouseDown="AlbumResearch">
-            <TextBlock Text="{Binding Path=MediaName}" HorizontalAlignment="Center"
+        
+        <Button Grid.Row="1" Command="{Binding Path=AccessAlbum}">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid Margin="10,0,10,0" Grid.Row="1" Name="TitleGrid" Cursor="Hand">
+                        <TextBlock Text="{Binding Path=MediaName}" HorizontalAlignment="Center"
                        Foreground="LightGray"
                        FontSize="16" FontStretch="UltraExpanded" FontWeight="Black"
-                       Name="TitleTestSize" LayoutUpdated="OnTitleTextUpdated" />
+                       Name="TitleTestSize">
+                            <TextBlock.Visibility>
+                                <MultiBinding Converter="{StaticResource SliderSizeConverter}">
+                                    <Binding ElementName="TitleTestSize" Path="ActualWidth"/>
+                                    <Binding ElementName="TitleGrid" Path="ActualWidth"/>
+                                    <Binding Source="{StaticResource False}"/>
+                                </MultiBinding>
+                            </TextBlock.Visibility>
+                        </TextBlock>
 
-            <Grid Height="35" VerticalAlignment="Center"
+                        <Grid Height="35" VerticalAlignment="Center"
                   x:Name="TitleBlock">
-                <Grid.Resources>
-                    <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
-                    <Storyboard x:Key="TitleSlide" Completed="OnTitleAnimationCompleted">
-                        <DoubleAnimation From="0"
+                            <Grid.Visibility>
+                                <MultiBinding Converter="{StaticResource SliderSizeConverter}">
+                                    <Binding ElementName="TitleTestSize" Path="ActualWidth"/>
+                                    <Binding ElementName="TitleGrid" Path="ActualWidth"/>
+                                    <Binding Source="{StaticResource True}"/>
+                                </MultiBinding>
+                            </Grid.Visibility>
+                            <Grid.Resources>
+                                <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
+                                <Storyboard x:Key="TitleSlide">
+                                    <DoubleAnimation From="0"
                                          To="{Binding ActualWidth, ElementName=Title, Converter={StaticResource NegatingConverter}}"
                                          Duration="00:00:05"
                                          Storyboard.TargetProperty="X"
                                          Storyboard.TargetName="TitleBlockTransfer">
-                        </DoubleAnimation>
-                    </Storyboard>
-                </Grid.Resources>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </Grid.Resources>
 
-                <Rectangle Fill="Aqua" Opacity="0" />
+                            <Rectangle Fill="Aqua" Opacity="0" />
 
-                <Canvas x:Name="TitleCanvas"
+                            <Canvas x:Name="TitleCanvas"
                         Width="{Binding ActualWidth, ElementName=TitleBlock}"
                         ClipToBounds="True">
-                    <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
 
-                        <StackPanel.RenderTransform>
-                            <TranslateTransform x:Name="TitleBlockTransfer" X="0" />
-                        </StackPanel.RenderTransform>
+                                    <StackPanel.RenderTransform>
+                                        <TranslateTransform x:Name="TitleBlockTransfer" X="0" />
+                                    </StackPanel.RenderTransform>
 
-                        <TextBlock Text="{Binding Path=MediaName}"
+                                    <TextBlock Text="{Binding Path=MediaName}"
                                    HorizontalAlignment="Center"
                                    Foreground="LightGray"
                                    FontSize="16" FontStretch="UltraExpanded"
                                    FontWeight="Black"
                                    x:Name="Title" />
-                        <TextBlock Text="{Binding Text, ElementName=Title}"
+                                    <TextBlock Text="{Binding Text, ElementName=Title}"
                                    Foreground="LightGray" FontSize="16"
                                    FontStretch="UltraExpanded"
                                    FontWeight="Black"
                                    Margin="30,0,0,0" />
-                    </StackPanel>
-                </Canvas>
+                                </StackPanel>
+                            </Canvas>
 
-                <Grid.Triggers>
-                    <EventTrigger RoutedEvent="StackPanel.MouseEnter">
-                        <BeginStoryboard Storyboard="{StaticResource TitleSlide}"
+                            <Grid.Triggers>
+                                <EventTrigger RoutedEvent="StackPanel.MouseEnter">
+                                    <BeginStoryboard Storyboard="{StaticResource TitleSlide}"
                                          HandoffBehavior="Compose" />
-                    </EventTrigger>
-                </Grid.Triggers>
+                                </EventTrigger>
+                            </Grid.Triggers>
 
-            </Grid>
-        </Grid>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
 
-        <Grid Margin="10,0,10,0" Grid.Row="2" MouseDown="ArtistResearch">
-            <TextBlock Text="{Binding Path=MediaArtists}" HorizontalAlignment="Center"
-                       Foreground="LightGray"
-                       FontSize="11" FontStretch="UltraExpanded" FontWeight="Black"
-                       Name="ArtistTestSize" LayoutUpdated="OnArtistTextUpdated" />
+        <Grid Margin="10,0,10,0" Grid.Row="2" Name="ArtistGrid">
+            <ContentControl Content="{Binding ArtistsM}" x:Name="ArtistTestSize" HorizontalAlignment="Center"
+        		VerticalAlignment="Center">
+                <ContentControl.Visibility>
+                    <MultiBinding Converter="{StaticResource SliderSizeConverter}">
+                        <Binding ElementName="ArtistTestSize" Path="Content.ActualWidth"/>
+                        <Binding ElementName="ArtistGrid" Path="ActualWidth"/>
+                        <Binding Source="{StaticResource False}"/>
+                    </MultiBinding>
+                </ContentControl.Visibility>
+            </ContentControl>
 
             <Grid Height="35" VerticalAlignment="Center"
                   x:Name="ArtistBlock">
+                <Grid.Visibility>
+                    <MultiBinding Converter="{StaticResource SliderSizeConverter}">
+                        <Binding ElementName="ArtistTestSize" Path="Content.ActualWidth"/>
+                        <Binding ElementName="ArtistGrid" Path="ActualWidth"/>
+                        <Binding Source="{StaticResource True}"/>
+                    </MultiBinding>
+                </Grid.Visibility>
                 <Grid.Resources>
                     <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
                     <Storyboard x:Key="ArtistSlide" Completed="OnArtistAnimationCompleted">
@@ -110,17 +155,8 @@
                             <TranslateTransform x:Name="ArtistBlockTransfer" X="0" />
                         </StackPanel.RenderTransform>
 
-                        <TextBlock Text="{Binding Path=MediaArtists}"
-                                   HorizontalAlignment="Center"
-                                   Foreground="LightGray"
-                                   FontSize="11" FontStretch="UltraExpanded"
-                                   FontWeight="Black"
-                                   x:Name="Artist" />
-                        <TextBlock Text="{Binding Text, ElementName=Artist}"
-                                   Foreground="LightGray" FontSize="11"
-                                   FontStretch="UltraExpanded"
-                                   FontWeight="Black"
-                                   Margin="30,0,0,0" />
+                        <ContentControl Content="{Binding Path=ArtistsP}"/>
+                        <ContentControl Content="{Binding Path=ArtistsV}"/>
                     </StackPanel>
                 </Canvas>
 

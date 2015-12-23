@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -15,7 +14,7 @@ namespace SidePlayer.MediasPlayer.Audio
     /// <summary>
     /// Interaction logic for MusicPlayerViewPluginView.xaml
     /// </summary>
-    public partial class MusicPlayerViewPluginView : UserControl
+    public partial class MusicPlayerViewPluginView : UserControl, INotifyPropertyChanged
     {
 
         public MusicPlayerViewPluginView()
@@ -39,62 +38,25 @@ namespace SidePlayer.MediasPlayer.Audio
 
         #region Layout Resizing and Animation
 
-        private void OnTitleAnimationCompleted(object sender, EventArgs e)
-        {
-            if (TitleBlock.IsMouseOver)
-                (TitleBlock.FindResource("TitleSlide") as Storyboard)?.Begin();
-        }
-
-        private void OnTitleTextUpdated(object sender, EventArgs e)
-        {
-            if (TitleTestSize.ActualWidth > 200)
-            {
-                TitleTestSize.Visibility = Visibility.Hidden;
-                TitleBlock.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                TitleBlock.Visibility = Visibility.Hidden;
-                TitleTestSize.Visibility = Visibility.Visible;
-            }
-        }
-
         private void OnArtistAnimationCompleted(object sender, EventArgs e)
         {
             if (ArtistBlock.IsMouseOver)
                 (ArtistBlock.FindResource("ArtistSlide") as Storyboard)?.Begin();
         }
 
-        private void OnArtistTextUpdated(object sender, EventArgs e)
-        {
-            if (ArtistTestSize.ActualWidth > 200)
-            {
-                ArtistTestSize.Visibility = Visibility.Hidden;
-                ArtistBlock.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ArtistBlock.Visibility = Visibility.Hidden;
-                ArtistTestSize.Visibility = Visibility.Visible;
-            }
-        }
-
         #endregion
-
-        private void AlbumResearch(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void ArtistResearch(object sender, MouseButtonEventArgs e)
-        {
-
-        }
 
         private void MaximizeAudioPlayer(object sender, MouseButtonEventArgs e)
         {
             DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Maximize Media View");
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

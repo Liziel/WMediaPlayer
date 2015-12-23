@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PluginLibrary.Customization;
 
-namespace MyWindowsMediaPlayerv2 //TODO: FOCUS GIVE AWAY
+namespace MyWindowsMediaPlayerv2
 {
     public class ViewAnchorer
     {
@@ -99,19 +99,28 @@ namespace MyWindowsMediaPlayerv2 //TODO: FOCUS GIVE AWAY
                 switch (position)
                 {
                     case Position.All:
-                        _allControl.Content = viewPlugin;
+                        if (_allControl.Content != viewPlugin)
+                            _allControl.Content = viewPlugin;
                         break;
                     case Position.Center:
-                        _centerControl.Content = viewPlugin;
+                        if (_centerControl.Content != viewPlugin)
+                            _centerControl.Content = viewPlugin;
                         break;
                     case Position.Left:
-                        _leftControl.Content = viewPlugin;
-                        _leftSplitter.Visibility = Visibility.Visible;
+                        if (_leftControl.Content != viewPlugin)
+                        {
+                            _leftControl.Content = viewPlugin;
+                            _leftSplitter.Visibility = Visibility.Visible;
+                        }
                         break;
                     case Position.Right:
-                        _rightControl.Content = viewPlugin;
-                        _rightSplitter.Visibility = Visibility.Visible;
-                        _divisedGrid.ColumnDefinitions[4].Width = new GridLength(250);
+                        if (_rightControl.Content != viewPlugin)
+                        {
+                            _rightControl.Content = viewPlugin;
+                            _rightSplitter.Visibility = Visibility.Visible;
+                            _divisedGrid.ColumnDefinitions[4].Width = new GridLength(250);
+                            
+                        }
                         break;
                 }
             }

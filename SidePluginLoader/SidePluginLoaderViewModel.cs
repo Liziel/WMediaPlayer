@@ -42,9 +42,12 @@ namespace SidePluginLoader
 
         public SidePluginLoaderViewModel()
         {
+            Dispatcher.GetInstance.AddEventListener(this);
             PluginLoaders = LoadablePluginManager.GetInstance.Query(plugin => true)
                 .Select(plugin => new PluginLoader(plugin, OnPluginSelected))
                 .ToList();
+            foreach (var loader in PluginLoaders)
+                AttachOnRun("Loader: Call(" + loader.PluginName + ")", objects => OnPluginSelected(loader));
         }
 
         private void OnPluginSelected(PluginLoader pluginLoader)

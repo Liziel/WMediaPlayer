@@ -1,13 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaPropertiesLibrary.Audio;
 using SidePlayer.Annotations;
+using UiLibrary;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 using File = TagLib.File;
 
@@ -31,7 +36,7 @@ namespace SidePlayer.MediasPlayer.Audio
 
         private MusicView _albumCoverView;
         public MusicView AlbumCoverView { get { return _albumCoverView; } set { _albumCoverView = value; OnPropertyChanged(nameof(AlbumCoverView)); } }
-        public UserControl MediaView { get { return AlbumCoverView; } }
+        public UserControl MediaView => AlbumCoverView;
 
         public void OnMaximize()
         {
@@ -66,8 +71,9 @@ namespace SidePlayer.MediasPlayer.Audio
             }
         }
 
-        private string _mediaArtists = "";
-        public string MediaArtists { get { return _mediaArtists; } set { _mediaArtists = value; OnPropertyChanged(nameof(MediaArtists));} }
+        public TextBlock ArtistsM { get; set; } = null;
+        public TextBlock ArtistsP { get; set; } = null;
+        public TextBlock ArtistsV { get; set; } = null;
 
         private File _tag;
 
@@ -94,9 +100,6 @@ namespace SidePlayer.MediasPlayer.Audio
                 MediaName = _tag.Tag.Title;
             else
                 MediaName = filename;
-
-            if (!_tag.Tag.IsEmpty)
-                MediaArtists = string.Join(", ", _tag.Tag.Performers);
         }
 
         #endregion
@@ -182,8 +185,83 @@ namespace SidePlayer.MediasPlayer.Audio
             ForceSetPosition(0);
             AlbumCover = track.Album?.Cover;
 
+            CreateArtistBand(track);
             MediaName = track.Name;
+
             _tick.Tick += OnTick;
+            AccessAlbum = new UiCommand(o => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Album", track.Album));
+        }
+
+        private UiCommand _accessAlbum;
+        public UiCommand AccessAlbum
+        {
+            get { return _accessAlbum; }
+            set
+            {
+                _accessAlbum = value; 
+                OnPropertyChanged(nameof(AccessAlbum));
+            }
+        }
+
+        private void CreateArtistBand(Track track)
+        {
+            if (track.Artist == null)
+                return;
+            ArtistsM = new TextBlock
+            {
+                FontWeight = FontWeights.Black,
+                FontSize = 14,
+                FontStretch = FontStretches.UltraExpanded,
+                Foreground = Brushes.LightGray
+            };
+            ArtistsP = new TextBlock
+            {
+                FontWeight = FontWeights.Black,
+                FontSize = 14,
+                FontStretch = FontStretches.UltraExpanded,
+                Foreground = Brushes.LightGray
+            };
+            ArtistsV = new TextBlock
+            {
+                FontWeight = FontWeights.Black,
+                FontSize = 14,
+                FontStretch = FontStretches.UltraExpanded,
+                Foreground = Brushes.LightGray
+            };
+            var tmp = track.Artist.Last();
+            foreach (var artist in track.Artist)
+            {
+                ArtistsM.Inlines.Add(new Hyperlink
+                {
+                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Artist", artist)),
+                    Foreground = Brushes.LightGray,
+                    TextDecorations = null,
+                    Inlines = { artist.Name }
+                });
+                if (artist != tmp)
+                    ArtistsM.Inlines.Add(", ");
+                ArtistsP.Inlines.Add(new Hyperlink
+                {
+                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("MediaLibrary: View Artist", artist)),
+                    Foreground = Brushes.LightGray,
+                    TextDecorations = null,
+                    Inlines = { artist.Name }
+                });
+                if (artist != tmp)
+                    ArtistsP.Inlines.Add(", ");
+                ArtistsV.Inlines.Add(new Hyperlink
+                {
+                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("MediaLibrary: View Artist", artist)),
+                    Foreground = Brushes.LightGray,
+                    TextDecorations = null,
+                    Inlines = { artist.Name }
+                });
+                if (artist != tmp)
+                    ArtistsV.Inlines.Add(", ");
+            }
+            OnPropertyChanged(nameof(ArtistsM));
+            OnPropertyChanged(nameof(ArtistsP));
+            OnPropertyChanged(nameof(ArtistsV));
         }
         #endregion
     }

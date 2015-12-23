@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
+using MediaLibrary.Audio.Pages;
 using MediaLibrary.Audio.SubViews;
+using MediaPropertiesLibrary.Audio;
+using PluginLibrary;
 using UiLibrary;
 
 namespace MediaLibrary.Audio
@@ -45,8 +51,27 @@ namespace MediaLibrary.Audio
         #endregion
     }
 
-    public class LibraryClassViewModel : INotifyPropertyChanged
+    public class LibraryClassViewModel : Listener, INotifyPropertyChanged, IMessageablePlugin
     {
+        #region Pages
+
+        private ObservableCollection<UIElement> _pages = new ObservableCollection<UIElement>();
+        public ObservableCollection<UIElement> Pages
+        {
+            get { return _pages; }
+            set
+            {
+                _pages = value;
+                OnPropertyChanged(nameof(Pages));
+            }
+        } 
+        [EventHook("AudioLibrary: View Album")]
+        public void AccessAlbum(Album album)
+        {
+            Pages.Add(new AlbumView(new AlbumViewModel(album)));
+        }
+        #endregion
+
         #region TabItems List
 
         private List<TabItem> _tabItems = null;
@@ -107,6 +132,7 @@ namespace MediaLibrary.Audio
             _subViews = new UserControl[] { new AudioTrackView(_subViewModels[0] as AudioTrackViewModel), new AudioAlbumView(_subViewModels[1] as AudioAlbumViewModel), null };
             TabItemsInitialization();
             SelectTab(0);
+            Dispatcher.GetInstance.AddEventListener(this);
         }
 
         private void TabItemsInitialization()
@@ -144,6 +170,7 @@ namespace MediaLibrary.Audio
             SubViewModel = _subViewModels[item];
             SubView = _subViews[item];
             SearchBox.DataContext = _subViewModels[item];
+            OnPropertyChanged(nameof(SearchBox));
         }
 
         #endregion
@@ -158,6 +185,13 @@ namespace MediaLibrary.Audio
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
+
+        #region Messageable Plugin Implementation
+
+        public event MessageableStatusChanged StatusChanged;
+        public bool Optional { get; }
 
         #endregion
     }

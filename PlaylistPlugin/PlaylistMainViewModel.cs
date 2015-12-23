@@ -12,18 +12,28 @@ using System.ComponentModel.Composition;
 namespace PlaylistPlugin
 {
 
-    [Export(typeof(IMessageablePlugin))]
-    public sealed class PlaylistMainViewModel : Listener, IMessageablePlugin, INotifyPropertyChanged
+    public sealed class PlaylistMainViewModel : Listener, INotifyPropertyChanged
     {
         #region Childs Views
 
-        private SavedPlaylistsViewModel _savedPlaylists = new SavedPlaylistsViewModel();
-        private CurrentPlaylistViewModel _currentPlaylist = new CurrentPlaylistViewModel();
+        private Listener _playlistView;
+        public Listener PlaylistView
+        {
+            get { return _playlistView; }
+            set
+            {
+                _playlistView = value;
+                OnPropertyChanged(nameof(PlaylistView));
+            }
+        }
 
         [ForwardDispatch]
-        public SavedPlaylistsViewModel SavedPlaylists => _savedPlaylists;
+        public SavedPlaylistsViewModel SavedPlaylists { get; } = new SavedPlaylistsViewModel();
         [ForwardDispatch]
-        public CurrentPlaylistViewModel CurrentPlaylist => _currentPlaylist;
+        public CurrentPlaylistViewModel CurrentPlaylist { get; } = new CurrentPlaylistViewModel();
+        [ForwardDispatch]
+        public object PlaylistDisplay { get; } = null;
+
 
         #endregion
 
@@ -39,16 +49,17 @@ namespace PlaylistPlugin
 
         #endregion
 
-        #region IMessageablePlugin Properties
-
-        public event MessageableStatusChanged StatusChanged;
-        public bool Optional { get; } = false;
-
-        private void OnMessageableStatusChanged(object source)
+        public PlaylistMainViewModel()
         {
-            StatusChanged?.Invoke(source);
+            Dispatcher.GetInstance.AddEventListener(this);
+            ViewInQueue();
         }
 
-        #endregion
+        [EventHook("Playlist Plugin: View In Queue")]
+        public void ViewInQueue()
+        {
+            PlaylistView = CurrentPlaylist;
+        }
+
     }
 }

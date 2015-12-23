@@ -82,6 +82,7 @@
       <DependentUpon>MusicView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediasPlayer\IMediaPlayer.cs" />
+    <Compile Include="MediasPlayer\SliderSizeConverter.cs" />
     <Compile Include="MediasPlayer\Video\Subtitles.cs" />
     <Compile Include="MediasPlayer\Video\SubtitleView.xaml.cs">
       <DependentUpon>SubtitleView.xaml</DependentUpon>

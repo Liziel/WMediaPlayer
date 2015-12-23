@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
 using PlaylistPlugin.Models;
+using UiLibrary;
 
 namespace PlaylistPlugin.ChildsViews
 {
@@ -21,8 +22,11 @@ namespace PlaylistPlugin.ChildsViews
 
         #endregion
 
-        private List<Playlist>  _savedPlaylists;
-        public List<Playlist>   SavedPlaylists
+        #region Saved Playlists Management
+
+        private List<Playlist> _savedPlaylists;
+
+        public List<Playlist> SavedPlaylists
         {
             get { return _savedPlaylists; }
             set
@@ -39,5 +43,8 @@ namespace PlaylistPlugin.ChildsViews
             OnPropertyChanged(nameof(SavedPlaylists));
         }
 
+        #endregion
+
+        public UiCommand ViewInQueue { get; } = new UiCommand(o => Dispatcher.GetInstance.Dispatch("Playlist Plugin: View In Queue"));
     }
 }
