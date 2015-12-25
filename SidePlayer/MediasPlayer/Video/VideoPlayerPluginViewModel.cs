@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using DispatcherLibrary;
+using MediaPropertiesLibrary.Video;
 using SidePlayer.Annotations;
 using TagLib.Matroska;
 using Dispatcher = DispatcherLibrary.Dispatcher;

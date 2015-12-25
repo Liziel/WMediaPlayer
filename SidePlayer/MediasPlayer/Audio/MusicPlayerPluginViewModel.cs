@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -13,6 +12,7 @@ using DispatcherLibrary;
 using MediaPropertiesLibrary.Audio;
 using SidePlayer.Annotations;
 using UiLibrary;
+using UiLibrary.Utils;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 using File = TagLib.File;
 
@@ -75,36 +75,9 @@ namespace SidePlayer.MediasPlayer.Audio
         public TextBlock ArtistsP { get; set; } = null;
         public TextBlock ArtistsV { get; set; } = null;
 
-        private File _tag;
-
-        private void InitializeCover()
-        {
-            if (_tag.Tag.IsEmpty || _tag.Tag.Pictures.Length == 0)
-                return;
-
-            var picture = _tag.Tag.Pictures[0];
-            MemoryStream mstream = new MemoryStream(picture.Data.Data);
-            mstream.Seek(0, SeekOrigin.Begin);
-
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.StreamSource = mstream;
-            bitmap.EndInit();
-
-            AlbumCover = bitmap;
-        }
-
-        private void InializeTitle(string filename)
-        {
-            if (!_tag.Tag.IsEmpty && !string.IsNullOrEmpty(_tag.Tag.Title))
-                MediaName = _tag.Tag.Title;
-            else
-                MediaName = filename;
-        }
-
         #endregion
 
-        #region Video Fields
+        #region Music Fields
 
         private MediaElement _music;
 
@@ -122,6 +95,7 @@ namespace SidePlayer.MediasPlayer.Audio
         public void Play()
         {
             _music.Play();
+            _track.State = MediaPropertiesLibrary.MediaState.Playing;
             _tick.Start();
             Dispatcher.GetInstance.Dispatch("Media Playing");
         }
@@ -130,6 +104,7 @@ namespace SidePlayer.MediasPlayer.Audio
         public void Pause()
         {
             _music.Pause();
+            _track.State  = MediaPropertiesLibrary.MediaState.Paused;
             _tick.Stop();
             Dispatcher.GetInstance.Dispatch("Media Paused");
         }
@@ -138,6 +113,7 @@ namespace SidePlayer.MediasPlayer.Audio
         public void Stop()
         {
             _music.Stop();
+            _track.State = MediaPropertiesLibrary.MediaState.Stopped;
             _tick.Stop();
         }
 
@@ -165,22 +141,15 @@ namespace SidePlayer.MediasPlayer.Audio
         {
             AlbumCoverView = new MusicView(this);
             Music = new MediaElement { LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual };
+            Music.MediaEnded += (o, p) => { _track.State = MediaPropertiesLibrary.MediaState.End; };
         }
 
-        public void AssignUri(Uri media, TagLib.File tag)
-        {
-            _tag = tag;
-
-            InitializeCover();
-            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
-
-            _tick.Tick += OnTick;
-        }
+        private Track _track;
 
         public void AssignMedia(object media)
         {
             Track track = media as Track;
-
+            _track = track;
             Music.Source = new Uri(track.Path);
             ForceSetPosition(0);
             AlbumCover = track.Album?.Cover;

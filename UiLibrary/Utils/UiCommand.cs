@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace UiLibrary
+namespace UiLibrary.Utils
 {
     public class UiCommand : ICommand
     {

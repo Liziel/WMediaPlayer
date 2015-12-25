@@ -7,6 +7,7 @@ using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
 using UiLibrary;
+using UiLibrary.Utils;
 
 namespace SidePluginLoader
 {

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:MediaLibrary.Audio.SubViews"
              xmlns:uiLibrary="clr-namespace:UiLibrary;assembly=UiLibrary"
              xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
-             mc:Ignorable="d"
+             xmlns:converters="clr-namespace:UiLibrary.Converters;assembly=UiLibrary"
+             mc:Ignorable="d" Name="AlbumPageControl"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{local:AudioAlbumViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -22,8 +23,8 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsPanelTemplate.Resources>
-                            <uiLibrary:CountToRow x:Key="CountToRow"/>
-                            <uiLibrary:WidthToColumnConverter x:Key="WidthToColumnConverter" />
+                            <converters:CountToRow x:Key="CountToRow"/>
+                            <converters:WidthToColumnConverter x:Key="WidthToColumnConverter" />
                         </ItemsPanelTemplate.Resources>
                         <UniformGrid
                             Columns="{Binding ElementName=GridContainer, Path=ActualWidth, Converter={StaticResource WidthToColumnConverter}}"
@@ -51,11 +52,12 @@
                                 <RowDefinition Height="1.5*" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
-                            <Button Grid.Row="0" MinWidth="50"
+                            <Button Grid.Row="0" MinWidth="50" Name="AlbumCoverButton"
+                                    Command="{Binding ElementName=AlbumPageControl, Path=DataContext.SelectAlbum}" CommandParameter="{Binding DataContext, ElementName=AlbumPresenter}"
                                     Height="{Binding ElementName=AlbumPresenter, Path=ActualWidth}">
                                 <Button.Template>
                                     <ControlTemplate>
-                                        <Grid>
+                                        <Grid DataContext="{Binding ElementName=AlbumPresenter, Path=DataContext}">
                                             <Border Background="#154154" BorderBrush="LightGray" BorderThickness="0.0"
                                                     Grid.ZIndex="0"/>
                                             <Path Margin="10" Stretch="Uniform" Grid.ZIndex="0"
@@ -85,8 +87,60 @@
 		 -272.8,261.92 -260.64,274.24 -260.64,289.28 -260.64,304.32 -272.8,316.48 -287.84,316.48 z"
                                                   Fill="Black" Stroke="LightGray" />
                                             <Image Grid.ZIndex="1" Source="{Binding Path=Cover}" Stretch="Fill" />
+                                            <Grid Name="AlbumControlPresenter" Grid.ZIndex="2">
+                                                <Rectangle Fill="#111111" Opacity="0.8"/>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Grid.Column="1" Command="{Binding ElementName=AlbumPageControl, Path=DataContext.PlayAlbum}" CommandParameter="{Binding DataContext, ElementName=AlbumPresenter}">
+                                                        <Button.Template>
+                                                            <ControlTemplate>
+                                                                <Viewbox Stretch="Uniform" MaxHeight="75" MaxWidth="75">
+                                                                    <Grid Width="10" Height="10">
+                                                                        <Path Stretch="Uniform"  Stroke="LightGray" Fill="#111111" StrokeThickness="0.1">
+                                                                            <Path.Data>
+                                                                                <GeometryGroup>
+                                                                                    <EllipseGeometry RadiusX="10"
+                                                                                                 RadiusY="10" />
+                                                                                </GeometryGroup>
+                                                                            </Path.Data>
+                                                                            <Path.Style>
+                                                                                <Style TargetType="Path">
+                                                                                    <Style.Triggers>
+                                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                                            <Setter Property="Opacity" Value="0.9"/>
+                                                                                        </Trigger>
+                                                                                        <Trigger Property="IsMouseOver" Value="False">
+                                                                                            <Setter Property="Opacity" Value="0.5"/>
+                                                                                        </Trigger>
+                                                                                    </Style.Triggers>
+                                                                                </Style>
+                                                                            </Path.Style>
+                                                                        </Path>
+                                                                        <Path Fill="LightGray" Data="M 3.5,3 L 3.5,7 7.5,5 z"></Path>
+                                                                    </Grid>
+                                                                    </Viewbox>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
+                                                </Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ElementName=AlbumCoverButton, Path=IsMouseOver}" Value="True">
+                                                                <Setter  Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding ElementName=AlbumCoverButton, Path=IsMouseOver}" Value="False">
+                                                                <Setter  Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                            </Grid>
                                         </Grid>
-
                                     </ControlTemplate>
                                 </Button.Template>
                                 <Button.Style>
@@ -101,9 +155,6 @@
                                 </Button.Style>
                             </Button>
                             <Grid Grid.Row="1" Background="#333333" Height="80">
-                                <Grid.Resources>
-                                    <uiLibrary:AccessFirstMember x:Key="AccessFirstMember" />
-                                </Grid.Resources>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="1*" />

@@ -135,7 +135,7 @@
                                 <Button Grid.Column="3" Command="{Binding Path=OrderByAlbum}">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <TextBlock Text="ALBUM" FontSize="17" 
+                                            <TextBlock Text="ALBUM" FontSize="17"
                                                        HorizontalAlignment="Left"
                                                        Foreground="LightGray" Opacity="0.6"
                                                        TextTrimming="CharacterEllipsis"
@@ -143,11 +143,12 @@
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="4" Command="{Binding Path=OrderByTime}" Height="24" Width="21" HorizontalAlignment="Right">
+                                <Button Grid.Column="4" Command="{Binding Path=OrderByTime}" Height="24" Width="21"
+                                        HorizontalAlignment="Right">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Grid>
-                                                <Border/>
+                                                <Border />
                                                 <Path Stretch="UniformToFill" Opacity="0.6"
                                                       Data="F1 M 0,0 L -5.92,0 -5.92,1.92 0,1.92 z
 		M -4,12.96 L -1.92,12.96 -1.92,7.04 -4,7.04 z
@@ -156,13 +157,13 @@
 		 6.08,9.92 5.28,7.84 4,6.4 z
 		M -2.88,19.04 C -6.88,19.04 -9.92,15.84 -9.92,12 -9.92,8.16 -6.88,4.96 -2.88,4.96
 		 0.96,4.96 4,8.16 4,12 4,15.84 0.96,19.04 -2.88,19.04 z"
-                                                      Fill="LightGray" RenderTransformOrigin="0.5,0.5" >
+                                                      Fill="LightGray" RenderTransformOrigin="0.5,0.5">
                                                     <Path.RenderTransform>
                                                         <TransformGroup>
-                                                            <ScaleTransform/>
-                                                            <SkewTransform/>
-                                                            <RotateTransform/>
-                                                            <TranslateTransform X="-5"/>
+                                                            <ScaleTransform />
+                                                            <SkewTransform />
+                                                            <RotateTransform />
+                                                            <TranslateTransform X="-5" />
                                                         </TransformGroup>
                                                     </Path.RenderTransform>
                                                 </Path>
@@ -189,7 +190,7 @@
                     <DataTemplate.Resources>
                         <audio:TrackAccessAlbumName x:Key="TrackAccessAlbumName" />
                         <audio:TrackDurationStylized x:Key="DurationStylized" />
-                        <audio:TrackAccessArtistName x:Key="TrackAccessArtist"/>
+                        <audio:TrackAccessArtistName x:Key="TrackAccessArtist" />
                     </DataTemplate.Resources>
                     <Grid Name="ContainerGrid">
                         <Grid Height="40">
@@ -202,10 +203,11 @@
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock 
-                                    Foreground="LightGray" 
-                                    Text="{Binding ElementName=TextIndex, Path=Text}" 
-                                    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Grid.Column="0"/>
+                                <TextBlock
+                                    Foreground="LightGray"
+                                    Text="{Binding ElementName=TextIndex, Path=Text}"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"
+                                    Grid.Column="0" />
                                 <Button Grid.Column="0" Width="30" Height="30" VerticalAlignment="Center"
                                         DataContext="{Binding ElementName=TrackLibraryUserContext, Path=DataContext}"
                                         Command="{Binding Path=PlayTrack}"
@@ -213,17 +215,34 @@
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Style.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding ElementName=Bd, Path=IsMouseOver}"
-                                                    Value="True">
-                                                    <Setter Property="Template"
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding ElementName=Bd, Path=IsMouseOver}" Value="False"/>
+                                                        <Condition Binding="{Binding ElementName=ContainerGrid, Path=DataContext.State}" Value="Playing"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="Template"
                                                             Value="{StaticResource PlayButtonState}" />
-                                                </DataTrigger>
-                                                <DataTrigger
-                                                    Binding="{Binding ElementName=Bd, Path=IsMouseOver}"
-                                                    Value="False">
-                                                    <Setter Property="Template" Value="{x:Null}" />
-                                                </DataTrigger>
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding ElementName=Bd, Path=IsMouseOver}" Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="Template"
+                                                            Value="{StaticResource PlayButtonState}" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding ElementName=Bd, Path=IsMouseOver}" Value="False"/>
+                                                        <Condition Binding="{Binding ElementName=ContainerGrid, Path=DataContext.State}" Value="Stopped"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="Template" Value="{x:Null}" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Button.Style>
@@ -236,22 +255,41 @@
                                            VerticalAlignment="Center" />
 
                                 <Border Grid.Column="2" Name="ArtistBorder" Margin="0.5" BorderThickness="0" />
-                                <TextBlock
-                                    Text="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TrackAccessArtist}}"
-                                    Grid.Column="2" FontSize="15"
-                                    HorizontalAlignment="Left"
-                                    Width="{Binding ElementName=ArtistBorder, Path=ActualWidth}"
-                                    Foreground="LightGray" Opacity="0.9" TextTrimming="CharacterEllipsis"
-                                    VerticalAlignment="Center" />
+                                <Button Grid.Column="2" Command="{Binding Path=ShowArtist}" Cursor="Hand"
+                                        DataContext="{Binding ElementName=TrackLibraryUserContext, Path=DataContext}"
+                                        CommandParameter="{Binding ElementName=AlbumBorder, Path=DataContext}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <TextBlock
+                                                DataContext="{Binding ElementName=AlbumBorder, Path=DataContext}"
+                                                Text="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TrackAccessArtist}}"
+                                                FontSize="15"
+                                                HorizontalAlignment="Left"
+                                                Width="{Binding ElementName=ArtistBorder, Path=ActualWidth}"
+                                                Foreground="LightGray" Opacity="0.9" TextTrimming="CharacterEllipsis"
+                                                VerticalAlignment="Center" />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
 
                                 <Border Grid.Column="3" BorderThickness="0" Name="AlbumBorder" Margin="0.5" />
-                                <TextBlock
-                                    Text="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TrackAccessAlbumName}}"
-                                    FontSize="15" Grid.Column="3"
-                                    HorizontalAlignment="Left"
-                                    Width="{Binding ElementName=AlbumBorder, Path=ActualWidth}"
-                                    Foreground="LightGray" Opacity="0.9" TextTrimming="CharacterEllipsis"
-                                    VerticalAlignment="Center" />
+                                <Button Grid.Column="3" Cursor="Hand"
+                                        DataContext="{Binding ElementName=TrackLibraryUserContext, Path=DataContext}"
+                                        Command="{Binding Path=ShowAlbum}"
+                                        CommandParameter="{Binding ElementName=AlbumBorder, Path=DataContext}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <TextBlock
+                                                DataContext="{Binding ElementName=AlbumBorder, Path=DataContext}"
+                                                Text="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TrackAccessAlbumName}}"
+                                                FontSize="15" Grid.Column="3"
+                                                HorizontalAlignment="Left"
+                                                Width="{Binding ElementName=AlbumBorder, Path=ActualWidth}"
+                                                Foreground="LightGray" Opacity="0.9" TextTrimming="CharacterEllipsis"
+                                                VerticalAlignment="Center" />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
 
                                 <TextBlock
                                     Text="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource DurationStylized}}"

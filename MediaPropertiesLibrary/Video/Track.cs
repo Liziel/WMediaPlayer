@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace MediaPropertiesLibrary.Video
 {
     [Serializable]
-    public class Track : ITrack
+    public class Track : MediaPropertiesLibrary.TrackDefinition
     {
 
         #region Serializable Members
@@ -26,12 +26,8 @@ namespace MediaPropertiesLibrary.Video
         [XmlIgnore]
         public List<string> RelativePath { get; set; }
 
-        public event TrackPaused TrackPaused;
-        public event TrackPlayed TrackPlayed;
-        public event TrackStopped TrackStopped;
-
         [XmlIgnore]
-        public TimeSpan Duration { get; set; }
+        public override TimeSpan Duration { get; set; }
 
         [XmlIgnore]
         public Serie Serie { get; set; }
@@ -41,7 +37,7 @@ namespace MediaPropertiesLibrary.Video
 
         #region Herited From ITracks
 
-        public string MediaLibraryKey => Path;
+        public override string MediaLibraryKey => Path;
 
         #endregion
     }

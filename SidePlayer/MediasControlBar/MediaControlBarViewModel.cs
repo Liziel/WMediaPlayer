@@ -10,6 +10,7 @@ using SidePlayer.Annotations;
 using SidePlayer.MediasPlayer;
 using TagLib;
 using UiLibrary;
+using UiLibrary.Utils;
 using Dispatcher = DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediaControlBar
@@ -151,7 +152,8 @@ namespace SidePlayer.MediaControlBar
         [EventHook("Media Position Actualization")]
         public void TickResponse(double position)
         {
-            SliderCurrentValue = position;
+            _sliderCurrentValue = position;
+            OnPropertyChanged(nameof(SliderCurrentValue));
             MediaPosition = TimeSpan.FromSeconds(position).ToString(@"hh\:mm\:ss");
         }
 

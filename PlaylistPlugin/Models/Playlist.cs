@@ -18,7 +18,7 @@ namespace PlaylistPlugin.Models
             #region Properties
 
             [XmlIgnore]
-            public ITrack Track { get; private set; }
+            public TrackDefinition Track { get; private set; }
 
             [XmlIgnore]
             public long Position { get; private set; }
@@ -27,7 +27,7 @@ namespace PlaylistPlugin.Models
 
             #region Constructor
 
-            public Member(ITrack track, long position)
+            public Member(TrackDefinition track, long position)
             {
                 Track = track;
                 Position = position;
@@ -57,7 +57,7 @@ namespace PlaylistPlugin.Models
                 set
                 {
                     Track =
-                        (ITrack) Library.SingleQueryOnTrack(
+                        (TrackDefinition) Library.SingleQueryOnTrack(
                             track => track.MediaLibraryKey == value) ??
                         MediaPropertiesLibrary.Video.Library.Library.SingleQueryOnTrack(
                             track => track.MediaLibraryKey == value);
@@ -117,9 +117,9 @@ namespace PlaylistPlugin.Models
 
         #endregion
 
-        public void AddTrack(ITrack track)
+        public void AddTrack(TrackDefinition trackDefinition)
         {
-            Tracks.Add(new Member(track, Tracks.Count + 1));
+            Tracks.Add(new Member(trackDefinition, Tracks.Count + 1));
         }
     }
 }

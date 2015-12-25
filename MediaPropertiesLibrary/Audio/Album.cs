@@ -17,5 +17,15 @@ namespace MediaPropertiesLibrary.Audio
         public string           FirstArtistName => Artists.First()?.Name;
         [XmlIgnore]
         public List<Track> Tracks { get; } = new List<Track>();
+
+        [XmlIgnore]
+        public MediaState State {
+            get
+            {
+                if (Tracks.Count(track => track.State == MediaState.Paused) > 0)
+                    return MediaState.Paused;
+                return Tracks.Count(track => track.State == MediaState.Playing) > 0 ? MediaState.Playing : MediaState.Stopped;
+            }
+        }
     }
 }

@@ -2,22 +2,19 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace UiLibrary
+namespace UiLibrary.Converters
 {
-    public class WidthToColumnConverter : IValueConverter
+    public class CountToRow : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((value as double?) == null)
-                return value;
-            double conv = (value as double?).Value;
+            if ((value as int?) == null)
+                return false;
+            int conv = ((int?) value).Value;
 
-            if (conv > 800)
-                return 6;
-            else if (conv < 500)
-                return 3;
-            else
-                return 4;
+            if (conv > 9)
+                return true;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -60,7 +60,8 @@
     <Compile Include="Audio\Library\Library.cs" />
     <Compile Include="Audio\Library\PathLibrary.cs" />
     <Compile Include="Audio\Track.cs" />
-    <Compile Include="ITrack.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="TrackDefinition.cs" />
     <Compile Include="Pictures\Library\PathLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Video\Library\Library.cs" />

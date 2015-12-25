@@ -8,7 +8,10 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
+using MediaPropertiesLibrary;
 using MediaPropertiesLibrary.Audio;
+using UiLibrary.Utils;
+using Dispatcher = DispatcherLibrary.Dispatcher;
 
 namespace MediaLibrary.Audio.SubViews
 {
@@ -37,7 +40,13 @@ namespace MediaLibrary.Audio.SubViews
 
         public AudioAlbumViewModel()
         {
-            MediaPropertiesLibrary.Audio.Library.Library.TracksLoaded += () =>
+            _albumsAccess = MediaPropertiesLibrary.Audio.Library.Library.Albums;
+            _albumCollectionViewSource.Source = _albumsAccess;
+            AlbumsView.Filter += item => ((Album)item).Name.ToLower().Contains(SearchText.ToLower());
+            AlbumsView.Refresh();
+            OnPropertyChanged(nameof(AlbumsView));
+            OnPropertyChanged(nameof(AlbumsViewCount));
+            MediaPropertiesLibrary.Audio.Library.Library.OnTracksActualized += () =>
             {
                _albumsAccess = MediaPropertiesLibrary.Audio.Library.Library.Albums;
                 if (Application.Current != null)
@@ -64,5 +73,32 @@ namespace MediaLibrary.Audio.SubViews
         }
 
         #endregion
+
+        public UiCommand    PlayAlbum { get; } = new UiCommand(StaticPlayAlbum);
+
+        private static void StaticPlayAlbum(object o)
+        {
+            var album = o as Album;
+
+            if (album == null)
+                return;
+            switch (album.State)
+            {
+                case MediaState.Playing:
+                    Dispatcher.GetInstance.Dispatch("Pause");
+                    break;
+                case MediaState.Paused:
+                    Dispatcher.GetInstance.Dispatch("Play");
+                    break;
+                case MediaState.Stopped:
+                case MediaState.End:
+                    Dispatcher.GetInstance.Dispatch("Multiple Track Selected For Play", album.Tracks, 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public UiCommand SelectAlbum { get; } = new UiCommand(o => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Album", o));
     }
 }

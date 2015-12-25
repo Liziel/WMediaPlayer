@@ -13,6 +13,7 @@ using MediaLibrary.Audio.SubViews;
 using MediaPropertiesLibrary.Audio;
 using PluginLibrary;
 using UiLibrary;
+using UiLibrary.Utils;
 
 namespace MediaLibrary.Audio
 {
@@ -51,7 +52,7 @@ namespace MediaLibrary.Audio
         #endregion
     }
 
-    public class LibraryClassViewModel : Listener, INotifyPropertyChanged, IMessageablePlugin
+    public class LibraryClassViewModel : Listener, INotifyPropertyChanged
     {
         #region Pages
 
@@ -64,11 +65,13 @@ namespace MediaLibrary.Audio
                 _pages = value;
                 OnPropertyChanged(nameof(Pages));
             }
-        } 
+        }
+
         [EventHook("AudioLibrary: View Album")]
         public void AccessAlbum(Album album)
         {
-            Pages.Add(new AlbumView(new AlbumViewModel(album)));
+            if (album != null)
+                Pages.Add(new AlbumView(new AlbumViewModel(album)));
         }
         #endregion
 
@@ -185,13 +188,6 @@ namespace MediaLibrary.Audio
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        #endregion
-
-        #region Messageable Plugin Implementation
-
-        public event MessageableStatusChanged StatusChanged;
-        public bool Optional { get; }
 
         #endregion
     }

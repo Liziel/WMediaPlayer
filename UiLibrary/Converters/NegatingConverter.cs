@@ -2,19 +2,13 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace UiLibrary
+namespace UiLibrary.Converters
 {
-    public class CountToRow : IValueConverter
+    public class NegatingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((value as int?) == null)
-                return false;
-            int conv = ((int?) value).Value;
-
-            if (conv > 9)
-                return true;
-            return false;
+            return -(value as double?) - 30 ?? value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

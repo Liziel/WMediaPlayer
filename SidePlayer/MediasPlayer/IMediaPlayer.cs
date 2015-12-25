@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace SidePlayer.MediasPlayer
 {
@@ -10,7 +9,6 @@ namespace SidePlayer.MediasPlayer
         void OnMaximize();
         void OnMinimize();
 
-        void AssignUri(Uri uri, TagLib.File tag);
         void AssignMedia(object media);
     }
 }

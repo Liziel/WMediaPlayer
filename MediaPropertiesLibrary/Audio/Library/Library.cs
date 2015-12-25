@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
@@ -11,22 +12,44 @@ using File = TagLib.File;
 namespace MediaPropertiesLibrary.Audio.Library
 { 
 
-    public delegate void OnAllTracksLoaded();
+    public delegate void OnTracksActualized();
+
+    [Serializable]
+    public class TrackSerializer
+    {
+        public Track Track { get; set; }
+        public string AlbumName { get; set; }
+        public List<string> ArtistsNames { get; set; }
+    }
 
     public class Library
     {
         private static string AudioLibraryLocation => AbstractPathLibrary.LibrariesLocation + "/SavedAudioLibrary.xml";
 
-        [XmlElement("Tracks")]
-        public List<Track> SerializableTracks { get { return _tracks; } set { _tracks = value; } }
-        [XmlElement("Albums")]
+        private List<TrackSerializer> useForDeserializer;
+
+        [XmlArray("Tracks", Order = 2)]
+        public List<TrackSerializer> SerializableTracks {
+            get
+            {
+                if (_tracks == null)
+                    return useForDeserializer = new List<TrackSerializer>();
+                return _tracks.Select(track => new TrackSerializer
+                {
+                    Track = track,
+                    AlbumName = track.Album?.Name,
+                    ArtistsNames = track.Artist.Select(artist => artist.Name).ToList()
+                }).ToList();
+            }
+        }
+        [XmlArray("Albums", Order = 1)]
         public List<Album> SerializableAlbums { get { return _albums; } set { _albums = value; } }
-        [XmlElement("Artists")]
+        [XmlArray("Artists", Order = 0)]
         public List<Artist> SerializableArtists { get { return _artists; } set { _artists = value; } }
 
         #region Library Tracks Artists & Albums
 
-        private List<Track> _tracks = new List<Track>();
+        private List<Track> _tracks = null;
         private List<Album> _albums = new List<Album>();
         private List<Artist> _artists = new List<Artist>();
 
@@ -67,7 +90,7 @@ namespace MediaPropertiesLibrary.Audio.Library
             }
         }
 
-        public static event OnAllTracksLoaded TracksLoaded;
+        public static event OnTracksActualized OnTracksActualized;
         private static void OnTracksLoaded()
         {
             Instance._tracks = Instance._workingtracks;
@@ -79,7 +102,7 @@ namespace MediaPropertiesLibrary.Audio.Library
             Stream audioLibraryStream = null;
             using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
                 new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
-            TracksLoaded?.Invoke();
+            OnTracksActualized?.Invoke();
         }
 
         #endregion
@@ -89,10 +112,41 @@ namespace MediaPropertiesLibrary.Audio.Library
 
         private static Library CreateInstance()
         {
-            Stream audioLibraryStream = null;
+            Library instance;
+            Stream audioLibraryStream;
             using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
-                return (Library)
+                instance = (Library)
                 new XmlSerializer(typeof(Library)).Deserialize(audioLibraryStream);
+            instance._tracks = new List<Track>();
+            foreach (var trackSerializer in instance.useForDeserializer)
+            {
+                instance._tracks.Add(trackSerializer.Track);
+                var album = instance._albums.Find(salbum => trackSerializer.AlbumName == salbum.Name);
+                if (album != null)
+                {
+                    album.Tracks.Add(trackSerializer.Track);
+                    trackSerializer.Track.Album = album;
+                    foreach (
+                        var artist in
+                            instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
+                                .ToList())
+                    {
+                        artist.Albums.Add(album);
+                        album.Artists.Add(artist);
+                        trackSerializer.Track.Artist.Add(artist);
+                    }
+                }
+                else
+                    foreach (
+                        var artist in
+                            instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
+                                .ToList())
+                    {
+                        artist.SingleTracks.Add(trackSerializer.Track);
+                        trackSerializer.Track.Artist.Add(artist);
+                    }
+            }
+            return instance;
         }
 
         private static readonly Library Instance = CreateInstance();
@@ -233,7 +287,12 @@ namespace MediaPropertiesLibrary.Audio.Library
 
         public static Track SingleQueryOnTrack(Predicate<Track> predicate)
         {
-            return null;
+            return Instance._tracks.Find(predicate);
+        }
+
+        public static Album SingleQueryOnAlbum(Predicate<Album> predicate)
+        {
+            return Instance._albums.Find(predicate);
         }
         #endregion
     }

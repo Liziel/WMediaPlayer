@@ -8,6 +8,7 @@ using DispatcherLibrary;
 using MediaLibrary.Annotations;
 using MediaPropertiesLibrary.Video;
 using UiLibrary;
+using UiLibrary.Utils;
 
 namespace MediaLibrary.Video.SubViews
 {

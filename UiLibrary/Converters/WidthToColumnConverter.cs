@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace UiLibrary
+namespace UiLibrary.Converters
 {
-    
-    public class AccessFirstMember
-        : IValueConverter
+    public class WidthToColumnConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var l = value as List<object>;
-            if (l != null)
-                return l.Find(o => true);
-            var l2 = value as HashSet<object>;
-            if (l2 != null)
-                return l2;
-            return null;
+            if ((value as double?) == null)
+                return value;
+            double conv = (value as double?).Value;
+
+            if (conv > 800)
+                return 6;
+            else if (conv < 500)
+                return 3;
+            else
+                return 4;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

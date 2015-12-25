@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using SidePlayer.Annotations;
 using UiLibrary;
+using UiLibrary.Utils;
 
 namespace SidePlayer.MaximizedMediaPlayer
 {

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace MediaPropertiesLibrary.Audio
 {
-    public class Track : ITrack
+    public class Track : MediaPropertiesLibrary.TrackDefinition
     {
         #region Serializable Members
 
@@ -21,16 +21,12 @@ namespace MediaPropertiesLibrary.Audio
 
         #region Attached Members
 
-        public event TrackPaused TrackPaused;
-        public event TrackPlayed TrackPlayed;
-        public event TrackStopped TrackStopped;
-
         [XmlIgnore]
-        public TimeSpan Duration { get; set; }
+        public override TimeSpan Duration { get; set; }
         [XmlIgnore]
         public Album Album { get; set; }
         [XmlIgnore]
-        public List<Artist> Artist { get; set; }
+        public List<Artist> Artist { get; set; } = new List<Artist>();
         [XmlIgnore]
         public List<string> RelativePaths { get; set; }
 
@@ -38,7 +34,7 @@ namespace MediaPropertiesLibrary.Audio
 
         #region Herited From ITracks
 
-        public string MediaLibraryKey => Path;
+        public override string MediaLibraryKey => Path;
 
         #endregion
 
@@ -46,6 +42,8 @@ namespace MediaPropertiesLibrary.Audio
 
     public sealed class TrackUserTag
     {
+        private string UserDefinedAlbumName { get; set; }
+        private List<string> UserDefinedArtistsNames { get; set; }
     }
 
     public class TrackAccessArtistName : IValueConverter

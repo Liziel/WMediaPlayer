@@ -12,6 +12,8 @@ using MediaLibrary.Annotations;
 using MediaPropertiesLibrary;
 using MediaPropertiesLibrary.Audio;
 using UiLibrary;
+using UiLibrary.Utils;
+using Dispatcher = DispatcherLibrary.Dispatcher;
 
 namespace MediaLibrary.Audio.SubViews
 {
@@ -34,8 +36,8 @@ namespace MediaLibrary.Audio.SubViews
 
         public int Compare(object rhs, object lhs)
         {
-            var x = rhs as Track;
-            var y = lhs as Track;
+            var x = rhs as MediaPropertiesLibrary.Audio.Track;
+            var y = lhs as MediaPropertiesLibrary.Audio.Track;
             int result = 0;
 
             if (x == null && y == null)
@@ -84,19 +86,19 @@ namespace MediaLibrary.Audio.SubViews
 
         #region Track Access and Constructor
 
-        private List<Track> _tracksAccess = null;
-        public List<Track> TracksAccess => _tracksAccess;
+        private List<MediaPropertiesLibrary.Audio.Track> _tracksAccess = null;
+        public List<MediaPropertiesLibrary.Audio.Track> TracksAccess => _tracksAccess;
 
         public AudioTrackViewModel()
         {
             _tracksAccess = MediaPropertiesLibrary.Audio.Library.Library.Tracks;
             _trackCollectionView.Source = _tracksAccess;
-            TracksView.Filter += (item) => ((Track)item).Name.ToLower().Contains(SearchText.ToLower());
+            TracksView.Filter += (item) => ((MediaPropertiesLibrary.Audio.Track)item).Name.ToLower().Contains(SearchText.ToLower());
             TracksView.CustomSort = this;
             TracksView.Refresh();
             OnPropertyChanged(nameof(TracksView));
 
-            MediaPropertiesLibrary.Audio.Library.Library.TracksLoaded += OnLibraryOnTracksLoaded;
+            MediaPropertiesLibrary.Audio.Library.Library.OnTracksActualized += OnLibraryOnOnTracksActualized;
             PlayTrack = new UiCommand(o => Play(o as Track));
 
             OrderByTime = new UiCommand(o => OrderByAffectation(OrderBy.Time));
@@ -112,14 +114,14 @@ namespace MediaLibrary.Audio.SubViews
             TracksView?.Refresh();
         }
 
-        private void OnLibraryOnTracksLoaded()
+        private void OnLibraryOnOnTracksActualized()
         {
             _tracksAccess = MediaPropertiesLibrary.Audio.Library.Library.Tracks;
             if (Application.Current != null)
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     _trackCollectionView.Source = _tracksAccess;
-                    TracksView.Filter += (item) => ((Track)item).Name.ToLower().Contains(SearchText.ToLower());
+                    TracksView.Filter += (item) => ((MediaPropertiesLibrary.Audio.Track)item).Name.ToLower().Contains(SearchText.ToLower());
                     TracksView.CustomSort = this;
                     TracksView.Refresh();
                     OnPropertyChanged(nameof(TracksView));
@@ -133,8 +135,19 @@ namespace MediaLibrary.Audio.SubViews
 
         private void Play(Track track)
         {
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Multiple Track Selected For Play",
-                TracksView.Cast<ITrack>(), TracksView.Cast<ITrack>().ToList().FindIndex(o => o == track));
+            switch (track.State)
+            {
+                case MediaState.Stopped:
+                    Dispatcher.GetInstance.Dispatch("Multiple Track Selected For Play",
+                        TracksView.Cast<TrackDefinition>(), TracksView.Cast<TrackDefinition>().ToList().FindIndex(o => o == track));
+                    break;
+                case MediaState.Playing:
+                    Dispatcher.GetInstance.Dispatch("Pause");
+                    break;
+                default:
+                    Dispatcher.GetInstance.Dispatch("Play");
+                    break;
+            }
         }
 
         #region Notifier Properties
@@ -146,6 +159,9 @@ namespace MediaLibrary.Audio.SubViews
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public UiCommand ShowArtist { get; } = new UiCommand(track => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Artist", ((MediaPropertiesLibrary.Audio.Track)track).Artist));
+        public UiCommand ShowAlbum { get; } = new UiCommand(track => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Album", ((MediaPropertiesLibrary.Audio.Track)track).Album));
 
         #endregion
     }

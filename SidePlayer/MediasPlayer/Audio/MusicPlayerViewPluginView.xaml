@@ -8,6 +8,7 @@
              xmlns:audio1="clr-namespace:SidePlayer.MediasPlayer.Audio"
              xmlns:mediasPlayer="clr-namespace:SidePlayer.MediasPlayer"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:UiLibrary.Converters;assembly=UiLibrary"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="300" d:DataContext="{audio1:MusicPlayerPluginViewModel}">
     <UserControl.Resources>
@@ -61,7 +62,7 @@
                                 </MultiBinding>
                             </Grid.Visibility>
                             <Grid.Resources>
-                                <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
+                                <converters:NegatingConverter x:Key="NegatingConverter" />
                                 <Storyboard x:Key="TitleSlide">
                                     <DoubleAnimation From="0"
                                          To="{Binding ActualWidth, ElementName=Title, Converter={StaticResource NegatingConverter}}"
@@ -133,7 +134,7 @@
                     </MultiBinding>
                 </Grid.Visibility>
                 <Grid.Resources>
-                    <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
+                    <converters:NegatingConverter x:Key="NegatingConverter" />
                     <Storyboard x:Key="ArtistSlide" Completed="OnArtistAnimationCompleted">
                         <DoubleAnimation From="0"
                                          To="{Binding ActualWidth, ElementName=Artist, Converter={StaticResource NegatingConverter}}"

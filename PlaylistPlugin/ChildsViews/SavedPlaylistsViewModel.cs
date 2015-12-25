@@ -5,6 +5,7 @@ using DispatcherLibrary;
 using MediaLibrary.Annotations;
 using PlaylistPlugin.Models;
 using UiLibrary;
+using UiLibrary.Utils;
 
 namespace PlaylistPlugin.ChildsViews
 {

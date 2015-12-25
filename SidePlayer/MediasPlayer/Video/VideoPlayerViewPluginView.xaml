@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:uiLibrary="clr-namespace:UiLibrary;assembly=UiLibrary"
+             xmlns:converters="clr-namespace:UiLibrary.Converters;assembly=UiLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid VerticalAlignment="Top">
@@ -32,7 +33,7 @@
             <Grid Height="35" VerticalAlignment="Center"
                   x:Name="TitleBlock">
                 <Grid.Resources>
-                    <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
+                    <converters:NegatingConverter x:Key="NegatingConverter" />
                     <Storyboard x:Key="TitleSlide" Completed="OnTitleAnimationCompleted">
                         <DoubleAnimation From="0"
                                          To="{Binding ActualWidth, ElementName=Title, Converter={StaticResource NegatingConverter}}"
@@ -87,7 +88,7 @@
             <Grid Height="35" VerticalAlignment="Center"
                   x:Name="ArtistBlock">
                 <Grid.Resources>
-                    <uiLibrary:NegatingConverter x:Key="NegatingConverter" />
+                    <converters:NegatingConverter x:Key="NegatingConverter" />
                     <Storyboard x:Key="ArtistSlide" Completed="OnArtistAnimationCompleted">
                         <DoubleAnimation From="0"
                                          To="{Binding ActualWidth, ElementName=Artist, Converter={StaticResource NegatingConverter}}"
