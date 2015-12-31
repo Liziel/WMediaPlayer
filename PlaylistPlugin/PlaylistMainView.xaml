@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="PlaylistPlugin.PlaylistMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlaylistPlugin"
+             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:video="clr-namespace:MediaPropertiesLibrary.Video;assembly=MediaPropertiesLibrary"
+             xmlns:subViews="clr-namespace:PlaylistPlugin.SubViews"
+             xmlns:childsViews="clr-namespace:PlaylistPlugin.ChildsViews"
+             mc:Ignorable="d" d:DataContext="{local:PlaylistMainViewModel}"
+             d:DesignHeight="1080" d:DesignWidth="1620">
+    <UserControl.DataContext>
+        <local:PlaylistMainViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Ressources/ControlPlayButton.xaml" />
+                <ResourceDictionary Source="Ressources/MusicDisplayer.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+
+        <!-- Background -->
+        <Border Background="#111111" Grid.ZIndex="-1"/>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2.5*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Playlist Presentation List-->
+            <ContentControl Content="{Binding SavedPlaylists}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type childsViews:SavedPlaylistsViewModel}">
+                        <subViews:SavedPlaylistsView/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+
+            <!-- Playlist Representation -->
+            <ContentControl Grid.Column="1" Content="{Binding PlaylistView}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type childsViews:CurrentPlaylistViewModel}">
+                        <childsViews:CurrentPlaylistView/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+
+        </Grid>
+    </Grid>
+</UserControl>
