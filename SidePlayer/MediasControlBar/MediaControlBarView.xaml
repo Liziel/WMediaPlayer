@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SidePlayer.MediaControlBar"
+             xmlns:mediasControlBar="clr-namespace:SidePlayer.MediasControlBar"
+             xmlns:dependencyTools="clr-namespace:WPFUiLibrary.UserControls.DependencyTools;assembly=WPFUiLibrary"
              mc:Ignorable="d" d:DataContext="{local:MediaControlBarViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -31,19 +33,17 @@
             <RowDefinition Height="Auto" />
             <!-- Sub Control -->
         </Grid.RowDefinitions>
-        <GridSplitter>
-        </GridSplitter>
 
-        <Slider Grid.Row="1" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True" Margin="10,0,10,0"
+        <Slider Grid.Row="0" Style="{StaticResource CustomSlider}" IsMoveToPointEnabled="True" Margin="10,0,10,0" dependencyTools:SliderTools.MoveToPointOnDrag="True"
                 Value="{Binding Path=SliderCurrentValue, Mode=TwoWay}" Maximum="{Binding Path=SliderMaxValue}" Minimum="0">
         </Slider>
 
-        <Grid Grid.Row="2" Margin="0,0,0,5">
+        <Grid Grid.Row="1" Margin="0,0,0,5">
             <TextBlock Text="{Binding Path=MediaPosition}" Foreground="LightGray" Opacity="0.6" Margin="10,0,0,0"/>
             <TextBlock Text="{Binding Path=MediaDuration}" Foreground="LightGray" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,10,0"/>
         </Grid>
         
-        <Grid Grid.Row="3" HorizontalAlignment="Center">
+        <Grid Grid.Row="2" HorizontalAlignment="Center">
 
             <Grid.Resources>
                 <Style TargetType="Button">
@@ -74,8 +74,8 @@
             <Button Grid.Column="0" Command="{Binding Path=Previous}">
                 <Button.Template>
                     <ControlTemplate>
-                        <Grid Width="50" Height="50">
-                            <Path Stretch="Fill"
+                        <Grid Width="55" Height="55">
+                            <Path Stretch="Uniform"
                                 Data="F0 M 0,0 C -12.8,0 -30.08,-1.6 -43.84,8 L -409.6,316.8 -409.6,71.04 C -409.6,31.84 -441.28,0 -480.48,0
 		L -586.88,0 C -626.08,0 -657.92,31.84 -657.92,71.04 L -657.92,744.96 C -657.92,784.16 -626.08,816 -586.88,816
 		L -480.48,816 C -441.28,816 -409.6,784.16 -409.6,744.96 L -409.6,497.12 -43.84,805.92 C -30.08,815.52 -12.8,813.92 0,813.92
@@ -112,8 +112,8 @@
             <Button Grid.Column="2" Command="{Binding Path=Next}">
                 <Button.Template>
                     <ControlTemplate>
-                        <Grid Width="50" Height="50">
-                            <Path Stretch="Fill"
+                        <Grid Width="55" Height="55">
+                            <Path Stretch="Uniform"
                                   Data="F0 M 0,0 L -106.4,0 C -145.6,0 -177.28,31.68 -177.28,70.88 L -177.28,318.72 -543.04,9.92
 		C -556.8,0.32 -574.08,1.92 -586.88,1.92 -638.72,1.92 -638.56,48.32 -638.56,60.16 L -638.56,757.76
 		C -638.56,767.68 -638.72,815.84 -586.88,815.84 -574.08,815.84 -556.8,817.44 -543.04,807.84 L -177.28,499.04
@@ -133,8 +133,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-
-
         </Grid>
+        <mediasControlBar:SubControlView Grid.Row="3" Height="25" Margin="0 10 0 45"/>
     </Grid>
 </UserControl>

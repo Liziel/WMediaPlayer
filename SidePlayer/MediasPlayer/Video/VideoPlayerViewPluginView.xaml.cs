@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using DispatcherLibrary;
 using PluginLibrary.Customization;
 using SidePlayer.Annotations;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediasPlayer.Video
 {
@@ -96,7 +97,7 @@ namespace SidePlayer.MediasPlayer.Video
 
         private void MaximizeVideoPlayer(object sender, MouseButtonEventArgs e)
         {
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Maximize Media View");
+            Dispatch("Maximize Media View");
         }
     }
 }

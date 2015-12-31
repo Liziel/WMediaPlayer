@@ -4,36 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:albumViewPanels="clr-namespace:MediaLibrary.Audio.Pages.AlbumViewPanels"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary Source="../../Ressources/ControlPlayButton.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Ressources/ScrollViewCustomization.xaml" />
+                <ResourceDictionary Source="../../Ressources/ControlPlayButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="5">
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                <Image Source="{Binding Path=Cover}" Height="150" Width="150" />
-                <DockPanel Margin="20 0 0 0">
-                    <TextBlock Text="Album" DockPanel.Dock="Top" />
-                    <TextBlock Text="{Binding Path=Name}" DockPanel.Dock="Top" />
-                    <StackPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Orientation="Horizontal">
-                        <Border Background="DodgerBlue" CornerRadius="15" BorderBrush="Black" BorderThickness="0.4">
-                            <Grid Margin="15 0 15 0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Path Data="M 0,0 L 0,20 13,10 z" Fill="LightGray" Stroke="#222222"
-                                      StrokeThickness="0.4"
-                                      VerticalAlignment="Center" Margin="0 0 2 0">
-                                </Path>
-                                <TextBlock Text="PLAY" Grid.Column="1" Margin="0 2 0 2" FontSize="19"
-                                           Foreground="LightGray" FontFamily="Calibri Light" />
-                            </Grid>
-                        </Border>
-                    </StackPanel>
-                </DockPanel>
-            </StackPanel>
+            <albumViewPanels:AlbumViewHeader Margin="0 0 0 5" Album="{Binding Path=Album}"/>
             <Border BorderBrush="#555555" BorderThickness="0 0.6 0 0.6">
                 <ContentControl Content="{Binding Path=AlbumPresentation}" />
             </Border>
@@ -72,13 +56,6 @@
                                             <ColumnDefinition Width="2*" />
                                             <ColumnDefinition Width="1*" />
                                         </Grid.ColumnDefinitions>
-                                        <!-- <TextBlock Grid.Column="0" Text="{Binding Path=Position}"
-                                                                       Foreground="LightGray" Opacity="0.8"
-                                                                       TextTrimming="CharacterEllipsis"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       FontFamily="Segoe UI Light">
-                                            </TextBlock>-->
                                         <!-- Play Button -->
                                         <Button Grid.Column="1" Width="30" Height="30"
                                                 VerticalAlignment="Center"
@@ -170,5 +147,5 @@
                 </Grid>
             </Grid>
         </StackPanel>
-        </ScrollViewer>
+    </ScrollViewer>
 </UserControl>

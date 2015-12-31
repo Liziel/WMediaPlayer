@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Xml.Serialization;
 using PluginLibrary;
 using File = TagLib.File;
@@ -24,40 +27,45 @@ namespace MediaPropertiesLibrary.Audio.Library
 
     public class Library
     {
+        #region Serialization
+
         private static string AudioLibraryLocation => AbstractPathLibrary.LibrariesLocation + "/SavedAudioLibrary.xml";
 
-        private List<TrackSerializer> useForDeserializer;
+        private List<TrackSerializer> _useForTrackDeserializer;
 
         [XmlArray("Tracks", Order = 2)]
-        public List<TrackSerializer> SerializableTracks {
+        public List<TrackSerializer> SerializableTracks
+        {
             get
             {
                 if (_tracks == null)
-                    return useForDeserializer = new List<TrackSerializer>();
+                    return _useForTrackDeserializer = new List<TrackSerializer>();
                 return _tracks.Select(track => new TrackSerializer
                 {
                     Track = track,
                     AlbumName = track.Album?.Name,
-                    ArtistsNames = track.Artist.Select(artist => artist.Name).ToList()
+                    ArtistsNames = track.Artists.Select(artist => artist.Name).ToList()
                 }).ToList();
             }
         }
+
         [XmlArray("Albums", Order = 1)]
-        public List<Album> SerializableAlbums { get { return _albums; } set { _albums = value; } }
+        // ReSharper disable once ConvertToAutoPropertyWhenPossible
+        public ObservableCollection<Album> SerializableAlbums => _albums;
+
         [XmlArray("Artists", Order = 0)]
-        public List<Artist> SerializableArtists { get { return _artists; } set { _artists = value; } }
+        // ReSharper disable once ConvertToAutoPropertyWhenPossible
+        public ObservableCollection<Artist> SerializableArtists => _artists;
+
+        #endregion
 
         #region Library Tracks Artists & Albums
 
-        private List<Track> _tracks = null;
-        private List<Album> _albums = new List<Album>();
-        private List<Artist> _artists = new List<Artist>();
+        private ObservableCollection<Track>             _tracks = null;
+        private readonly ObservableCollection<Album>    _albums = new ObservableCollection<Album>();
+        private readonly ObservableCollection<Artist>   _artists = new ObservableCollection<Artist>();
 
-        private List<Track> _workingtracks = new List<Track>();
-        private List<Album> _workingalbums = new List<Album>();
-        private List<Artist> _workingartists = new List<Artist>();
-
-        public static List<Track> Tracks
+        public static ObservableCollection<Track> Tracks
         {
             get
             {
@@ -68,7 +76,7 @@ namespace MediaPropertiesLibrary.Audio.Library
             }
         }
 
-        public static List<Album> Albums
+        public static ObservableCollection<Album> Albums
         {
             get
             {
@@ -79,7 +87,7 @@ namespace MediaPropertiesLibrary.Audio.Library
             }
         }
 
-        public static List<Artist> Artists
+        public static ObservableCollection<Artist> Artists
         {
             get
             {
@@ -93,16 +101,21 @@ namespace MediaPropertiesLibrary.Audio.Library
         public static event OnTracksActualized OnTracksActualized;
         private static void OnTracksLoaded()
         {
-            Instance._tracks = Instance._workingtracks;
-            Instance._albums = Instance._workingalbums;
-            Instance._artists = Instance._workingartists;
-            Instance._workingtracks = null;
-            Instance._workingartists = null;
-            Instance._workingalbums = null;
-            Stream audioLibraryStream = null;
-            using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
-                new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
-            OnTracksActualized?.Invoke();
+            Application.Current.Dispatcher.Invoke(
+            delegate
+            {
+                foreach (var track in Instance._workingTracks)
+                    Instance._tracks.Add(track);
+                foreach (var album in Instance._workingAlbums)
+                    Instance._albums.Add(album);
+                foreach (var artist in Instance._workingArtists)
+                    Instance._artists.Add(artist);
+                Stream audioLibraryStream = null;
+                using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.Truncate))
+                    new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
+                Instance._working = false;
+                OnTracksActualized?.Invoke();
+            }, DispatcherPriority.DataBind);
         }
 
         #endregion
@@ -117,11 +130,11 @@ namespace MediaPropertiesLibrary.Audio.Library
             using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
                 instance = (Library)
                 new XmlSerializer(typeof(Library)).Deserialize(audioLibraryStream);
-            instance._tracks = new List<Track>();
-            foreach (var trackSerializer in instance.useForDeserializer)
+            instance._tracks = new ObservableCollection<Track>();
+            foreach (var trackSerializer in instance._useForTrackDeserializer.Where(trackSerializer => System.IO.File.Exists(trackSerializer.Track.Path)))
             {
                 instance._tracks.Add(trackSerializer.Track);
-                var album = instance._albums.Find(salbum => trackSerializer.AlbumName == salbum.Name);
+                var album = instance._albums.FirstOrDefault(salbum => trackSerializer.AlbumName == salbum.Name);
                 if (album != null)
                 {
                     album.Tracks.Add(trackSerializer.Track);
@@ -133,7 +146,7 @@ namespace MediaPropertiesLibrary.Audio.Library
                     {
                         artist.Albums.Add(album);
                         album.Artists.Add(artist);
-                        trackSerializer.Track.Artist.Add(artist);
+                        trackSerializer.Track.Artists.Add(artist);
                     }
                 }
                 else
@@ -142,10 +155,15 @@ namespace MediaPropertiesLibrary.Audio.Library
                             instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
                                 .ToList())
                     {
-                        artist.SingleTracks.Add(trackSerializer.Track);
-                        trackSerializer.Track.Artist.Add(artist);
+                        artist.Singles.Add(trackSerializer.Track);
+                        trackSerializer.Track.Artists.Add(artist);
                     }
             }
+            foreach (var album in instance._albums.Where(album => album.Tracks.Count == 0).ToList())
+                instance._albums.Remove(album);
+            foreach (
+                var artist in instance._artists.Where(artist => artist.Singles.Count == 0 && artist.Albums.Count == 0).ToList())
+                instance._artists.Remove(artist);
             return instance;
         }
 
@@ -155,13 +173,18 @@ namespace MediaPropertiesLibrary.Audio.Library
         {
         }
 
+        private readonly List<Track> _workingTracks = new List<Track>();
+        private readonly List<Album> _workingAlbums = new List<Album>();
+        private readonly List<Artist> _workingArtists = new List<Artist>();
+        private bool _working = true;
         internal static void Initialize()
         {
             new Thread(new ThreadStart(delegate
             {
                 PathLibrary.Synchronize(new Dictionary<string, Action<List<string>, string>>
                 {
-                    {"*.mp3", Instance.OnFoundFile}
+                    {"*.mp3", Instance.OnFoundFile},
+                    {"*.wma", Instance.OnFoundFile}
                 });
                 OnTracksLoaded();
             })).Start();
@@ -176,7 +199,7 @@ namespace MediaPropertiesLibrary.Audio.Library
             MemoryStream mstream = new MemoryStream(picture.Data.Data);
             mstream.Seek(0, SeekOrigin.Begin);
 
-            BitmapImage bitmap = null;
+            BitmapImage bitmap;
             lock (this)
             {
                 try
@@ -209,16 +232,16 @@ namespace MediaPropertiesLibrary.Audio.Library
             Album album = null;
             if (!metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Album))
             {
-                album = _workingalbums.Find(searchedAlbum => searchedAlbum.Name == metaData.Tag.Album);
+                album = _workingAlbums.FirstOrDefault(searchedAlbum => searchedAlbum.Name == metaData.Tag.Album) ?? _albums.FirstOrDefault(searchedAlbum => searchedAlbum.Name == metaData.Tag.Album);
                 if (album != null && album.Cover == null && metaData.Tag.Pictures.Length > 0)
                     lock (album)
                     {
                         album.Cover = CreateCover(metaData);
                     }
                 if (album == null)
-                    lock (_workingalbums)
+                    lock (_albums)
                     {
-                        _workingalbums.Add(album = new Album
+                        _workingAlbums.Add(album = new Album
                         {
                             Name = metaData.Tag.Album,
                             Cover = CreateCover(metaData)
@@ -230,46 +253,51 @@ namespace MediaPropertiesLibrary.Audio.Library
             {
                 foreach (var performer in metaData.Tag.Performers)
                 {
-                    var artist = _workingartists.Find(searchedArtist => searchedArtist.Name == performer);
+                    var artist = _workingArtists.FirstOrDefault(searchedArtist => searchedArtist.Name == performer) ?? _artists.FirstOrDefault(searchedArtist => searchedArtist.Name == performer);
                     if (artist == null)
-                        lock (_workingartists)
-                            _workingartists.Add(artist = new Artist
+                        lock (_artists)
+                            _workingArtists.Add(artist = new Artist
                             {
                                 Name = performer
                             });
                     artists.Add(artist);
                 }
             }
-            TrackUserTag userTag = null;
-            Track track = new Track
             {
-                Album = album,
-                Artist = artists,
-                Name =
-                    !metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Title)
-                        ? metaData.Tag.Title
-                        : Path.GetFileNameWithoutExtension(file),
-                Duration = metaData.Properties.Duration,
-                UserTag = new TrackUserTag(),
-                RelativePaths = path,
-                Path = file
-            };
-            lock (_workingartists)
-                _workingtracks.Add(track);
-            if (album != null)
-                lock (album)
+                if ((_workingTracks.FirstOrDefault(track => track.Path == file) ?? _tracks.FirstOrDefault(track => track.Path == file)) != null) return;
+            }
+            {
+                TrackUserTag userTag = null;
+                Track track =  new Track
                 {
-                    album.Tracks.Add(track);
-                    foreach (var artist in artists)
+                    Album = album,
+                    Artists = artists,
+                    Name =
+                        !metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Title)
+                            ? metaData.Tag.Title
+                            : Path.GetFileNameWithoutExtension(file),
+                    Duration = metaData.Properties.Duration,
+                    UserTag = new TrackUserTag(),
+                    Genres = new List<string>(metaData.Tag.Genres),
+                    RelativePaths = path,
+                    Path = file
+                };
+                _workingTracks.Add(track);
+                if (album != null)
+                    lock (album)
                     {
-                        album.Artists.Add(artist);
-                        lock (artist)
-                            artist.Albums.Add(album);
+                        album.Tracks.Add(track);
+                        foreach (var artist in artists)
+                        {
+                            album.Artists.Add(artist);
+                            lock (artist)
+                                artist.Albums.Add(album);
+                        }
                     }
-                }
-            foreach (var artist in artists)
-                lock (artist)
-                    artist.SingleTracks.Add(track);
+                foreach (var artist in artists)
+                    lock (artist)
+                        artist.Singles.Add(track);
+            }
         }
 
         #endregion
@@ -287,14 +315,32 @@ namespace MediaPropertiesLibrary.Audio.Library
 
         public static Track SingleQueryOnTrack(Predicate<Track> predicate)
         {
-            return Instance._tracks.Find(predicate);
+            return Instance._tracks.FirstOrDefault(o => predicate(o));
         }
 
         public static Album SingleQueryOnAlbum(Predicate<Album> predicate)
         {
-            return Instance._albums.Find(predicate);
+            return Instance._albums.FirstOrDefault(o => predicate(o));
         }
         #endregion
+
+        public static IEnumerable<Track> QueryOnTrack(Predicate<Track> predicate)
+        {
+            return Instance._tracks.Where(o => predicate(o));
+        }
+
+        public static IEnumerable<Artist> QueryOnArtist(Func<Artist, bool> func)
+        {
+            return Instance._artists.Where(func);
+        }
+
+        public static void Save()
+        {
+            if (Instance._working) return;
+            lock (Instance)
+                using (var audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.Truncate))
+                    new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
+        }
     }
 
     [Export(typeof (IStaticRessource))]

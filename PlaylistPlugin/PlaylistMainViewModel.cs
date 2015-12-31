@@ -8,6 +8,7 @@ using PlaylistPlugin.ChildsViews;
 using PlaylistPlugin.Models;
 using PluginLibrary;
 using System.ComponentModel.Composition;
+using static DispatcherLibrary.Dispatcher;
 
 namespace PlaylistPlugin
 {
@@ -51,7 +52,7 @@ namespace PlaylistPlugin
 
         public PlaylistMainViewModel()
         {
-            Dispatcher.GetInstance.AddEventListener(this);
+            AddEventListener(this);
             ViewInQueue();
         }
 

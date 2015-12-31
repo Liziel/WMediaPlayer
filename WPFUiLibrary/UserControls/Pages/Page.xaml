@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.Pages.Page"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Name="ContainerGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" Name="SideAreaSize"/>
+            <ColumnDefinition Width="*" Name="MainAreaSize"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Name="SideArea">
+            <Button.Template>
+                <ControlTemplate>
+                    <Rectangle Fill="#111111" Opacity="0.7" Grid.Column="0"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Border Grid.Column="1" BorderThickness="0.6 0 0 0" BorderBrush="#555555" Background="#111111" Name="ContainerBorder">
+            <Border.Effect>
+                <DropShadowEffect Direction="200"/>
+            </Border.Effect>
+        </Border>
+    </Grid>
+    <UserControl.Resources>
+        <Storyboard x:Key="OnLoadAnimation" TargetName="SideArea" TargetProperty="Width">
+            <DoubleAnimation From="{Binding ElementName=ContainerGrid, Path=ActualWidth}" To="300" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="OnExit" TargetName="SideArea" TargetProperty="Width">
+            <DoubleAnimation From="{Binding ElementName=ContainerGrid, Path=ActualWidth}" To="300" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="OnHide" TargetName="SideArea" TargetProperty="Width">
+            <DoubleAnimation From="300" To="0" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="OnShow" TargetName="SideArea" TargetProperty="Width">
+            <DoubleAnimation From="0" To="300" Duration="0:0:0.3"/>
+        </Storyboard>
+    </UserControl.Resources>
+</UserControl>

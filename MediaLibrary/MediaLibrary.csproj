@@ -57,6 +57,22 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistAlbumsViewModel.cs" />
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistsAlbumsView.xaml.cs">
+      <DependentUpon>ArtistsAlbumsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\AlbumViewPanels\AlbumViewHeader.xaml.cs">
+      <DependentUpon>AlbumViewHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\ArtistViewModel.cs" />
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistSinglesView.xaml.cs">
+      <DependentUpon>ArtistSinglesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistSinglesViewModel.cs" />
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistViewPopularModel.cs" />
+    <Compile Include="Audio\Pages\ArtistViewPanels\PopularTrackItem.xaml.cs">
+      <DependentUpon>PopularTrackItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Audio\LibraryClassViewModel.cs" />
     <Compile Include="Audio\LibraryClassView.xaml.cs">
       <DependentUpon>LibraryClassView.xaml</DependentUpon>
@@ -69,17 +85,33 @@
       <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Audio\Pages\AlbumViewModel.cs" />
+    <Compile Include="Audio\Pages\ArtistView.xaml.cs">
+      <DependentUpon>ArtistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistViewHeader.xaml.cs">
+      <DependentUpon>ArtistViewHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\ArtistViewPanels\ArtistViewPopularity.xaml.cs">
+      <DependentUpon>ArtistViewPopularity.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\Pages\ArtistViewPanels\RelatedArtistItem.xaml.cs">
+      <DependentUpon>RelatedArtistItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Audio\SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Audio\SubViews\AudioAlbumView.xaml.cs">
-      <DependentUpon>AudioAlbumView.xaml</DependentUpon>
+    <Compile Include="Audio\SubViews\AlbumView.xaml.cs">
+      <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Audio\SubViews\AudioAlbumViewModel.cs" />
-    <Compile Include="Audio\SubViews\AudioTrackView.xaml.cs">
-      <DependentUpon>AudioTrackView.xaml</DependentUpon>
+    <Compile Include="Audio\SubViews\AlbumViewModel.cs" />
+    <Compile Include="Audio\SubViews\ArtistView.xaml.cs">
+      <DependentUpon>ArtistView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Audio\SubViews\AudioTrackViewModel.cs" />
+    <Compile Include="Audio\SubViews\ArtistViewModel.cs" />
+    <Compile Include="Audio\SubViews\TrackView.xaml.cs">
+      <DependentUpon>TrackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Audio\SubViews\TrackViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -94,6 +126,44 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateAccessAlbum.cs" />
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateAccessAlbumFromTrack.cs" />
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateAccessArtist.cs" />
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateAccessArtistByAlbum.cs" />
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateAccessArtistFromTrack.cs" />
+    <Compile Include="UserControlTemplates\AccessConverters\GenerateArtistSongNumber.cs" />
+    <Compile Include="UserControlTemplates\GridView\AlbumGridItem.xaml.cs">
+      <DependentUpon>AlbumGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\GridView\ArtistGridItem.xaml.cs">
+      <DependentUpon>ArtistGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\GridView\GridView.xaml.cs">
+      <DependentUpon>GridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\GridView\ListAndHeightToRows.cs" />
+    <Compile Include="UserControlTemplates\GridView\AudioTrackGridItem.xaml.cs">
+      <DependentUpon>AudioTrackGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\GridView\WidthToColumns.cs" />
+    <Compile Include="UserControlTemplates\ListView\AudioTrackListItem.xaml.cs">
+      <DependentUpon>AudioTrackListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\ListView\ListView.xaml.cs">
+      <DependentUpon>ListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlTemplates\ModelGenerator\AlbumModelGenerator.cs" />
+    <Compile Include="UserControlTemplates\ModelGenerator\ArtistModelGenerator.cs" />
+    <Compile Include="UserControlTemplates\ModelGenerator\GenerateListContext.cs" />
+    <Compile Include="UserControlTemplates\ModelGenerator\GenerateMenuModel.cs" />
+    <Compile Include="UserControlTemplates\ModelGenerator\TrackModelGenerator.cs" />
+    <Compile Include="UserControlTemplates\Models\AudioAlbumViewModel.cs" />
+    <Compile Include="UserControlTemplates\Models\AudioArtistViewModel.cs" />
+    <Compile Include="UserControlTemplates\Models\AudioTrackViewModel.cs" />
+    <Compile Include="UserControlTemplates\Models\ListModel.cs" />
+    <Compile Include="UserControlTemplates\PlayingConverters\GenerateAlbumListening.cs" />
+    <Compile Include="UserControlTemplates\PlayingConverters\GenerateArtistListening.cs" />
+    <Compile Include="UserControlTemplates\PlayingConverters\GenerateTrackListening.cs" />
     <Compile Include="Video\LibraryClassView.xaml.cs">
       <DependentUpon>LibraryClassView.xaml</DependentUpon>
     </Compile>
@@ -116,6 +186,14 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-UltraLight.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-SemiBold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Regular.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Light.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Hairline.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-ExtraBold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Bold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Black.otf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaPropertiesLibrary\MediaPropertiesLibrary.csproj">
@@ -130,12 +208,28 @@
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
       <Name>PluginLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UiLibrary\UiLibrary.csproj">
-      <Project>{b0664bf6-6b73-46e3-9a18-fa1ad61464fb}</Project>
-      <Name>UiLibrary</Name>
+    <ProjectReference Include="..\WPFUiLibrary\WPFUiLibrary.csproj">
+      <Project>{08f7fd22-0007-44da-a5d8-a64c26f65bfd}</Project>
+      <Name>WPFUiLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Audio\Pages\ArtistViewPanels\ArtistsAlbumsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\Pages\AlbumViewPanels\AlbumViewHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Audio\Pages\ArtistViewPanels\ArtistSinglesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\Pages\ArtistViewPanels\PopularTrackItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Audio\LibraryClassView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,15 +242,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Audio\Pages\ArtistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\Pages\ArtistViewPanels\ArtistViewHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\Pages\ArtistViewPanels\ArtistViewPopularity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\Pages\ArtistViewPanels\RelatedArtistItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Audio\SearchBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Audio\SubViews\AudioAlbumView.xaml">
+    <Page Include="Audio\SubViews\AlbumView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Audio\SubViews\AudioTrackView.xaml">
+    <Page Include="Audio\SubViews\ArtistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Audio\SubViews\TrackView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -167,6 +281,34 @@
     <Page Include="Ressources\MusicDisplayer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ressources\ScrollViewCustomization.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlTemplates\GridView\AlbumGridItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlTemplates\GridView\ArtistGridItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlTemplates\GridView\GridView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlTemplates\GridView\AudioTrackGridItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlTemplates\ListView\AudioTrackListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlTemplates\ListView\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Video\LibraryClassView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -181,7 +323,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Audio\UserControlTemplates\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

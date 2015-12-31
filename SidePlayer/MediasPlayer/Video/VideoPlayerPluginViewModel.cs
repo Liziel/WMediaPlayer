@@ -10,7 +10,7 @@ using DispatcherLibrary;
 using MediaPropertiesLibrary.Video;
 using SidePlayer.Annotations;
 using TagLib.Matroska;
-using Dispatcher = DispatcherLibrary.Dispatcher;
+using static DispatcherLibrary.Dispatcher;
 using File = TagLib.File;
 using Track = MediaPropertiesLibrary.Video.Track;
 
@@ -86,7 +86,7 @@ namespace SidePlayer.MediasPlayer.Video
                 Video.LoadedBehavior = MediaState.Manual;
             _video.Play();
             _senderTick.Start();
-            Dispatcher.GetInstance.Dispatch("Media Playing");
+            Dispatch("Media Playing");
         }
 
         [EventHook("Pause")]
@@ -94,7 +94,7 @@ namespace SidePlayer.MediasPlayer.Video
         {
             _video.Pause();
             _senderTick.Stop();
-            Dispatcher.GetInstance.Dispatch("Media Paused");
+            Dispatch("Media Paused");
         }
 
         [EventHook("Stop")]
@@ -136,7 +136,7 @@ namespace SidePlayer.MediasPlayer.Video
 
         private void OnSenderTick(object sender, EventArgs e)
         {
-            Dispatcher.GetInstance.Dispatch("Media Position Actualization", _video.Position.TotalSeconds);
+            Dispatch("Media Position Actualization", _video.Position.TotalSeconds);
         }
 
         #endregion

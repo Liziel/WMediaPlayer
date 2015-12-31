@@ -11,8 +11,7 @@ namespace MediaLibrary.Audio.Pages
     {
         public AlbumViewModel(Album album)
         {
-            Cover = album.Cover;
-            Name = album.Name;
+            Album = album;
             Tracks = album.Tracks;
         }
 
@@ -24,26 +23,15 @@ namespace MediaLibrary.Audio.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private Album _album;
 
-        private BitmapImage _cover;
-        public BitmapImage Cover
+        public Album Album
         {
-            get { return _cover; }
+            get { return _album; }
             set
             {
-                _cover = value; 
-                OnPropertyChanged(nameof(Cover));
-            }
-        }
-
-        private string _name;
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value; 
-                OnPropertyChanged(nameof(Name));
+                _album = value;
+                OnPropertyChanged(nameof(Album));
             }
         }
 

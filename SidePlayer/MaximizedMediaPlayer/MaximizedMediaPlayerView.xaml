@@ -6,13 +6,12 @@
              xmlns:local="clr-namespace:SidePlayer.MaximizedMediaPlayer"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-
-        <Grid.Resources>
-            <Storyboard x:Key="HidingStoryBoard">
-                <DoubleAnimation BeginTime="0:0:3.0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlBar" From="1" To="0" Duration="0:0:1.0"/>
-            </Storyboard>
-        </Grid.Resources>
+    <UserControl.Resources>
+        <Storyboard x:Key="HidingStoryBoard">
+            <DoubleAnimation BeginTime="0:0:2.0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlBar" From="1" To="0" Duration="0:0:1.0"/>
+        </Storyboard>
+    </UserControl.Resources>
+    <Grid MouseMove="UIElement_OnMouseMove">
 
         <Grid.Triggers>
             <EventTrigger RoutedEvent="Grid.Loaded">
@@ -59,7 +58,7 @@
         </Button>
         <ContentControl Grid.ZIndex="1" Content="{Binding Path=MediaDisplay}" Grid.Row="0" Grid.Column="0"/>
 
-        <ContentControl Grid.ZIndex="2" Content="{Binding Path=MediaControl}" VerticalAlignment="Bottom"
+        <ContentControl Grid.ZIndex="2" Content="{Binding Path=MediaControl}" VerticalAlignment="Bottom" MouseEnter="ControlBar_OnMouseEnter" MouseLeave="ControlBar_OnMouseLeave"
                         Grid.Column="0" Grid.Row="0" MaxWidth="600" RenderTransformOrigin="0.5,0.5" x:Name="ControlBar"/>
 
     </Grid>

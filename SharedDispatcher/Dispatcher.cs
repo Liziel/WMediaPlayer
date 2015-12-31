@@ -16,31 +16,32 @@ namespace DispatcherLibrary
 
 
         /// <summary>
-        /// _instance for a singleton pattern
+        /// Instance for a singleton pattern
         /// </summary>
-        public static Dispatcher GetInstance => _instance ?? (_instance = new Dispatcher());
-        private static Dispatcher _instance;
+        private static readonly Dispatcher Instance = new Dispatcher();
 
-        public void AddEventListener(Listener listener)
+        public static void AddEventListener(Listener listener)
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
-            _eventsConsummers.Add(listener);
-        }
-        public void RemoveEnventListener(Listener listener)
-        {
-            if (listener == null) throw new ArgumentNullException(nameof(listener));
-            _eventsConsummers.Remove(listener);
+            Instance._eventsConsummers.Add(listener);
         }
 
-        public void Dispatch(string _event, params object[] fwdparams)
+        public static void RemoveEnventListener(Listener listener)
         {
-            foreach (var consumer in _eventsConsummers)
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
+            Instance._eventsConsummers.Remove(listener);
+        }
+
+        public static void Dispatch(string _event, params object[] fwdparams)
+        {
+            foreach (var consumer in Instance._eventsConsummers)
                 consumer.DispatchInternal(_event, fwdparams);
         }
 
-        public void Dispatch(Listener target, string _event, params object[] fwdparams)
+        public static void Dispatch(Listener target, string _event, params object[] fwdparams)
         {
             target.DispatchInternal(_event, fwdparams);
         }
+
     }
 }

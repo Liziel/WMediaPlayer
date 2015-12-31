@@ -72,6 +72,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Ressources\ListShuffle.cs" />
     <Compile Include="Ressources\PlaylistDurationStylized.cs" />
     <Compile Include="ChildsViews\CurrentPlaylistView.xaml.cs">
       <DependentUpon>CurrentPlaylistView.xaml</DependentUpon>
@@ -90,12 +91,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-UltraLight.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-SemiBold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Regular.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Light.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Hairline.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-ExtraBold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Bold.otf" />
+    <Resource Include="Ressources\Fonts\montserrat\Montserrat-Black.otf" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaLibrary\MediaLibrary.csproj">
-      <Project>{f3b45e37-2dfa-45c1-8596-4c95673acb47}</Project>
-      <Name>MediaLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MediaPropertiesLibrary\MediaPropertiesLibrary.csproj">
       <Project>{8bc656eb-0ea4-4d03-b9f8-135904c9976b}</Project>
       <Name>MediaPropertiesLibrary</Name>
@@ -108,9 +113,9 @@
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
       <Name>PluginLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UiLibrary\UiLibrary.csproj">
-      <Project>{b0664bf6-6b73-46e3-9a18-fa1ad61464fb}</Project>
-      <Name>UiLibrary</Name>
+    <ProjectReference Include="..\WPFUiLibrary\WPFUiLibrary.csproj">
+      <Project>{08f7fd22-0007-44da-a5d8-a64c26f65bfd}</Project>
+      <Name>WPFUiLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +140,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ChildsViews\SavedPlaylistsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ressources\ScrollViewCustomization.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

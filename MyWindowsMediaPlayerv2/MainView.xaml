@@ -4,10 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:MyWindowsMediaPlayerv2.ViewModel"
+        xmlns:popupManager="clr-namespace:WPFUiLibrary.UserControls.PopupManager;assembly=WPFUiLibrary"
         mc:Ignorable="d"
-        Title="GJVMediaPlayer" Height="800" Width="800" Background="Black"
+        Title="{Binding WindowName}" Height="800" Width="800" Background="Black"
+        Icon="TaskbarIcons/icon.png"
         WindowStartupLocation="CenterScreen"
         >
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            ResizeBorderThickness="5"
+            CaptionHeight="40"
+            CornerRadius="10"
+            />
+    </WindowChrome.WindowChrome>
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
@@ -22,8 +31,61 @@
                 <Setter Property="WindowState" Value="Maximized" />
                 <Setter Property="WindowStyle" Value="SingleBorderWindow" />
             </DataTrigger>
+                <DataTrigger Binding="{Binding Path=TaskBarHidded}" Value="False">
+                    <Setter Property="TaskbarItemInfo">
+                        <Setter.Value>
+                            <TaskbarItemInfo Description="Test">
+                                <TaskbarItemInfo.ThumbButtonInfos>
+                                    <ThumbButtonInfo Command="{Binding Path=Prev}" ImageSource="TaskbarIcons/previous.png"/>
+                                    <ThumbButtonInfo Command="{Binding Path=PlayPause}" ImageSource="{Binding PlayPauseIcon}"/>
+                                    <ThumbButtonInfo Command="{Binding Path=Next}" ImageSource="TaskbarIcons/next.png"/>
+                                </TaskbarItemInfo.ThumbButtonInfos>
+                            </TaskbarItemInfo>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=TaskBarHidded}" Value="True">
+                    <Setter Property="TaskbarItemInfo">
+                        <Setter.Value>
+                            <TaskbarItemInfo Description="Test"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </Window.Style>
-    <ContentControl Content="{Binding Path=RootElement}"/>
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Height="40" Background="#1C1C1F">
+                <Grid Margin="2">
+                    <Image Source="TaskbarIcons/icon.png" HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding Path=WindowName}"
+                           Foreground="#DFE0E6"
+                           FontFamily="/MyWindowsMediaPlayerv2;component/Fonts/montserrat/#Montserrat Semi Bold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           />
+                </Grid>
+            </Border>
+
+            <ContentControl Grid.Row="1" Content="{Binding Path=RootElement}" Panel.ZIndex="0"/>
+            <popupManager:PopUpManagerView Grid.Row="1" Panel.ZIndex="1"/>
+        </Grid>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}" Value="Maximized">
+                        <Setter Property="BorderThickness" Value="10"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}" Value="Normal">
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+    </Border>
 </Window>

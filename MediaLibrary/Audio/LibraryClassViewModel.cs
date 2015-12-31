@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
-using MediaLibrary.Audio.Pages;
 using MediaLibrary.Audio.SubViews;
 using MediaPropertiesLibrary.Audio;
-using PluginLibrary;
-using UiLibrary;
-using UiLibrary.Utils;
+using WPFUiLibrary.Utils;
+using AlbumView = MediaLibrary.Audio.SubViews.AlbumView;
+using AlbumViewModel = MediaLibrary.Audio.SubViews.AlbumViewModel;
 
 namespace MediaLibrary.Audio
 {
@@ -71,7 +68,14 @@ namespace MediaLibrary.Audio
         public void AccessAlbum(Album album)
         {
             if (album != null)
-                Pages.Add(new AlbumView(new AlbumViewModel(album)));
+                Pages.Add(new Pages.AlbumView(new Pages.AlbumViewModel(album)));
+        }
+
+        [EventHook("AudioLibrary: View Artist")]
+        public void AccessArtist(Artist artist)
+        {
+            if (artist != null)
+                Pages.Add(new Pages.ArtistView(new Pages.ArtistViewModel(artist)));
         }
         #endregion
 
@@ -121,7 +125,7 @@ namespace MediaLibrary.Audio
 
         private readonly Listener[] _subViewModels =
         {
-            new AudioTrackViewModel(), new AudioAlbumViewModel(), null
+            new TrackViewModel(), new AlbumViewModel(), new ArtistViewModel()
         };
 
         private readonly UserControl[] _subViews = null;
@@ -132,10 +136,10 @@ namespace MediaLibrary.Audio
 
         public LibraryClassViewModel()
         {
-            _subViews = new UserControl[] { new AudioTrackView(_subViewModels[0] as AudioTrackViewModel), new AudioAlbumView(_subViewModels[1] as AudioAlbumViewModel), null };
+            _subViews = new UserControl[] { new TrackView(_subViewModels[0] as TrackViewModel), new AlbumView(_subViewModels[1] as AlbumViewModel), new ArtistView( _subViewModels[2] as ArtistViewModel),  };
             TabItemsInitialization();
             SelectTab(0);
-            Dispatcher.GetInstance.AddEventListener(this);
+            Dispatcher.AddEventListener(this);
         }
 
         private void TabItemsInitialization()

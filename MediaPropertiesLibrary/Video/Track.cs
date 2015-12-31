@@ -39,6 +39,13 @@ namespace MediaPropertiesLibrary.Video
 
         public override string MediaLibraryKey => Path;
 
+        protected override void OnStateChanged(MediaState state)
+        {
+            if (state == MediaState.End) return;;
+            if (Serie != null)
+                Serie.State = state;
+        }
+
         #endregion
     }
 

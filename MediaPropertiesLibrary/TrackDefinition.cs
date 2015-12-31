@@ -28,6 +28,7 @@ namespace MediaPropertiesLibrary
             {
                 _state = value; 
                 OnPropertyChanged(nameof(State));
+                OnStateChanged(value);
             }
         }
 
@@ -36,5 +37,6 @@ namespace MediaPropertiesLibrary
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected abstract void OnStateChanged(MediaState state);
     }
 }

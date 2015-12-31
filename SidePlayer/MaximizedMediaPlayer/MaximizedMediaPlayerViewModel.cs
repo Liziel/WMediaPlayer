@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using SidePlayer.Annotations;
-using UiLibrary;
-using UiLibrary.Utils;
+using WPFUiLibrary.Utils;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MaximizedMediaPlayer
 {
@@ -49,7 +49,7 @@ namespace SidePlayer.MaximizedMediaPlayer
 
         #endregion
 
-        public UiCommand Minimize { get; } = new UiCommand(delegate {DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Minimize Media View");});
+        public UiCommand Minimize { get; } = new UiCommand(delegate {Dispatch("Minimize Media View");});
 
         public MaximizedMediaPlayerViewModel(UserControl mediaDisplay, UserControl mediaControl)
         {

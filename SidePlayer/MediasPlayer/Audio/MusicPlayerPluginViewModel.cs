@@ -10,11 +10,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaPropertiesLibrary.Audio;
+using MediaPropertiesLibrary.Audio.Library;
 using SidePlayer.Annotations;
-using UiLibrary;
-using UiLibrary.Utils;
-using Dispatcher = DispatcherLibrary.Dispatcher;
-using File = TagLib.File;
+using WPFUiLibrary.Utils;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediasPlayer.Audio
 {
@@ -97,7 +96,11 @@ namespace SidePlayer.MediasPlayer.Audio
             _music.Play();
             _track.State = MediaPropertiesLibrary.MediaState.Playing;
             _tick.Start();
-            Dispatcher.GetInstance.Dispatch("Media Playing");
+            Dispatch("Media Playing");
+            if (_track.Artists.Count > 0)
+                Dispatch("Current Media Name", _track.Artists[0].Name + " - " + _track.Name);
+            else
+                Dispatch("Current Media Name", _track.Name);
         }
 
         [EventHook("Pause")]
@@ -106,7 +109,7 @@ namespace SidePlayer.MediasPlayer.Audio
             _music.Pause();
             _track.State  = MediaPropertiesLibrary.MediaState.Paused;
             _tick.Stop();
-            Dispatcher.GetInstance.Dispatch("Media Paused");
+            Dispatch("Media Paused");
         }
 
         [EventHook("Stop")]
@@ -115,12 +118,19 @@ namespace SidePlayer.MediasPlayer.Audio
             _music.Stop();
             _track.State = MediaPropertiesLibrary.MediaState.Stopped;
             _tick.Stop();
+            Dispatch("Media Stopped");
         }
 
         [EventHook("Media Position Set")]
         public void ForceSetPosition(double duration)
         {
             _music.Position = TimeSpan.FromSeconds(duration);
+        }
+
+        [EventHook("Media Volume Set")]
+        public void MediaVolumeSet(double volume)
+        {
+            _music.Volume = volume;
         }
         #endregion
 
@@ -130,7 +140,7 @@ namespace SidePlayer.MediasPlayer.Audio
 
         private void OnTick(object sender, EventArgs e)
         {
-            Dispatcher.GetInstance.Dispatch("Media Position Actualization", _music.Position.TotalSeconds);
+            Dispatch("Media Position Actualization", _music.Position.TotalSeconds);
         }
 
         #endregion
@@ -141,7 +151,12 @@ namespace SidePlayer.MediasPlayer.Audio
         {
             AlbumCoverView = new MusicView(this);
             Music = new MediaElement { LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual };
-            Music.MediaEnded += (o, p) => { _track.State = MediaPropertiesLibrary.MediaState.End; };
+            Music.MediaEnded += (o, p) =>
+            {
+                _track.UserTag.TimesListened += 1;
+                _track.State = MediaPropertiesLibrary.MediaState.End;
+                Library.Save();
+            };
         }
 
         private Track _track;
@@ -154,11 +169,16 @@ namespace SidePlayer.MediasPlayer.Audio
             ForceSetPosition(0);
             AlbumCover = track.Album?.Cover;
 
+            if (_track.Artists.Count > 0)
             CreateArtistBand(track);
             MediaName = track.Name;
 
             _tick.Tick += OnTick;
-            AccessAlbum = new UiCommand(o => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Album", track.Album));
+            AccessAlbum = new UiCommand(o =>
+            {
+                Dispatch("Loader: Call(My Musics)");
+                Dispatch("AudioLibrary: View Album", track.Album);
+            });
         }
 
         private UiCommand _accessAlbum;
@@ -174,7 +194,7 @@ namespace SidePlayer.MediasPlayer.Audio
 
         private void CreateArtistBand(Track track)
         {
-            if (track.Artist == null)
+            if (track.Artists == null)
                 return;
             ArtistsM = new TextBlock
             {
@@ -197,12 +217,16 @@ namespace SidePlayer.MediasPlayer.Audio
                 FontStretch = FontStretches.UltraExpanded,
                 Foreground = Brushes.LightGray
             };
-            var tmp = track.Artist.Last();
-            foreach (var artist in track.Artist)
+            var tmp = track.Artists.Last();
+            foreach (var artist in track.Artists)
             {
                 ArtistsM.Inlines.Add(new Hyperlink
                 {
-                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("AudioLibrary: View Artist", artist)),
+                    Command = new UiCommand(o =>
+                    {
+                        Dispatch("Loader: Call(My Musics)");
+                        Dispatch("AudioLibrary: View Artist", artist);
+                    }),
                     Foreground = Brushes.LightGray,
                     TextDecorations = null,
                     Inlines = { artist.Name }
@@ -211,7 +235,11 @@ namespace SidePlayer.MediasPlayer.Audio
                     ArtistsM.Inlines.Add(", ");
                 ArtistsP.Inlines.Add(new Hyperlink
                 {
-                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("MediaLibrary: View Artist", artist)),
+                    Command = new UiCommand(o =>
+                    {
+                        Dispatch("Loader: Call(My Musics)");
+                        Dispatch("AudioLibrary: View Artist", artist);
+                    }),
                     Foreground = Brushes.LightGray,
                     TextDecorations = null,
                     Inlines = { artist.Name }
@@ -220,7 +248,11 @@ namespace SidePlayer.MediasPlayer.Audio
                     ArtistsP.Inlines.Add(", ");
                 ArtistsV.Inlines.Add(new Hyperlink
                 {
-                    Command = new UiCommand(o => Dispatcher.GetInstance.Dispatch("MediaLibrary: View Artist", artist)),
+                    Command = new UiCommand(o =>
+                    {
+                        Dispatch("Loader: Call(My Musics)");
+                        Dispatch("AudioLibrary: View Artist", artist);
+                    }),
                     Foreground = Brushes.LightGray,
                     TextDecorations = null,
                     Inlines = { artist.Name }

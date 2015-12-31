@@ -74,6 +74,10 @@
       <DependentUpon>MediaControlBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MediasControlBar\MediaControlBarViewModel.cs" />
+    <Compile Include="MediasControlBar\SubControlView.xaml.cs">
+      <DependentUpon>SubControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediasControlBar\SubControlViewModel.cs" />
     <Compile Include="MediasPlayer\Audio\MusicPlayerViewPluginView.xaml.cs">
       <DependentUpon>MusicPlayerViewPluginView.xaml</DependentUpon>
     </Compile>
@@ -108,6 +112,10 @@
     <Page Include="MediasControlBar\MediaControlBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MediasControlBar\SubControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MediasPlayer\Audio\MusicPlayerViewPluginView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -188,14 +196,12 @@
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
       <Name>PluginLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UiLibrary\UiLibrary.csproj">
-      <Project>{b0664bf6-6b73-46e3-9a18-fa1ad61464fb}</Project>
-      <Name>UiLibrary</Name>
+    <ProjectReference Include="..\WPFUiLibrary\WPFUiLibrary.csproj">
+      <Project>{08f7fd22-0007-44da-a5d8-a64c26f65bfd}</Project>
+      <Name>WPFUiLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MediasPlayer\Picture\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

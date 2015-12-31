@@ -2,10 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using DispatcherLibrary;
-using MediaLibrary.Annotations;
+using PlaylistPlugin.Annotations;
 using PlaylistPlugin.Models;
-using UiLibrary;
-using UiLibrary.Utils;
+using WPFUiLibrary.Utils;
 
 namespace PlaylistPlugin.ChildsViews
 {
@@ -46,6 +45,6 @@ namespace PlaylistPlugin.ChildsViews
 
         #endregion
 
-        public UiCommand ViewInQueue { get; } = new UiCommand(o => Dispatcher.GetInstance.Dispatch("Playlist Plugin: View In Queue"));
+        public UiCommand ViewInQueue { get; } = new UiCommand(o => Dispatcher.Dispatch("Playlist Plugin: View In Queue"));
     }
 }

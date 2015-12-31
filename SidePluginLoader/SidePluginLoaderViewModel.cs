@@ -7,6 +7,7 @@ using DispatcherLibrary;
 using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePluginLoader
 {
@@ -42,7 +43,7 @@ namespace SidePluginLoader
 
         public SidePluginLoaderViewModel()
         {
-            Dispatcher.GetInstance.AddEventListener(this);
+            AddEventListener(this);
             PluginLoaders = LoadablePluginManager.GetInstance.Query(plugin => true)
                 .Select(plugin => new PluginLoader(plugin, OnPluginSelected))
                 .ToList();
@@ -55,7 +56,7 @@ namespace SidePluginLoader
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;
-            Dispatcher.GetInstance.Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
+            Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
         }
 
         [EventHook("Force Load Plugin")]
@@ -66,7 +67,7 @@ namespace SidePluginLoader
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;
-            Dispatcher.GetInstance.Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
+            Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
         }
     }
 }

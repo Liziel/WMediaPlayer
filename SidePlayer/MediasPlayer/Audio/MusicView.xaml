@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SidePlayer.MediasPlayer"
              xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:staticDisplay="clr-namespace:WPFUiLibrary.UserControls.StaticDisplay;assembly=WPFUiLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -19,7 +20,13 @@
             <Style TargetType="ContentControl">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=AlbumCover}" Value="{x:Null}">
-                        <Setter Property="Template" Value="{StaticResource DefaultAlbumCover}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <staticDisplay:DiscElement />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </DataTrigger>
                 </Style.Triggers>
                 <Setter Property="Template">

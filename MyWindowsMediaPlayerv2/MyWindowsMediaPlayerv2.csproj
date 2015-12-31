@@ -39,6 +39,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -92,6 +93,14 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\montserrat\Montserrat-Black.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-Bold.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-ExtraBold.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-Hairline.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-Light.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-Regular.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-SemiBold.otf" />
+    <Resource Include="Fonts\montserrat\Montserrat-UltraLight.otf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -110,6 +119,25 @@
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
       <Name>PluginLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WPFUiLibrary\WPFUiLibrary.csproj">
+      <Project>{08f7fd22-0007-44da-a5d8-a64c26f65bfd}</Project>
+      <Name>WPFUiLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TaskbarIcons\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TaskbarIcons\next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TaskbarIcons\previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TaskbarIcons\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TaskbarIcons\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

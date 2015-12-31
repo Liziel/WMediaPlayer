@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.MediaControl.Button"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="30" d:DesignWidth="30">
+    <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave" Name="Container">
+        <Button Name="PauseButton" Visibility="Collapsed">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Path Stretch="Uniform" Stroke="#B9BABF" Fill="#0E0F10">
+                            <Path.Data>
+                                <EllipseGeometry RadiusX="10" RadiusY="10" />
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="#88898C" Grid.ZIndex="1" Stretch="Uniform">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <RectangleGeometry Rect="1 0 0.5 1.5" RadiusY="0.2" RadiusX="0.2"/>
+                                    <RectangleGeometry Rect="2 0 0.5 1.5" RadiusY="0.2" RadiusX="0.2"/>
+                                    <RectangleGeometry Rect="0 0 0 0"/>
+                                    <RectangleGeometry Rect="3.5 0 0 0"/>
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Name="PlayButton" Visibility="Collapsed">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Path Stretch="Uniform" Stroke="#B9BABF" Fill="#0E0F10">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <EllipseGeometry RadiusX="10" RadiusY="10" />
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.15*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="1" Fill="#88898C" Stroke="#88898C" Grid.ZIndex="1" Stretch="Uniform"
+                                  StrokeLineJoin="Round" StrokeThickness="5" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.4" />
+                                        <SkewTransform />
+                                        <RotateTransform />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                                <Path.Data>
+                                    <GeometryGroup>
+                                        <PathGeometry>
+                                            M 2 0 L 2 10 10 5 Z
+                                        </PathGeometry>
+                                    </GeometryGroup>
+                                </Path.Data>
+                            </Path>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Name="InPlayButton" Visibility="Collapsed">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Path Stretch="Uniform" Stroke="#B9BABF" Fill="#0E0F10">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <EllipseGeometry RadiusX="10" RadiusY="10" />
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                        <Path Stretch="Uniform"
+                              Fill="#B9BABF" RenderTransformOrigin="0.5,0.5">
+                            <Path.Data>
+                                F1 M 0,0 L 0,5.92 4,5.92 9.12,11.04 9.12,-4.96 4,0 z
+                                M 13.6,3.04 C 13.6,1.12 12.48,-0.32 11.04,-1.12 L 11.04,7.04 C 12.48,6.24 13.6,4.8 13.6,3.04 z
+                                M 11.04,-5.76 L 11.04,-3.68 C 13.92,-2.88 16,-0.16 16,3.04 16,6.08 13.92,8.8 11.04,9.6
+                                L 11.04,11.68 C 15.04,10.88 18.08,7.2 18.08,3.04 18.08,-1.28 15.04,-4.96 11.04,-5.76 z
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="0.6" ScaleY="0.6"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

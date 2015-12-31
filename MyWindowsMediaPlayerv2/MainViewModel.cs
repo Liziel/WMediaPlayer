@@ -12,6 +12,7 @@ using MyWindowsMediaPlayerv2.Annotations;
 using DispatcherLibrary;
 using PluginLibrary;
 using PluginLibrary.Customization;
+using WPFUiLibrary.Utils;
 
 namespace MyWindowsMediaPlayerv2
 {
@@ -120,10 +121,45 @@ namespace MyWindowsMediaPlayerv2
                     MessageablePluginManager.GetInstance.Query(plugin => plugin.Optional == false).ToList();
                 LoadablePlugins = LoadablePluginManager.GetInstance.Query(plugin => true).ToList();
 
-                Dispatcher.GetInstance.AddEventListener(this);
+                Dispatcher.AddEventListener(this);
             }
 
             #endregion
+
+            [EventHook("Current Media Name")]
+            public void CurrentMediaName(string mediaName) => WindowName = mediaName;
+
+            [EventHook("Media Playing")]
+            public void OnPlay() { TaskBarState = ETaskBarState.Play; }
+            [EventHook("Media Paused")]
+            public void OnPause() { TaskBarState = ETaskBarState.Pause; }
+            public UiCommand Prev { get; } = new UiCommand(o => Dispatcher.Dispatch("Previous Track"));
+            public UiCommand Next { get; } = new UiCommand(o => Dispatcher.Dispatch("Next Track"));
+            private UiCommand Play { get; } = new UiCommand(o => Dispatcher.Dispatch("Play"));
+            private UiCommand Pause { get; } = new UiCommand(o => Dispatcher.Dispatch("Pause"));
+            public UiCommand PlayPause => TaskBarState == ETaskBarState.Play ? Pause : Play;
+            public string PlayPauseIcon => TaskBarState == ETaskBarState.Play ? "TaskbarIcons/pause.png" : "TaskbarIcons/play.png";
+
+            public enum ETaskBarState { Hide, Play, Pause }
+            private ETaskBarState _eTaskBarState = ETaskBarState.Hide;
+
+            public bool TaskBarHidded => TaskBarState == ETaskBarState.Hide;
+            public ETaskBarState    TaskBarState
+            {
+                get { return _eTaskBarState; }
+                set
+                {
+                    _eTaskBarState = value;
+                    OnPropertyChanged(nameof(TaskBarState));
+                    OnPropertyChanged(nameof(TaskBarHidded));
+
+                    OnPropertyChanged(nameof(PlayPause));
+                    OnPropertyChanged(nameof(PlayPauseIcon));
+                }
+            }
+
+            private string _windowName = "GJVMediaPlayer";
+            public string WindowName { get { return _windowName; } set { _windowName = value; OnPropertyChanged(nameof(WindowName)); } }
         }
     }
 }

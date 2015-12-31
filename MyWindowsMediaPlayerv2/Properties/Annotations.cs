@@ -407,7 +407,7 @@ namespace MyWindowsMediaPlayerv2.Annotations
   /// The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
   /// </summary>
   /// <example><code>
-  /// [Pure] int Multiply(int x, int y) => x * y;
+  /// [Pure] int Multiply(int x, int y) => x * Y;
   /// 
   /// void M() {
   ///   Multiply(123, 42); // Waring: Return value of pure method is not used

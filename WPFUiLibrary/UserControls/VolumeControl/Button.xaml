@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.VolumeControl.Button"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:volumeControl="clr-namespace:WPFUiLibrary.UserControls.VolumeControl"
+             mc:Ignorable="d" ClipToBounds="False"
+             d:DesignHeight="300" d:DesignWidth="300" Width="25">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Grid MouseDown="OnMute" x:Name="VolumeButton">
+        <Rectangle Fill="LightGray" Opacity="0"/>
+        <StackPanel>
+            <Path Data="F1 M 6.88,8.96 L 6.88,14.88 10.88,14.88 16,20 16,4 10.88,8.96 z" Height="25"
+                  Stretch="Uniform" HorizontalAlignment="Left" Fill="#88898C" Name="VolumeLow"/>
+            <Path VerticalAlignment="Center"
+                  Data="F1 M 0,0 C 0,-1.92 -1.12,-3.36 -2.56,-4.16 L -2.56,-1.92 -0.16,0.48 C 0,0.32 0,0.16 0,0 z
+		M 2.4,0 C 2.4,0.8 2.24,1.76 1.92,2.56 L 3.36,4 C 4,2.88 4.48,1.44 4.48,0
+		 4.48,-4.32 1.44,-8 -2.56,-8.8 L -2.56,-6.72 C 0.32,-5.92 2.4,-3.2 2.4,0 z
+		M -12.32,-9.12 L -13.6,-7.84 -8.8,-3.04 -13.6,-3.04 -13.6,2.88 -9.6,2.88 -4.48,8
+		 -4.48,1.12 -0.32,5.44 C -0.96,5.92 -1.76,6.4 -2.56,6.56 L -2.56,8.64 C -1.12,8.32 0,7.68 1.12,6.88
+		L 3.2,8.96 4.48,7.68 z
+		M -4.48,-8 L -6.72,-5.92 -4.48,-3.84 z" Name="Muted"
+                  Stretch="Uniform" Height="27" Fill="#88898C" HorizontalAlignment="Left" />
+            <Path
+                Data="F1 M 0,0 C 0,-1.92 -0.96,-3.36 -2.4,-4.16 L -2.4,4 C -0.96,3.2 0,1.76 0,0 z
+M -13.44,-3.04 L -13.44,2.88 -9.44,2.88 -4.48,8 -4.48,-8 -9.44,-3.04 z"
+                HorizontalAlignment="Left" Stretch="Uniform" Height="25"
+                Fill="#88898C" Name="VolumeMid"/>
+            <Path
+                Data="F1 M 0,0 L 0,5.92 4,5.92 9.12,11.04 9.12,-4.96 4,0 z
+M 13.6,3.04 C 13.6,1.12 12.48,-0.32 11.04,-1.12 L 11.04,7.04 C 12.48,6.24 13.6,4.8 13.6,3.04 z
+M 11.04,-5.76 L 11.04,-3.68 C 13.92,-2.88 16,-0.16 16,3.04 16,6.08 13.92,8.8 11.04,9.6
+L 11.04,11.68 C 15.04,10.88 18.08,7.2 18.08,3.04 18.08,-1.28 15.04,-4.96 11.04,-5.76 z"
+                Fill="#88898C" Stretch="Uniform" Height="27" HorizontalAlignment="Left" Name="VolumeHigh"/>
+        </StackPanel>
+        <Canvas x:Name="SliderContainer" Visibility="Collapsed" Grid.ZIndex="1">
+            <Path Fill="#2E2F33" Data="M 0,12.5 L 12.5,0 25,12.5 z" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform Y="25" />
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Border Background="#2E2F33" Height="20" Width="150" CornerRadius="4" HorizontalAlignment="Left"
+                    RenderTransformOrigin="0.5,0.5" StackPanel.ZIndex="1">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform X="-110" Y="37.5" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <volumeControl:Slider VerticalAlignment="Center" HorizontalAlignment="Center" Width="140"
+                                      x:Name="VolumeSlider"
+                                      />
+            </Border>
+        </Canvas>
+    </Grid>
+</UserControl>

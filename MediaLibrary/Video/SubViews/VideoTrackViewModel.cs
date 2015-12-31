@@ -7,8 +7,7 @@ using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
 using MediaPropertiesLibrary.Video;
-using UiLibrary;
-using UiLibrary.Utils;
+using WPFUiLibrary.Utils;
 
 namespace MediaLibrary.Video.SubViews
 {
@@ -39,8 +38,8 @@ namespace MediaLibrary.Video.SubViews
 
         void Play(Track track)
         {
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Video Track Selected", track);
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Play");
+            DispatcherLibrary.Dispatcher.Dispatch("Video Track Selected", track);
+            DispatcherLibrary.Dispatcher.Dispatch("Play");
         }
 
         #region Notifier Properties

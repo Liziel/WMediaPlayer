@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="MediaLibrary.Audio.Pages.ArtistViewPanels.ArtistsAlbumsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MediaLibrary.Audio.Pages.ArtistViewPanels"
+             xmlns:userControlTemplates1="clr-namespace:MediaLibrary.UserControlTemplates"
+             xmlns:modelGenerator="clr-namespace:MediaLibrary.UserControlTemplates.ModelGenerator"
+             xmlns:gridView="clr-namespace:MediaLibrary.UserControlTemplates.GridView"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <modelGenerator:GenerateListContext x:Key="GenerateListContext"/>
+    </UserControl.Resources>
+    <StackPanel Margin="20 0 20 35">
+
+        <Border BorderThickness="0 0 0 1" BorderBrush="#1F2022" Margin="0 0 0 5" Name="Title">
+            <DockPanel>
+                <TextBlock Text="Albums"
+                           FontFamily="Segoe Ui Light" Foreground="#88898c" FontSize="21" DockPanel.Dock="Left" />
+            </DockPanel>
+        </Border>
+        
+        <gridView:GridView>
+            <gridView:GridView.DataContext>
+                <MultiBinding Converter="{StaticResource GenerateListContext}">
+                    <Binding Path="Albums"/>
+                    <Binding Path="PlayAlbum"/>
+                </MultiBinding>
+            </gridView:GridView.DataContext>
+        </gridView:GridView>
+
+    </StackPanel>
+</UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

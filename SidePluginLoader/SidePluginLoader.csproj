@@ -88,9 +88,9 @@
       <Project>{16a9f836-1667-4f22-b8eb-d21a13cb428d}</Project>
       <Name>PluginLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UiLibrary\UiLibrary.csproj">
-      <Project>{b0664bf6-6b73-46e3-9a18-fa1ad61464fb}</Project>
-      <Name>UiLibrary</Name>
+    <ProjectReference Include="..\WPFUiLibrary\WPFUiLibrary.csproj">
+      <Project>{08f7fd22-0007-44da-a5d8-a64c26f65bfd}</Project>
+      <Name>WPFUiLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

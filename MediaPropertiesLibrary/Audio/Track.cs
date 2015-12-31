@@ -13,6 +13,7 @@ namespace MediaPropertiesLibrary.Audio
         public string Name { get; set; }
         public string Path { get; set; }
         public TrackUserTag UserTag { get; set; }
+        public List<string> Genres { get; set; }
 
         [XmlElement("Duration")]
         public long TimeSpanDuration { get { return Duration.Ticks; } set { Duration = new TimeSpan(value); } }
@@ -26,7 +27,7 @@ namespace MediaPropertiesLibrary.Audio
         [XmlIgnore]
         public Album Album { get; set; }
         [XmlIgnore]
-        public List<Artist> Artist { get; set; } = new List<Artist>();
+        public List<Artist> Artists { get; set; } = new List<Artist>();
         [XmlIgnore]
         public List<string> RelativePaths { get; set; }
 
@@ -36,14 +37,37 @@ namespace MediaPropertiesLibrary.Audio
 
         public override string MediaLibraryKey => Path;
 
+        protected override void OnStateChanged(MediaState state)
+        {
+            if (state == MediaState.End) return;
+            if (Album != null)
+                Album.State = State;
+            foreach (var artist in Artists)
+                artist.State = state;
+        }
+
         #endregion
 
     }
 
     public sealed class TrackUserTag
     {
-        private string UserDefinedAlbumName { get; set; }
-        private List<string> UserDefinedArtistsNames { get; set; }
+        public int TimesListened { get; set; } = 0;
+        public bool Favored { get; set; } = false;
+    }
+
+    public class TrackAccessCover : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var track = value as Track;
+            return track?.Album?.Cover;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class TrackAccessArtistName : IValueConverter
@@ -53,7 +77,7 @@ namespace MediaPropertiesLibrary.Audio
             var track = value as Track;
             if (track == null)
                 return "";
-            return track.Artist?.Count > 0 ? track.Artist[0].Name : "";
+            return track.Artists?.Count > 0 ? track.Artists[0].Name : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

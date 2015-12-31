@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using DispatcherLibrary;
 using PluginLibrary.Customization;
 using SidePlayer.Annotations;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediasPlayer.Audio
 {
@@ -48,7 +49,7 @@ namespace SidePlayer.MediasPlayer.Audio
 
         private void MaximizeAudioPlayer(object sender, MouseButtonEventArgs e)
         {
-            DispatcherLibrary.Dispatcher.GetInstance.Dispatch("Maximize Media View");
+            Dispatch("Maximize Media View");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

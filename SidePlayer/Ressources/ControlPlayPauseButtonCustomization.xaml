@@ -4,7 +4,7 @@
 
     <ControlTemplate x:Key="PauseButtonState">
 
-        <Grid Width="50" Height="50" Opacity="0.6" x:Name="PlayButtonStateGrid">
+        <Grid Width="55" Height="55" Opacity="0.6" x:Name="PlayButtonStateGrid">
             <Path Stretch="Fill" x:Name="PlayPauseBackgroundPath"
                   Stroke="LightGray"
                   Fill="Black"
@@ -38,7 +38,7 @@
 
     <ControlTemplate x:Key="PlayButtonState">
 
-        <Grid Width="50" Height="50" Opacity="0.6" x:Name="PlayButtonStateGrid">
+        <Grid Width="55" Height="55" Opacity="0.6" x:Name="PlayButtonStateGrid">
             <Path Stretch="Fill" x:Name="PlayPauseBackgroundPath"
                   Stroke="LightGray"
                   Fill="Black"

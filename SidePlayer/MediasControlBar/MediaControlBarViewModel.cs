@@ -1,17 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
-using SidePlayer.MediasPlayer;
-using TagLib;
-using UiLibrary;
-using UiLibrary.Utils;
-using Dispatcher = DispatcherLibrary.Dispatcher;
+using WPFUiLibrary.Utils;
+using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer.MediaControlBar
 {
@@ -61,6 +55,14 @@ namespace SidePlayer.MediaControlBar
             MediaState = MediaState.Pause;
         }
 
+        [EventHook("Media Stopped")]
+        public void OnMediaStopped()
+        {
+            MediaState = MediaState.Pause;
+            SliderCurrentValue = 0;
+            MediaPosition = TimeSpan.Zero.ToString(@"hh\:mm\:ss");
+        }
+
         #endregion
 
         #region Delegates
@@ -87,8 +89,8 @@ namespace SidePlayer.MediaControlBar
             }
         }
 
-        public UiCommand Next { get; } = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Next Track"); });
-        public UiCommand Previous { get; } = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Previous Track"); });
+        public UiCommand Next { get; } = new UiCommand(delegate { Dispatch("Next Track"); });
+        public UiCommand Previous { get; } = new UiCommand(delegate { Dispatch("Previous Track"); });
 
         #endregion
 
@@ -113,7 +115,7 @@ namespace SidePlayer.MediaControlBar
             {
                 _sliderCurrentValue = value;
                 OnPropertyChanged(nameof(SliderCurrentValue));
-                Dispatcher.GetInstance.Dispatch("Media Position Set", _sliderCurrentValue);
+                Dispatch("Media Position Set", _sliderCurrentValue);
             }
         }
 
@@ -166,9 +168,9 @@ namespace SidePlayer.MediaControlBar
             SliderMaxValue = 0;
             MediaDuration = TimeSpan.FromSeconds(0).ToString(@"hh\:mm\:ss");
 
-            Play = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Play"); },
+            Play = new UiCommand(delegate { Dispatch("Play"); },
                 o => MediaState == MediaState.Pause);
-            Pause = new UiCommand(delegate { Dispatcher.GetInstance.Dispatch("Pause"); },
+            Pause = new UiCommand(delegate { Dispatch("Pause"); },
                 o => MediaState == MediaState.Play);
         }
 

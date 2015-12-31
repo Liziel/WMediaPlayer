@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="MediaLibrary.Audio.Pages.ArtistViewPanels.PopularTrackItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:mediaControl="clr-namespace:WPFUiLibrary.UserControls.MediaControl;assembly=WPFUiLibrary"
+             mc:Ignorable="d" Height="42"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <d:UserControl.DataContext>
+        <audio:Track State="Playing" Name="Test">
+            <audio:Track.UserTag>
+                <audio:TrackUserTag TimesListened="10"/>
+            </audio:Track.UserTag>
+        </audio:Track>
+    </d:UserControl.DataContext>
+    <UserControl.Resources>
+        <audio:TrackAccessCover x:Key="TrackAccessCover"/>
+    </UserControl.Resources>
+    <Border x:Name="PopularTrackPresenter" BorderThickness="0 2 0 0" BorderBrush="#1F2022">
+        <DockPanel VerticalAlignment="Center">
+            <Image Width="40" Height="40"
+                   Source="{Binding ElementName=PopularTrackPresenter, Path=DataContext, Converter={StaticResource TrackAccessCover}}"
+                   DockPanel.Dock="Left" />
+            <mediaControl:Button DockPanel.Dock="Left" Height="30" Width="30" Status="{Binding Path=State}"
+                                 Selected="{Binding ElementName=PopularTrackPresenter, Path=IsMouseOver}"
+                                 Margin="15 5 15 5" x:Name="PlayMusicButton" />
+            <TextBlock Text="{Binding Path=Name}" DockPanel.Dock="Left" Foreground="#FBFBFC" VerticalAlignment="Center" FontFamily="Segoe WP SemiLight" FontSize="17.333" TextTrimming="CharacterEllipsis"/>
+            <TextBlock Text="{Binding Path=UserTag.TimesListened}" DockPanel.Dock="Right" Foreground="#88898C" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe WP SemiLight" FontSize="17.333" Margin="0 0 5 0"/>
+        </DockPanel>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#222326"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background" Value="#00000000"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+    </Border>
+
+</UserControl>

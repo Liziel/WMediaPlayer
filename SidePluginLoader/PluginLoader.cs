@@ -6,8 +6,7 @@ using System.Windows.Input;
 using PluginLibrary;
 using PluginLibrary.Customization;
 using SidePluginLoader.Annotations;
-using UiLibrary;
-using UiLibrary.Utils;
+using WPFUiLibrary.Utils;
 
 namespace SidePluginLoader
 {

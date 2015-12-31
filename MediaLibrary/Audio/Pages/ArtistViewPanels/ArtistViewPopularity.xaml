@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="MediaLibrary.Audio.Pages.ArtistViewPanels.ArtistViewPopularity"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:staticDisplay="clr-namespace:WPFUiLibrary.UserControls.StaticDisplay;assembly=WPFUiLibrary"
+             xmlns:artistViewPanels="clr-namespace:MediaLibrary.Audio.Pages.ArtistViewPanels"
+             mc:Ignorable="d" Name="PopularArtistPanel"
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid Margin="20 35 20 35">
+        <Grid.Resources>
+            <ResourceDictionary Source="../../../Ressources/ControlPlayButton.xaml" />
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="You've listened"
+                   FontFamily="Segoe Ui Light" Foreground="#88898c" FontSize="21"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Related Artist"
+                   FontFamily="Segoe Ui Light" Foreground="#88898c" FontSize="21"/>
+
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="0 0 0 2" BorderBrush="#1F2022" Grid.Row="0">
+                <ItemsControl ItemsSource="{Binding Path=MostListenedTracks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="audio:Track">
+                            <artistViewPanels:PopularTrackItem />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Grid>
+
+        <ItemsControl Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Path=RelatedArtists}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="audio:Artist">
+                    <artistViewPanels:RelatedArtistItem/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
