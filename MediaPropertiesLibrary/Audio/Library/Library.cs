@@ -131,8 +131,15 @@ namespace MediaPropertiesLibrary.Audio.Library
             catch (Exception)
             {
                 using (var stream = new FileStream(AudioLibraryLocation, FileMode.Open))
-                    instance = (Library)
-                        new XmlSerializer(typeof(Library)).Deserialize(stream);
+                    try
+                    {
+                        instance = (Library)
+                            new XmlSerializer(typeof(Library)).Deserialize(stream);
+                    }
+                    catch (Exception)
+                    {
+                        instance = new Library();
+                    }
             }
             instance._tracks = new ObservableCollection<Track>();
             foreach (var trackSerializer in instance._useForTrackDeserializer.Where(trackSerializer => System.IO.File.Exists(trackSerializer.Track.Path)))

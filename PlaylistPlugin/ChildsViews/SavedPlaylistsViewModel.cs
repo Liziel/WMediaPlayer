@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -31,12 +32,19 @@ namespace PlaylistPlugin.ChildsViews
 
         public SavedPlaylistsViewModel()
         {
-            using (
-                var file = new FileStream(Locations.Libraries + "/Playlist.xml",
-                    FileMode.OpenOrCreate))
-                SavedPlaylists =
-                    (ObservableCollection<Playlist>)
-                        new XmlSerializer(typeof (ObservableCollection<Playlist>)).Deserialize(file);
+            try
+            {
+                using (
+                    var file = new FileStream(Locations.Libraries + "/Playlist.xml",
+                        FileMode.OpenOrCreate))
+                    SavedPlaylists =
+                        (ObservableCollection<Playlist>)
+                            new XmlSerializer(typeof (ObservableCollection<Playlist>)).Deserialize(file);
+            }
+            catch (Exception)
+            {
+                SavedPlaylists = new ObservableCollection<Playlist>();
+            }
         }
 
         public void Save()

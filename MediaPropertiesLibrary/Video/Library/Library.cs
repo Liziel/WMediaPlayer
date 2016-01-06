@@ -81,8 +81,15 @@ namespace MediaPropertiesLibrary.Video.Library
         private static Library CreateInstance()
         {
             Library instance;
-            using (var stream = new FileStream(VideoLibraryLocation, FileMode.OpenOrCreate))
-                instance = (Library) new XmlSerializer(typeof (Library)).Deserialize(stream);
+            try
+            {
+                using (var stream = new FileStream(VideoLibraryLocation, FileMode.OpenOrCreate))
+                    instance = (Library) new XmlSerializer(typeof (Library)).Deserialize(stream);
+            }
+            catch (Exception)
+            {
+                instance = new Library();
+            }
             instance._tracks = new ObservableCollection<Track>();
             foreach (
                 var trackSerializer in
