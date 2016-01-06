@@ -142,34 +142,38 @@ namespace MediaPropertiesLibrary.Audio.Library
                     }
             }
             instance._tracks = new ObservableCollection<Track>();
-            foreach (var trackSerializer in instance._useForTrackDeserializer.Where(trackSerializer => System.IO.File.Exists(trackSerializer.Track.Path)))
-            {
-                var album = instance._albums.FirstOrDefault(salbum => trackSerializer.AlbumName == salbum.Name);
-                if (album != null)
+            if (instance._useForTrackDeserializer != null)
+                foreach (
+                    var trackSerializer in
+                        instance._useForTrackDeserializer.Where(
+                            trackSerializer => System.IO.File.Exists(trackSerializer.Track.Path)))
                 {
-                    album.Tracks.Add(trackSerializer.Track);
-                    trackSerializer.Track.Album = album;
-                    foreach (
-                        var artist in
-                            instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
-                                .ToList())
+                    var album = instance._albums.FirstOrDefault(salbum => trackSerializer.AlbumName == salbum.Name);
+                    if (album != null)
                     {
-                        artist.Albums.Add(album);
-                        album.Artists.Add(artist);
-                        trackSerializer.Track.Artists.Add(artist);
+                        album.Tracks.Add(trackSerializer.Track);
+                        trackSerializer.Track.Album = album;
+                        foreach (
+                            var artist in
+                                instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
+                                    .ToList())
+                        {
+                            artist.Albums.Add(album);
+                            album.Artists.Add(artist);
+                            trackSerializer.Track.Artists.Add(artist);
+                        }
                     }
+                    else
+                        foreach (
+                            var artist in
+                                instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
+                                    .ToList())
+                        {
+                            artist.Singles.Add(trackSerializer.Track);
+                            trackSerializer.Track.Artists.Add(artist);
+                        }
+                    instance._tracks.Add(trackSerializer.Track);
                 }
-                else
-                    foreach (
-                        var artist in
-                            instance._artists.Where(artist => trackSerializer.ArtistsNames.Contains(artist.Name))
-                                .ToList())
-                    {
-                        artist.Singles.Add(trackSerializer.Track);
-                        trackSerializer.Track.Artists.Add(artist);
-                    }
-                instance._tracks.Add(trackSerializer.Track);
-            }
             foreach (var album in instance._albums.Where(album => album.Tracks.Count == 0).ToList())
                 instance._albums.Remove(album);
             foreach (

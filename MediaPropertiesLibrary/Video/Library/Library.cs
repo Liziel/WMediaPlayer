@@ -91,15 +91,16 @@ namespace MediaPropertiesLibrary.Video.Library
                 instance = new Library();
             }
             instance._tracks = new ObservableCollection<Track>();
-            foreach (
-                var trackSerializer in
-                    instance._useForTrackDeserializer.Where(
-                        trackSerializer => File.Exists(trackSerializer.Track.Path)))
-            {
-                var serie = instance._series.FirstOrDefault(s => s.Name == trackSerializer.SerieName);
-                serie?.Tracks.Add(trackSerializer.Track);
-                instance._tracks.Add(trackSerializer.Track);
-            }
+            if (instance._useForTrackDeserializer != null)
+                foreach (
+                    var trackSerializer in
+                        instance._useForTrackDeserializer.Where(
+                            trackSerializer => File.Exists(trackSerializer.Track.Path)))
+                {
+                    var serie = instance._series.FirstOrDefault(s => s.Name == trackSerializer.SerieName);
+                    serie?.Tracks.Add(trackSerializer.Track);
+                    instance._tracks.Add(trackSerializer.Track);
+                }
             foreach (var serie in instance._series.Where(serie => serie.Tracks.Count == 0).ToList())
                 instance._series.Remove(serie);
             return instance;
