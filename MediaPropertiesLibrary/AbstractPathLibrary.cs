@@ -10,26 +10,8 @@ namespace MediaPropertiesLibrary
     {
         #region Save Locations
 
-        private static string DataFolderLocation
-        {
-            get
-            {
-                string dataFolderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                            "/GJVMediaPlayer";
-                if (!Directory.Exists(dataFolderLocation)) Directory.CreateDirectory(dataFolderLocation);
-                return dataFolderLocation;
-            }
-        }
 
-        protected internal static string LibrariesLocation
-        {
-            get
-            {
-                string librariesLocation = DataFolderLocation + "/LibrariesData";
-                if (!Directory.Exists(librariesLocation)) Directory.CreateDirectory(librariesLocation);
-                return librariesLocation;
-            }
-        }
+        protected internal static string LibrariesLocation => Locations.Libraries;
 
         #endregion
 
@@ -57,12 +39,14 @@ namespace MediaPropertiesLibrary
             {
                 foreach (string path in Paths)
                 {
-                    var localPath = new DirectoryInfo(path).FullName;
+                    var localPath = new DirectoryInfo(path);
                     foreach (string filePath in Directory.GetFiles(path, action.Key, SearchOption.AllDirectories).AsEnumerable())
                     {
                         var fileDirectoryPath = new FileInfo(filePath).Directory?.FullName;
-                        onSynchronizedFile[action.Key](fileDirectoryPath?.Substring(localPath.Length)
-                            .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToList(), filePath);
+                        var dividedPath = fileDirectoryPath?.Substring(localPath.FullName.Length)
+                            .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToList();
+                        dividedPath[0] = localPath.Name;
+                        onSynchronizedFile[action.Key](dividedPath, filePath);
                     }
                 }
             }

@@ -3,12 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:PlaylistPlugin"
-             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
-             xmlns:video="clr-namespace:MediaPropertiesLibrary.Video;assembly=MediaPropertiesLibrary"
              xmlns:childsViews="clr-namespace:PlaylistPlugin.ChildsViews"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{childsViews:SavedPlaylistsViewModel}">
+             xmlns:models="clr-namespace:PlaylistPlugin.Models"
+             xmlns:contextMenu="clr-namespace:WPFUiLibrary.UserControls.ContextMenu;assembly=WPFUiLibrary"
+             xmlns:modelGenerator="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.ModelGenerator;assembly=WPFUiLibrary"
+             xmlns:playlistItems="clr-namespace:PlaylistPlugin.ChildsViews.PlaylistItems"
+             xmlns:converters="clr-namespace:WPFUiLibrary.Converters;assembly=WPFUiLibrary"
+             mc:Ignorable="d" Name="UserControl"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <d:UserControl.DataContext>
+        <childsViews:SavedPlaylistsViewModel PlayQueue="True"/>        
+    </d:UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,145 +22,137 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ScrollViewer Style="{StaticResource InvertScrollViewer}">
+        <ScrollViewer.Resources>
+            <playlistItems:PlaylistMenuGenerator x:Key="PlaylistMenuGenerator"/>
+            <converters:EqualityComparer x:Key="EqualityComparer"/>
+        </ScrollViewer.Resources>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <!-- New Playlist -->
-        <Button>
-            <Button.Template>
-                <ControlTemplate>
-                    <Grid Background="#222222" Margin="0 1 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2" />
-                        </Grid.ColumnDefinitions>
+            <!-- Current Playlist -->
+            <Button Grid.Row="0" Command="{Binding Path=ViewInQueue}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid Margin="0 1 0 0">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#555555" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="#222222" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="4" />
+                            </Grid.ColumnDefinitions>
 
-                        <Path Grid.Column="0" Stretch="Fill" Margin="10" Fill="LightGray">
-                            <Path.Data>
-                                F0 M 0,0 L -306.08,0 -306.08,-306.08 C -306.08,-334.24 -328.8,-356.96 -356.96,-356.96 -385.28,-356.96 -408,-334.24 -408,-306.08
-                                L -408,0 -714.08,0 C -742.24,0 -764.96,22.72 -764.96,50.88 -764.96,79.2 -742.24,101.92 -714.08,101.92
-                                L -408,101.92 -408,408 C -408,436.16 -385.28,458.88 -356.96,458.88 -328.8,458.88 -306.08,436.16 -306.08,408
-                                L -306.08,101.92 0,101.92 C 28.16,101.92 50.88,79.2 50.88,50.88 51.04,22.72 28.16,0 0,0 z
-                            </Path.Data>
-                        </Path>
-                        <TextBlock Grid.Column="1" Foreground="LightGray" Opacity="0.6" Text="New Playlist"
-                                   VerticalAlignment="Center" />
-
-                    </Grid>
+                            <Path Grid.Column="0" Stretch="Fill" Margin="10" Fill="LightGray">
+                                <Path.Data>
+                                    F1 M 0,0 L -16.96,0 -16.96,1.92 0,1.92 z
+                                    M 0,-4 L -16.96,-4 -16.96,-2.08 0,-2.08 z
+                                    M -16.96,5.92 L -4,5.92 -4,4 -16.96,4 z
+                                    M -1.92,4 L -1.92,9.92 3.04,7.04 z
+                                </Path.Data>
+                            </Path>
+                            <TextBlock Grid.Column="1" Foreground="LightGray" Opacity="0.6" Text="In queue"
+                                       VerticalAlignment="Center" />
+                            <Rectangle Grid.Column="2">
+                                <Rectangle.Style>
+                                    <Style TargetType="Rectangle">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=PlayQueue}" Value="True">
+                                                <Setter Property="Fill" Value="DodgerBlue" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
+                        </Grid>
                     </ControlTemplate>
-            </Button.Template>
-        </Button>        <!-- Current Playlist -->
-        <Button Grid.Row="1" Command="{Binding Path=ViewInQueue}">
-            <Button.Template>
-                <ControlTemplate>
-                    <Grid Background="#222222" Margin="0 1 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2" />
-                        </Grid.ColumnDefinitions>
+                </Button.Template>
+            </Button>
+            <!-- List Box for Saved Playlists -->
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=SavedPlaylists}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="models:Playlist">
+                        <Grid Name="PlaylistContainer">
+                            <contextMenu:Overlayable
+                                Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource PlaylistMenuGenerator}}">
+                                <Button Height="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext.ViewPlaylist}"
+                                        CommandParameter="{Binding ElementName=PlaylistContainer, Path=DataContext}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Grid>
 
-                        <Path Grid.Column="0" Stretch="Fill" Margin="10" Fill="LightGray">
-                            <Path.Data>
-                                F1 M 0,0 L -16.96,0 -16.96,1.92 0,1.92 z
-                                M 0,-4 L -16.96,-4 -16.96,-2.08 0,-2.08 z
-                                M -16.96,5.92 L -4,5.92 -4,4 -16.96,4 z
-                                M -1.92,4 L -1.92,9.92 3.04,7.04 z
-                            </Path.Data>
-                        </Path>
-                        <TextBlock Grid.Column="1" Foreground="LightGray" Opacity="0.6" Text="In queue"
-                                   VerticalAlignment="Center" />
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#555555" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="False">
+                                                                <Setter Property="Background" Value="#222222" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
 
-                    </Grid>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-        <!-- List Box for Saved Playlists -->
-        <ListBox Background="#00000000" Grid.Row="2"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 AlternationCount="10000"
-                 VirtualizingPanel.IsVirtualizing="True"
-                 VirtualizingPanel.CacheLengthUnit="Page"
-                 VirtualizingPanel.CacheLength="2,2"
-                 VirtualizingPanel.IsContainerVirtualizable="True"
-                 VirtualizingPanel.VirtualizationMode="Recycling"
-                 HorizontalAlignment="Stretch" BorderThickness="0">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <Grid Height="40">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="0.6" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="4" />
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <TextBlock Grid.Column="1" Opacity="0.6" Text="{Binding Path=Name}"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="LightGray" />
 
-                                    <Border Background="LightGray" Grid.Row="0" Opacity="0.3" />
-                                    <Border BorderThickness="0" Grid.Row="1"
-                                            Padding="{TemplateBinding Control.Padding}"
-                                            BorderBrush="{TemplateBinding Border.BorderBrush}"
-                                            Background="#222222"
-                                            Name="Bd"
-                                            SnapsToDevicePixels="True">
-                                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
-                                                          ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
-                                                          HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                                    </Border>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="Selector.IsSelectionActive" Value="False" />
-                                            <Condition Property="Selector.IsSelected" Value="True" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Panel.Background" TargetName="Bd"
-                                                Value="Transparent" />
-                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#00000000" />
-                                    </MultiTrigger>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="Selector.IsSelectionActive" Value="True" />
-                                            <Condition Property="Selector.IsSelected" Value="True" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Panel.Background" TargetName="Bd" Value="Transparent" />
-                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#00000000" />
-                                    </MultiTrigger>
-                                    <Trigger Property="UIElement.IsMouseOver" Value="True">
-                                        <Setter Property="Panel.Background" TargetName="Bd"
-                                                Value="#444444" />
-                                        <Setter Property="Border.BorderBrush" TargetName="Bd" Value="#00000000" />
+                                                <Rectangle Grid.Column="2">
+                                                    <Rectangle.Style>
+                                                        <Style TargetType="Rectangle">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding ElementName=UserControl, Path=DataContext.PlayQueue}" Value="False"/>
+                                                                        <Condition Value="True">
+                                                                            <Condition.Binding>
+                                                                                <MultiBinding Converter="{StaticResource EqualityComparer}">
+                                                                                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" Path="DataContext"/>
+                                                                                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl}" Path="DataContext.CurrentPlaylist"/>
+                                                                                </MultiBinding>
+                                                                            </Condition.Binding>
+                                                                        </Condition>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <MultiDataTrigger.Setters>
+                                                                        <Setter Property="Fill" Value="DodgerBlue" />
+                                                                    </MultiDataTrigger.Setters>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Rectangle.Style>
+                                                </Rectangle>
 
-                                    </Trigger>
-                                    <Trigger Property="UIElement.IsEnabled" Value="False">
-                                        <Setter Property="TextElement.Foreground" TargetName="Bd">
-                                            <Setter.Value>
-                                                <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="MinWidth" Value="15" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.Resources>
-                <DataTemplate DataType="audio:Track" />
-                <DataTemplate DataType="video:Track" />
-            </ListBox.Resources>
-        </ListBox>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </contextMenu:Overlayable>
+                            </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
 
-    </Grid>
+        </Grid>
+        </ScrollViewer>
 </UserControl>

@@ -1,20 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
 using DispatcherLibrary;
-using NEbml.Core;
-using PluginLibrary;
-using PluginLibrary.Customization;
 using SidePlayer.Annotations;
 using SidePlayer.MaximizedMediaPlayer;
 using SidePlayer.MediaControlBar;
 using SidePlayer.MediasPlayer;
-using SidePlayer.MediasPlayer.Audio;
-using SidePlayer.MediasPlayer.Video;
-using TagLib;
-using TagLib.Matroska;
 using static DispatcherLibrary.Dispatcher;
 
 namespace SidePlayer
@@ -73,6 +63,7 @@ namespace SidePlayer
                 new MaximizedMediaPlayerView(new MaximizedMediaPlayerViewModel(MediaViewer.MediaView,
                     new MaximizedMediaControlView(MediaControlBar)));
             Dispatch("Attach Plugin On Top", _maximizedView);
+            Dispatch("View: Fullscreen");
         }
 
         [EventHook("Minimize Media View")]
@@ -82,6 +73,7 @@ namespace SidePlayer
             _maximizedView = null;
             System.GC.Collect();
             MediaViewer.OnMinimize();
+            Dispatch("View: Normal");
         }
 
         public SidePlayerPluginMainViewModel(IMediaPlayer mediaPlayer)

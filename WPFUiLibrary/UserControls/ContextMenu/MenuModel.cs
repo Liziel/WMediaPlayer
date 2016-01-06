@@ -12,26 +12,16 @@ namespace WPFUiLibrary.UserControls.ContextMenu
 {
     public class MenuModel : INotifyPropertyChanged
     {
-        public MenuModel()
+        public MenuModel(bool generic = true)
         {
-            MenuItems = new List<CommandItem>
-            {
-                new CommandItem
-                {
-                    Name = "Play",
-                    Command = new UiCommand(o => DispatcherLibrary.Dispatcher.Dispatch("Multiple Track Selected For Play", Tracks, 0))
-                },
-                new CommandItem
-                {
-                    Name = "Add to Play Queue",
-                    Command = new UiCommand(o => DispatcherLibrary.Dispatcher.Dispatch("Multiple Track Selected", Tracks))
-                },
-                new CommandItem
-                {
-                    Name = "Add to ...",
-                    Command = null
-                }
-            };
+            Precedent = new UiCommand(o => PopItems());
+            _menuItems = ItemConfigurator.Generate(new List<Item>(), this, generic);
+        }
+
+        public MenuModel(IEnumerable<Item> items, bool generic = true)
+        {
+            Precedent = new UiCommand(o => PopItems());
+            _menuItems = ItemConfigurator.Generate(items, this, generic);
         }
 
         #region Notifier Fields
@@ -47,6 +37,38 @@ namespace WPFUiLibrary.UserControls.ContextMenu
         #endregion
 
         public IEnumerable<TrackDefinition>     Tracks { get; set; }
-        public List<CommandItem>                MenuItems { get; }
+
+
+        private readonly IEnumerable<Item>           _menuItems;
+        private readonly List<IEnumerable<Item>>     _menuStack = new List<IEnumerable<Item>>();
+        private readonly List<string>                _menuTitles = new List<string>();
+         
+        public  IEnumerable<Item>   MenuItems => _menuStack.Count == 0 ? _menuItems : _menuStack[_menuStack.Count - 1];
+        public string               MenuTitle => _menuTitles.Count > 0 ? _menuTitles[_menuTitles.Count - 1] : null;
+
+        public void PushItems(IEnumerable<Item> items, string name)
+        {
+            _menuStack.Add(items);
+            _menuTitles.Add(name);
+            OnPropertyChanged(nameof(MenuItems));
+            OnPropertyChanged(nameof(MenuTitle));
+        }
+
+        private void PopItems()
+        {
+            _menuStack.RemoveAt(_menuStack.Count - 1);
+            _menuTitles.RemoveAt(_menuTitles.Count - 1);
+            OnPropertyChanged(nameof(MenuItems));
+            OnPropertyChanged(nameof(MenuTitle));
+        }
+        public ICommand Precedent { get; }
+
+        public void Reset()
+        {
+            _menuStack.Clear();
+            _menuTitles.Clear();
+            OnPropertyChanged(nameof(MenuItems));
+            OnPropertyChanged(nameof(MenuTitle));
+        }
     }
 }

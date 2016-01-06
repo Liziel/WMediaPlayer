@@ -53,29 +53,18 @@ namespace MediaLibrary.Audio
     {
         #region Pages
 
-        private ObservableCollection<UIElement> _pages = new ObservableCollection<UIElement>();
-        public ObservableCollection<UIElement> Pages
-        {
-            get { return _pages; }
-            set
-            {
-                _pages = value;
-                OnPropertyChanged(nameof(Pages));
-            }
-        }
-
         [EventHook("AudioLibrary: View Album")]
         public void AccessAlbum(Album album)
         {
             if (album != null)
-                Pages.Add(new Pages.AlbumView(new Pages.AlbumViewModel(album)));
+                Dispatcher.Dispatch("Publish pages", new Pages.AlbumView(new Pages.AlbumViewModel(album)));
         }
 
         [EventHook("AudioLibrary: View Artist")]
         public void AccessArtist(Artist artist)
         {
             if (artist != null)
-                Pages.Add(new Pages.ArtistView(new Pages.ArtistViewModel(artist)));
+                Dispatcher.Dispatch("Publish pages", new Pages.ArtistView(new Pages.ArtistViewModel(artist)));
         }
         #endregion
 

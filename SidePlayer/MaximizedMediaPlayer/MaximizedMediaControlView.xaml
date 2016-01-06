@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SidePlayer.MaximizedMediaPlayer"
+             xmlns:mediaControlBar="clr-namespace:SidePlayer.MediaControlBar"
+             xmlns:volumeControl="clr-namespace:WPFUiLibrary.UserControls.VolumeControl;assembly=WPFUiLibrary"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="150" d:DesignWidth="500">
+    <d:UserControl.DataContext>
+        <mediaControlBar:MediaControlBarViewModel />
+    </d:UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,10 +22,10 @@
 
     <Grid VerticalAlignment="Bottom">
 
-        <Rectangle Fill="#222222" Grid.ZIndex="0" Opacity="0.7"/>
+        <Rectangle Fill="#222222" Grid.ZIndex="0" Opacity="0.7" />
 
         <Grid VerticalAlignment="Bottom" Grid.ZIndex="1">
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -42,78 +47,141 @@
                            HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="2" />
             </Grid>
 
-            <Grid Grid.ZIndex="1" Grid.Row="1" HorizontalAlignment="Center">
+            <Grid Panel.ZIndex="1" Grid.Row="1">
+
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Command="{Binding Path=Previous}">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Grid Width="40" Height="40">
-                                <Path Stretch="Fill"
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Button Width="30" Height="30" Command="{Binding Path=SwitchSubtitles}" Margin="10 10 10 10">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Path
+                                    Data="F1 M 0,0 L -16,0 C -17.12,0 -18.08,0.8 -18.08,1.92 L -18.08,13.92 C -18.08,15.04 -17.12,16 -16,16
+		                                    L 0,16 C 0.96,16 1.92,15.04 1.92,13.92 L 1.92,1.92 C 1.92,0.8 0.96,0 0,0 z
+		                                    M -16,8 L -12,8 -12,9.92 -16,9.92 z
+		                                    M -6.08,13.92 L -16,13.92 -16,12 -6.08,12 z
+		                                    M 0,13.92 L -4,13.92 -4,12 0,12 z
+		                                    M 0,9.92 L -10.08,9.92 -10.08,8 0,8 z"
+                                    Stretch="Uniform">
+                                    <Path.Style>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Fill" Value="LightGray"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=SubtitlesEnabled}" Value="True">
+                                                    <Setter Property="Fill" Value="DodgerBlue"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Path.Style>
+                                </Path>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Width="30" Height="30" Command="{Binding Path=Minimize}" Margin="10 0 10 10">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid Background="#00000000">
+                                    <Path
+                                        Data="F1 M 0,0 L 3.04,0 3.04,2.88 4.96,2.88 4.96,-2.08 0,-2.08 z
+		                                    M 3.04,-8 L 0,-8 0,-6.08 4.96,-6.08 4.96,-11.04 3.04,-11.04 z
+		                                    M 8.96,2.88 L 11.04,2.88 11.04,0 13.92,0 13.92,-2.08 8.96,-2.08 z
+		                                    M 11.04,-8 L 11.04,-11.04 8.96,-11.04 8.96,-6.08 13.92,-6.08 13.92,-8 z"
+                                        Stretch="Uniform">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Fill" Value="LightGray"></Setter>
+                                            </Style>
+                                        </Path.Style>
+                                    </Path>
+                                    </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+
+                <Grid Grid.ZIndex="1" Grid.Column="1" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Command="{Binding Path=Previous}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid Width="40" Height="40">
+                                    <Path Stretch="Fill"
                                       Data="F0 M 0,0 C -12.8,0 -30.08,-1.6 -43.84,8 L -409.6,316.8 -409.6,71.04 C -409.6,31.84 -441.28,0 -480.48,0
 		L -586.88,0 C -626.08,0 -657.92,31.84 -657.92,71.04 L -657.92,744.96 C -657.92,784.16 -626.08,816 -586.88,816
 		L -480.48,816 C -441.28,816 -409.6,784.16 -409.6,744.96 L -409.6,497.12 -43.84,805.92 C -30.08,815.52 -12.8,813.92 0,813.92
 		 51.84,813.92 51.68,767.52 51.68,755.68 L 51.68,58.08 C 51.68,48.16 51.84,0 0,0 z"
                                       Fill="LightGray" RenderTransformOrigin="0.5,0.5">
-                                    <Path.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-                                            <SkewTransform />
-                                            <RotateTransform />
-                                            <TranslateTransform />
-                                        </TransformGroup>
-                                    </Path.RenderTransform>
-                                </Path>
-                            </Grid>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Grid.Column="1" Margin="10">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=MediaState}" Value="Play">
-                                    <Setter Property="Command" Value="{Binding Path=Pause}" />
-                                    <Setter Property="Template" Value="{StaticResource PauseButtonState}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=MediaState}" Value="Pause">
-                                    <Setter Property="Command" Value="{Binding Path=Play}" />
-                                    <Setter Property="Template" Value="{StaticResource PlayButtonState}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button Grid.Column="2" Command="{Binding Path=Next}">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Grid Width="40" Height="40">
-                                <Path Stretch="Fill"
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
+                                                <SkewTransform />
+                                                <RotateTransform />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Grid.Column="1" Margin="10">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=MediaState}" Value="Play">
+                                        <Setter Property="Command" Value="{Binding Path=Pause}" />
+                                        <Setter Property="Template" Value="{StaticResource PauseButtonState}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=MediaState}" Value="Pause">
+                                        <Setter Property="Command" Value="{Binding Path=Play}" />
+                                        <Setter Property="Template" Value="{StaticResource PlayButtonState}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Grid.Column="2" Command="{Binding Path=Next}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid Width="40" Height="40">
+                                    <Path Stretch="Fill"
                                       Data="F0 M 0,0 L -106.4,0 C -145.6,0 -177.28,31.68 -177.28,70.88 L -177.28,318.72 -543.04,9.92
 		C -556.8,0.32 -574.08,1.92 -586.88,1.92 -638.72,1.92 -638.56,48.32 -638.56,60.16 L -638.56,757.76
 		C -638.56,767.68 -638.72,815.84 -586.88,815.84 -574.08,815.84 -556.8,817.44 -543.04,807.84 L -177.28,499.04
 		 -177.28,744.8 C -177.28,784 -145.6,815.84 -106.4,815.84 L 0,815.84 C 39.2,815.84 71.04,784 71.04,744.8
 		L 71.04,70.88 C 71.04,31.683 39.2,0 0,0 z"
                                       Fill="LightGray" RenderTransformOrigin="0.5,0.5">
-                                    <Path.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-                                            <SkewTransform />
-                                            <RotateTransform />
-                                            <TranslateTransform />
-                                        </TransformGroup>
-                                    </Path.RenderTransform>
-                                </Path>
-                            </Grid>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                                        <Path.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
+                                                <SkewTransform />
+                                                <RotateTransform />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <volumeControl:Button ShowVolumeToolBar="False" Mute="{Binding Path=Mute, Mode=OneWayToSource}" VerticalAlignment="Center"/>
+                    <volumeControl:Slider Volume="{Binding Path=Volume, Mode=OneWayToSource}" Width="100" Margin="10"/>
+                </StackPanel>
 
             </Grid>
         </Grid>
-        </Grid>
+    </Grid>
 </UserControl>

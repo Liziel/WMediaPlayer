@@ -170,10 +170,12 @@ namespace SidePlayer.MediasPlayer.Audio
             AlbumCover = track.Album?.Cover;
 
             if (_track.Artists.Count > 0)
-            CreateArtistBand(track);
+                CreateArtistBand(track);
             MediaName = track.Name;
 
+            _tick.Tick -= OnTick;
             _tick.Tick += OnTick;
+
             AccessAlbum = new UiCommand(o =>
             {
                 Dispatch("Loader: Call(My Musics)");

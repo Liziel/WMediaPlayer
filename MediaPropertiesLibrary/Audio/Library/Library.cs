@@ -13,10 +13,7 @@ using PluginLibrary;
 using File = TagLib.File;
 
 namespace MediaPropertiesLibrary.Audio.Library
-{ 
-
-    public delegate void OnTracksActualized();
-
+{
     [Serializable]
     public class TrackSerializer
     {
@@ -29,11 +26,11 @@ namespace MediaPropertiesLibrary.Audio.Library
     {
         #region Serialization
 
-        private static string AudioLibraryLocation => AbstractPathLibrary.LibrariesLocation + "/SavedAudioLibrary.xml";
+        private static string AudioLibraryLocation => Locations.Libraries + "/SavedAudioLibrary.xml";
 
         private List<TrackSerializer> _useForTrackDeserializer;
 
-        [XmlArray("Tracks", Order = 2)]
+        [XmlArray("Songs", Order = 2)]
         public List<TrackSerializer> SerializableTracks
         {
             get
@@ -59,13 +56,13 @@ namespace MediaPropertiesLibrary.Audio.Library
 
         #endregion
 
-        #region Library Tracks Artists & Albums
+        #region Library Songs Artists & Albums
 
         private ObservableCollection<Track>             _tracks = null;
         private readonly ObservableCollection<Album>    _albums = new ObservableCollection<Album>();
         private readonly ObservableCollection<Artist>   _artists = new ObservableCollection<Artist>();
 
-        public static ObservableCollection<Track> Tracks
+        public static ObservableCollection<Track> Songs
         {
             get
             {
@@ -98,9 +95,9 @@ namespace MediaPropertiesLibrary.Audio.Library
             }
         }
 
-        public static event OnTracksActualized OnTracksActualized;
         private static void OnTracksLoaded()
         {
+
             Application.Current.Dispatcher.Invoke(
             delegate
             {
@@ -114,7 +111,6 @@ namespace MediaPropertiesLibrary.Audio.Library
                 using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.Truncate))
                     new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
                 Instance._working = false;
-                OnTracksActualized?.Invoke();
             }, DispatcherPriority.DataBind);
         }
 
@@ -126,14 +122,21 @@ namespace MediaPropertiesLibrary.Audio.Library
         private static Library CreateInstance()
         {
             Library instance;
-            Stream audioLibraryStream;
-            using (audioLibraryStream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
-                instance = (Library)
-                new XmlSerializer(typeof(Library)).Deserialize(audioLibraryStream);
+            try
+            {
+                using (var stream = new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate))
+                    instance = (Library)
+                        new XmlSerializer(typeof(Library)).Deserialize(stream);
+            }
+            catch (Exception)
+            {
+                using (var stream = new FileStream(AudioLibraryLocation, FileMode.Open))
+                    instance = (Library)
+                        new XmlSerializer(typeof(Library)).Deserialize(stream);
+            }
             instance._tracks = new ObservableCollection<Track>();
             foreach (var trackSerializer in instance._useForTrackDeserializer.Where(trackSerializer => System.IO.File.Exists(trackSerializer.Track.Path)))
             {
-                instance._tracks.Add(trackSerializer.Track);
                 var album = instance._albums.FirstOrDefault(salbum => trackSerializer.AlbumName == salbum.Name);
                 if (album != null)
                 {
@@ -158,6 +161,7 @@ namespace MediaPropertiesLibrary.Audio.Library
                         artist.Singles.Add(trackSerializer.Track);
                         trackSerializer.Track.Artists.Add(artist);
                     }
+                instance._tracks.Add(trackSerializer.Track);
             }
             foreach (var album in instance._albums.Where(album => album.Tracks.Count == 0).ToList())
                 instance._albums.Remove(album);
@@ -301,38 +305,6 @@ namespace MediaPropertiesLibrary.Audio.Library
         }
 
         #endregion
-
-        #region Query
-
-        private void InstanciedQuery()
-        {
-        }
-
-        public static void Query()
-        {
-            Instance.InstanciedQuery();
-        }
-
-        public static Track SingleQueryOnTrack(Predicate<Track> predicate)
-        {
-            return Instance._tracks.FirstOrDefault(o => predicate(o));
-        }
-
-        public static Album SingleQueryOnAlbum(Predicate<Album> predicate)
-        {
-            return Instance._albums.FirstOrDefault(o => predicate(o));
-        }
-        #endregion
-
-        public static IEnumerable<Track> QueryOnTrack(Predicate<Track> predicate)
-        {
-            return Instance._tracks.Where(o => predicate(o));
-        }
-
-        public static IEnumerable<Artist> QueryOnArtist(Func<Artist, bool> func)
-        {
-            return Instance._artists.Where(func);
-        }
 
         public static void Save()
         {

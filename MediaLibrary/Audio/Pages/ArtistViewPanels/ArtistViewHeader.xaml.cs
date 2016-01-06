@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,7 +28,7 @@ namespace MediaLibrary.Audio.Pages.ArtistViewPanels
             {
                 if (Artist == null) return;
                 if (Artist.State == MediaState.Paused) Dispatch("Play");
-                else Dispatch("Multiple Track Selected For Play", Library.QueryOnTrack(track => track.Artists.Contains(Artist)), 0);
+                else Dispatch("Multiple Track Selected For Play", Library.Songs.Where(track => track.Artists.Contains(Artist)), 0);
             });
             PauseButton.Command = new UiCommand(o => Dispatch("Pause"));
         }

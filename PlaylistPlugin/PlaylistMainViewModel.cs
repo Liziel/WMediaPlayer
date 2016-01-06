@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition.Primitives;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using DispatcherLibrary;
 using PlaylistPlugin.Annotations;
 using PlaylistPlugin.ChildsViews;
 using PlaylistPlugin.Models;
-using PluginLibrary;
-using System.ComponentModel.Composition;
 using static DispatcherLibrary.Dispatcher;
 
 namespace PlaylistPlugin
@@ -17,8 +13,8 @@ namespace PlaylistPlugin
     {
         #region Childs Views
 
-        private Listener _playlistView;
-        public Listener PlaylistView
+        private object _playlistView;
+        public object PlaylistView
         {
             get { return _playlistView; }
             set
@@ -32,9 +28,6 @@ namespace PlaylistPlugin
         public SavedPlaylistsViewModel SavedPlaylists { get; } = new SavedPlaylistsViewModel();
         [ForwardDispatch]
         public CurrentPlaylistViewModel CurrentPlaylist { get; } = new CurrentPlaylistViewModel();
-        [ForwardDispatch]
-        public object PlaylistDisplay { get; } = null;
-
 
         #endregion
 
@@ -53,13 +46,19 @@ namespace PlaylistPlugin
         public PlaylistMainViewModel()
         {
             AddEventListener(this);
-            ViewInQueue();
+            Dispatch("Playlist Plugin: View In Queue");
         }
 
         [EventHook("Playlist Plugin: View In Queue")]
         public void ViewInQueue()
         {
             PlaylistView = CurrentPlaylist;
+        }
+
+        [EventHook("Playlist Plugin: View Playlist")]
+        public void OnPlaylistView(Playlist p)
+        {
+            PlaylistView = new PlaylistView {DataContext = new PlaylistViewModel {Playlist = p} };
         }
 
     }

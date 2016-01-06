@@ -11,7 +11,7 @@
         <local:SidePluginLoaderViewModel />
     </UserControl.DataContext>
 
-    <ItemsControl ItemsSource="{Binding Path=PluginLoaders}" Background="#222222">
+    <ItemsControl ItemsSource="{Binding Path=PluginLoaders}" Background="#1C1C1F">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type local:PluginLoader}">
                 <Button Command="{Binding Path=OnSelect}" x:Name="ControlButton">

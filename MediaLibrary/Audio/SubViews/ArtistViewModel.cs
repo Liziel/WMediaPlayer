@@ -55,7 +55,7 @@ namespace MediaLibrary.Audio.SubViews
 
         #endregion
 
-        public UiCommand PlayArtist { get; } = new UiCommand(o => Dispatcher.Dispatch("Multiple Track Selected For Play", Library.QueryOnTrack(track => track.Artists.Contains(o)), 0));
+        public UiCommand PlayArtist { get; } = new UiCommand(o => Dispatcher.Dispatch("Multiple Track Selected For Play", Library.Songs.Where(track => track.Artists.Contains(o)), 0));
         public UiCommand SelectArtist { get; } = new UiCommand(o => Dispatcher.Dispatch("AudioLibrary: View Artist", o));
 
     }

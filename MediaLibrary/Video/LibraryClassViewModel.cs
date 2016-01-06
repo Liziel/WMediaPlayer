@@ -126,7 +126,7 @@ namespace MediaLibrary.Video
                 new TabItem
                 {
                     Selected = true,
-                    Name = "Tracks",
+                    Name = "Videos",
                     OnSelected = new UiCommand(delegate { SelectTab(0); })
                 },
                 new TabItem

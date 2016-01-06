@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DispatcherLibrary
 {
@@ -41,6 +42,11 @@ namespace DispatcherLibrary
         public static void Dispatch(Listener target, string _event, params object[] fwdparams)
         {
             target.DispatchInternal(_event, fwdparams);
+        }
+
+        public static IEnumerable<object> Request(string _event, params object[] fwdparams)
+        {
+            return Instance._eventsConsummers.SelectMany(consumer => consumer.RequestInternal(_event, fwdparams));
         }
 
     }

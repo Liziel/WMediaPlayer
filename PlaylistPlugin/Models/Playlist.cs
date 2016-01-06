@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using MediaPropertiesLibrary;
@@ -7,6 +8,13 @@ using MediaPropertiesLibrary.Audio.Library;
 
 namespace PlaylistPlugin.Models
 {
+    internal delegate void PlaylistStateChanged(Playlist sender, PlaylistState state);
+
+    public enum PlaylistState
+    {
+        Playing, InPlace, Stopped
+    }
+
     [Serializable]
     public class Playlist
     {
@@ -57,9 +65,9 @@ namespace PlaylistPlugin.Models
                 set
                 {
                     Track =
-                        (TrackDefinition) Library.SingleQueryOnTrack(
+                        (TrackDefinition) Library.Songs.FirstOrDefault(
                             track => track.MediaLibraryKey == value) ??
-                        MediaPropertiesLibrary.Video.Library.Library.SingleQueryOnTrack(
+                        MediaPropertiesLibrary.Video.Library.Library.Videos.First(
                             track => track.MediaLibraryKey == value);
                 }
             }
@@ -72,11 +80,12 @@ namespace PlaylistPlugin.Models
         #region Playlist properties
 
         private string _name = "";
-        private List<Member> _tracks;
+        private ObservableCollection<Member> _tracks;
         private TimeSpan _duration = TimeSpan.Zero;
+        private PlaylistState _playlistState = PlaylistState.Stopped;
 
         [XmlIgnore]
-        public List<Member> Tracks => _tracks ?? (_tracks = new List<Member>());
+        public ObservableCollection<Member> Tracks => _tracks ?? (_tracks = new ObservableCollection<Member>());
 
         [XmlIgnore]
         public TimeSpan Duration
@@ -89,7 +98,7 @@ namespace PlaylistPlugin.Models
             }
         }
 
-        [XmlIgnore]
+        [XmlElement("Name")]
         public string Name
         {
             get { return _name; }
@@ -109,10 +118,29 @@ namespace PlaylistPlugin.Models
 
 
         [XmlElement("Tracks")]
-        public List<Member> TracksSerial
+        public ObservableCollection<Member> TracksSerial
         {
             get { return _tracks; }
             set { _tracks = value; }
+        }
+
+
+        [XmlIgnore]
+        internal PlaylistState PlaylistState
+        {
+            get { return _playlistState; }
+            set
+            {
+                _playlistState = value;
+                StateChanged(this, value);
+            }
+        }
+
+        internal static event PlaylistStateChanged PlaylistStateChanged;
+
+        private static void StateChanged(Playlist sender, PlaylistState state)
+        {
+            PlaylistStateChanged?.Invoke(sender, state);
         }
 
         #endregion

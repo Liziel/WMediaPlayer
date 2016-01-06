@@ -1,46 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Threading;
+using System.Windows.Data;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
+using MediaPropertiesLibrary;
 using MediaPropertiesLibrary.Video;
-using WPFUiLibrary.Utils;
+using static DispatcherLibrary.Dispatcher;
+using WPFUiLibrary.UserControls.MediaTemplates.Models;
 
 namespace MediaLibrary.Video.SubViews
 {
     public class VideoTrackViewModel : Listener, INotifyPropertyChanged
     {
-        #region Track Access and Constructor
+        private readonly CollectionViewSource _trackCollectionView = new CollectionViewSource();
+        public ListCollectionView TracksView => _trackCollectionView.View as ListCollectionView;
 
-        private List<Track> _tracksAccess = null;
-        public List<Track> TracksAccess => _tracksAccess;
+        #region Track Access and Constructor
 
         public VideoTrackViewModel()
         {
-            MediaPropertiesLibrary.Video.Library.Library.TracksLoaded += () =>
+            _trackCollectionView.Source = MediaPropertiesLibrary.Video.Library.Library.Videos;
+            TracksView.Refresh();
+            OnPropertyChanged(nameof(TracksView));
+
+            PlayVideoTrack = delegate(Track track)
             {
-                _tracksAccess = MediaPropertiesLibrary.Video.Library.Library.Tracks;
-                Application.Current.Dispatcher.BeginInvoke(
-                    new Action(delegate { OnPropertyChanged(nameof(TracksAccess)); }), DispatcherPriority.DataBind);
+                Dispatch("Multiple Track Selected For Play",
+                    TracksView.Cast<TrackDefinition>(),
+                    TracksView.Cast<TrackDefinition>().ToList().FindIndex(o => o == track));
             };
-            _tracksAccess = MediaPropertiesLibrary.Video.Library.Library.Tracks;
-            OnPropertyChanged(nameof(TracksAccess));
-            PlayTrack = new UiCommand(o => Play(o as Track));
         }
+
+        public PlayVideoTrack PlayVideoTrack { get; }
 
         #endregion
-
-        private UiCommand _playTrack = null;
-        public UiCommand PlayTrack { get { return _playTrack; } set { _playTrack = value; OnPropertyChanged(nameof(PlayTrack)); } }
-
-        void Play(Track track)
-        {
-            DispatcherLibrary.Dispatcher.Dispatch("Video Track Selected", track);
-            DispatcherLibrary.Dispatcher.Dispatch("Play");
-        }
 
         #region Notifier Properties
 

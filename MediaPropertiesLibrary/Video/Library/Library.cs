@@ -1,132 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Media.Imaging;
+using System.Windows;
 using System.Xml.Serialization;
 using PluginLibrary;
+using TagLib.Matroska;
+using File = System.IO.File;
 
 namespace MediaPropertiesLibrary.Video.Library
 {
-    public delegate void OnAllTracksLoaded();
+    public class TrackSerializer
+    {
+        public Track Track { get; set; }
+        public string SerieName { get; set; }
+    }
 
     public class Library
     {
-        #region Tracks Loaded Event
+        #region Serializable
 
-        public static event OnAllTracksLoaded TracksLoaded;
+        private static string VideoLibraryLocation => Locations.Libraries + "/SavedVideoLibrary.xml";
+
+        private List<TrackSerializer> _useForTrackDeserializer;
+
+        [XmlElement("LastSubtitleTag", Order = 0)]
+        public long LastSubtitleTag { get; set; }
+
+        [XmlArray("Videos", Order = 2)]
+        public List<TrackSerializer> SerializableTracks
+        {
+            get
+            {
+                if (_tracks == null)
+                    return _useForTrackDeserializer = new List<TrackSerializer>();
+                return _tracks.Select(track => new TrackSerializer
+                {
+                    Track = track,
+                    SerieName = track.Serie?.Name
+                }).ToList();
+            }
+        }
+
+        [XmlArray("Series", Order = 1)]
+        // ReSharper disable once ConvertToAutoPropertyWhenPossible
+        public ObservableCollection<Serie> SerializableSeries => _series;
+
+        #endregion
+
+        #region Videos & Series
+
+        private ObservableCollection<Track> _tracks = null;
+        private readonly ObservableCollection<Serie> _series = new ObservableCollection<Serie>(new List<Serie>());
+
+        public static ObservableCollection<Track> Videos { get { lock (Instance._tracks) return Instance._tracks; } }
+        public static ObservableCollection<Serie> Series { get { lock (Instance._series) return Instance._series; } }
+
+        #endregion
+
         private static void OnTracksLoaded()
         {
-            TracksLoaded?.Invoke();
-        }
-
-        #endregion
-
-        #region Tracks & Series
-
-        private readonly List<Track> _tracks = new List<Track>();
-        private readonly List<Serie> _series = new List<Serie>();
-
-        public static List<Track> Tracks
-        {
-            get { lock (Instance._tracks) return Instance._tracks; }
-        }
-
-        public static List<Serie> Series
-        {
-            get { lock (Instance._series) return Instance._series; }
-        }
-
-        #endregion
-
-        #region User Defined Parts
-
-        private static List<UserTrackDefinition> CreateUserTracksDefintions(string userTrackDefinitionsFile)
-        {
-            Stream userTrackDefinitionsStream = null;
-            try
+            Application.Current.Dispatcher.Invoke(delegate
             {
-                using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.OpenOrCreate))
-                    return (List<UserTrackDefinition>) new XmlSerializer(typeof(List<UserTrackDefinition>)).Deserialize(userTrackDefinitionsStream);
-            }
-            catch (IOException)
-            {
-                using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.Open))
-                    return (List<UserTrackDefinition>) new XmlSerializer(typeof(List<UserTrackDefinition>)).Deserialize(userTrackDefinitionsStream);
-            }
+                if (Videos == null) return;
+                foreach (var workingTrack in Instance._workingTracks)
+                    Videos.Add(workingTrack);
+                Instance._working = false;
+
+                using (var stream = new FileStream(VideoLibraryLocation, FileMode.Truncate))
+                    new XmlSerializer(typeof(Library)).Serialize(stream, Instance);
+            });
         }
-
-        private static void SaveUserTracksDefinitions(string userTrackDefinitionsFile)
-        {
-            Stream userTrackDefinitionsStream = null;
-            using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.OpenOrCreate))
-                new XmlSerializer(typeof (List<UserTrackDefinition>)).Serialize(userTrackDefinitionsStream,
-                Instance._userTracksDefinitions);
-        }
-
-        private readonly List<UserTrackDefinition> _userTracksDefinitions
-            =
-            CreateUserTracksDefintions(AbstractPathLibrary.LibrariesLocation + "/UserVideoTracksDefinitions.xml");
-
-        private static List<UserSerieDefinition> CreateUserSeriesDefintions(string userTrackDefinitionsFile)
-        {
-            Stream userTrackDefinitionsStream = null;
-            try
-            {
-                using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.OpenOrCreate))
-                    return (List<UserSerieDefinition>)
-                    new XmlSerializer(typeof(List<UserSerieDefinition>)).Deserialize(userTrackDefinitionsStream);
-            }
-            catch (IOException)
-            {
-                using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.Open))
-                    return (List<UserSerieDefinition>)
-                    new XmlSerializer(typeof(List<UserSerieDefinition>)).Deserialize(userTrackDefinitionsStream);
-            }
-        }
-
-        private static void SaveUserSeriesDefinitions(string userTrackDefinitionsFile)
-        {
-            Stream userTrackDefinitionsStream = null;
-            using (userTrackDefinitionsStream = new FileStream(userTrackDefinitionsFile, FileMode.OpenOrCreate))
-                new XmlSerializer(typeof(List<UserSerieDefinition>)).Serialize(userTrackDefinitionsStream,
-                        Instance._userSeriesDefinitions);
-        }
-
-
-        private readonly List<UserSerieDefinition> _userSeriesDefinitions
-            =
-            CreateUserSeriesDefintions(AbstractPathLibrary.LibrariesLocation + "/UserVideoSeriesDefinitions.xml");
-
-        #endregion
 
         #region Initializer
 
-        private static Library Instance = new Library();
+        private static Library CreateInstance()
+        {
+            Library instance;
+            using (var stream = new FileStream(VideoLibraryLocation, FileMode.OpenOrCreate))
+                instance = (Library) new XmlSerializer(typeof (Library)).Deserialize(stream);
+            instance._tracks = new ObservableCollection<Track>();
+            foreach (
+                var trackSerializer in
+                    instance._useForTrackDeserializer.Where(
+                        trackSerializer => File.Exists(trackSerializer.Track.Path)))
+            {
+                var serie = instance._series.FirstOrDefault(s => s.Name == trackSerializer.SerieName);
+                serie?.Tracks.Add(trackSerializer.Track);
+                instance._tracks.Add(trackSerializer.Track);
+            }
+            foreach (var serie in instance._series.Where(serie => serie.Tracks.Count == 0).ToList())
+                instance._series.Remove(serie);
+            return instance;
+        }
+
+        private static readonly Library Instance = CreateInstance();
 
         private Library()
         {
         }
 
+        private readonly List<Track> _workingTracks = new List<Track>();
+        private bool _working = true;
         internal static void Initialize()
         {
-            foreach (var userSeriesDefinition in Instance._userSeriesDefinitions)
-                Instance._series.Add(new Serie
-                {
-                    Cover =
-                        string.IsNullOrEmpty(userSeriesDefinition.CoverPath)
-                            ? null
-                            : new BitmapImage(new Uri(userSeriesDefinition.CoverPath)),
-                    Name = userSeriesDefinition.Name
-                });
-            foreach (var userTracksDefinition in Instance._userTracksDefinitions)
-                Instance._tracks.Add(new Track
-                {
-                    UserTrackDefinition = userTracksDefinition,
-                    Name = userTracksDefinition.Name
-                });
             new Thread(new ThreadStart(delegate
             {
                 PathLibrary.Synchronize(new Dictionary<string, Action<List<string>, string>>
@@ -135,7 +116,6 @@ namespace MediaPropertiesLibrary.Video.Library
                     {"*.avi", Instance.OnFoundFile},
                     {"*.mkv", Instance.OnFoundFile},
                 });
-                Tracks.Remove(Tracks.Single(track => string.IsNullOrEmpty(track.Path)));
                 OnTracksLoaded();
             })).Start();
         }
@@ -151,54 +131,63 @@ namespace MediaPropertiesLibrary.Video.Library
             {
                 return;
             }
-            Serie serie = null;
-            if (!metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Album))
+            var track = _workingTracks.FirstOrDefault(t => t.Path == path) ??
+                          _tracks.FirstOrDefault(t => t.Path == path);
+            if (track == null)
             {
-                serie = _series.Find(searchedSerie => searchedSerie.Name == metaData.Tag.Album);
-                if (serie == null)
+                track = new Track
                 {
-                    var def =
-                        _userSeriesDefinitions.Find(searchedDefinition => searchedDefinition.Name == metaData.Tag.Album);
-                    lock (_series)
-                        _series.Add(
-                            serie =
-                                new Serie
-                                {
-                                    Name = metaData.Tag.Album,
-                                    Cover = def == null ? null : new BitmapImage(new Uri(def.CoverPath))
-                                });
-                }
+                    Name =
+                        !metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Title)
+                            ? metaData.Tag.Title
+                            : Path.GetFileNameWithoutExtension(path),
+
+                    Path = path,
+                    RelativePath = relativePath,
+
+                    Duration = metaData.Properties.Duration,
+                };
+                _workingTracks.Add(track);
             }
-            Track track = new Track
+
+            var hasSubtitle = false;
+            foreach (var codec in metaData.Properties.Codecs.OfType<SubtitleTrack>())
+                hasSubtitle = true;
+            if (!hasSubtitle || track.Subtitles.Any(subtitle => subtitle.Name == "encoded subtitles"))
+                return;
+            if (!Directory.Exists(Locations.DataFolder + "/subtitles"))
+                Directory.CreateDirectory(Locations.DataFolder + "/subtitles");
+            var subtitleLocation = Locations.DataFolder + "/subtitles/inner_subtitle" + LastSubtitleTag + ".srt";
+            var _process = new Process
             {
-                Name =
-                    !metaData.Tag.IsEmpty && !string.IsNullOrEmpty(metaData.Tag.Title)
-                        ? metaData.Tag.Title
-                        : Path.GetFileNameWithoutExtension(path),
-
-                Path = path,
-                RelativePath = relativePath,
-
-                Duration = metaData.Properties.Duration,
-
-                Serie = serie,
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = @"ffmpeg",
+                    Arguments = "-i \"" + track.Path + "\" -y -an -vn -threads 1 -c:s:0 srt \"" + subtitleLocation + "\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                },
             };
-            lock(_tracks)
-                _tracks.Add(track);
-            track.UserTrackDefinition =
-                _userTracksDefinitions.Find(searchedDefinition => searchedDefinition.Name == track.Name);
-            if (track.UserTrackDefinition != null && track.Serie == null)
+            LastSubtitleTag += 1;
+            _process.Exited += (sender, args) =>
             {
-                track.Serie =
-                    _series.Find(searchedDefinition => searchedDefinition.Name == track.UserTrackDefinition.Name);
-            }
+                track.Subtitles.Add(new Subtitle {Name = "encoded subtitles", Path = subtitleLocation});
+                Save();
+            };
+            _process.EnableRaisingEvents = true;
+            _process.Start();
         }
 
         #endregion
-        public static Track SingleQueryOnTrack(Predicate<Track> predicate)
+
+        public static void Save()
         {
-            return null;
+            if (Instance._working) return;
+            lock (Instance)
+                using (var audioLibraryStream = new FileStream(VideoLibraryLocation, FileMode.Truncate))
+                    new XmlSerializer(Instance.GetType()).Serialize(audioLibraryStream, Instance);
         }
+
     }
 
     [Export(typeof (IStaticRessource))]

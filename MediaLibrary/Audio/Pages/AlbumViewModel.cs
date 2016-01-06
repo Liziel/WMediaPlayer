@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using MediaLibrary.Annotations;
 using MediaPropertiesLibrary.Audio;
@@ -9,10 +12,19 @@ namespace MediaLibrary.Audio.Pages
 {
     public class AlbumViewModel : INotifyPropertyChanged
     {
+        private readonly CollectionViewSource _tracksCollectionViewSource = new CollectionViewSource();
+        public ListCollectionView TracksView => _tracksCollectionViewSource.View as ListCollectionView;
+
+        public AlbumViewModel()
+        {
+            Album = MediaPropertiesLibrary.Audio.Library.Library.Albums.FirstOrDefault();
+            _tracksCollectionViewSource.Source = Album?.Artists;
+        }
+
         public AlbumViewModel(Album album)
         {
             Album = album;
-            Tracks = album.Tracks;
+            _tracksCollectionViewSource.Source = new ObservableCollection<Track>(album.Tracks);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -34,17 +46,5 @@ namespace MediaLibrary.Audio.Pages
                 OnPropertyChanged(nameof(Album));
             }
         }
-
-        private List<Track> _tracks;
-
-        public List<Track> Tracks
-        {
-            get { return _tracks; }
-            set
-            {
-                _tracks = value;
-                OnPropertyChanged(nameof(Tracks));
-            }
-        } 
     }
 }

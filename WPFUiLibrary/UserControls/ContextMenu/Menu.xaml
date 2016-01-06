@@ -4,44 +4,109 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WPFUiLibrary.UserControls.ContextMenu"
+             xmlns:menuItems="clr-namespace:WPFUiLibrary.UserControls.ContextMenu.MenuItems"
+             Name="UserControl"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <menuItems:CustomMenuAssociator x:Key="CustomMenuAssociator"/>
     </UserControl.Resources>
     <Canvas>
         <Path Data="M 10 0 L 20 15 0 15 z" Canvas.Left="-10" Fill="#3E3E40"/>
-        <Border Background="#3E3E40" CornerRadius="10" Width="300" Canvas.Left="-150" Canvas.Top="15" Name="MenuContainer">
+        <Border Background="#3E3E40" Width="300" Canvas.Left="-150" Canvas.Top="15" Name="MenuContainer">
             <d:Border.DataContext>
                 <local:MenuModel/>
             </d:Border.DataContext>
             <Border.Effect>
                 <DropShadowEffect  BlurRadius="15" Direction="-90" RenderingBias="Performance" ShadowDepth="2"/>
             </Border.Effect>
-            <ItemsControl ItemsSource="{Binding Path=MenuItems}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type MenuItem}">
-                        <Border BorderBrush="#27282B" BorderThickness="0 2 0 0">
-                            <Button Command="{Binding Path=Command}">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <ControlTemplate.Resources>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Foreground" Value="#ADAEB3" />
-                                                <Setter Property="FontFamily" Value="Segoe Ui" />
-                                                <Setter Property="FontSize" Value="16" />
-                                                <Setter Property="Margin" Value="10" />
-                                            </Style>
-                                        </ControlTemplate.Resources>
-                                        <Grid>
-                                            <Rectangle Fill="#00000000"></Rectangle>
-                                            <TextBlock Text="{Binding Path=Name}" x:Name="CommandName" />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+
+            <StackPanel>
+                <Border Background="#2E2F33">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=MenuTitle}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Button Command="{Binding Path=Precedent}" HorizontalAlignment="Left" Width="32">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Grid>
+                                        <Rectangle Fill="#2E2F33"></Rectangle>
+                                        <Path Data="M 0 0 L 0 15 -12 7.5 z" Fill="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <TextBlock Text="{Binding Path=MenuTitle}"
+                                           Foreground="#ADAEB3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           FontFamily="/WPFUiLibrary;component/Ressources/Fonts/montserrat/#Montserrat Light"
+                                           FontSize="16" Margin="10" />
+                    </Grid>
+                </Border>
+
+                <ItemsControl ItemsSource="{Binding Path=MenuItems}">
+                    <ItemsControl.Resources>
+                        
+                        <DataTemplate DataType="{x:Type menuItems:UserControlItem}">
+                            <Border BorderBrush="#27282B" BorderThickness="0 2 0 0">
+                                <ContentPresenter>
+                                    <ContentPresenter.Content>
+                                        <MultiBinding Converter="{StaticResource CustomMenuAssociator}">
+                                            <Binding Path="UserControl"/>
+                                            <Binding ElementName="UserControl"/>
+                                        </MultiBinding>
+                                    </ContentPresenter.Content>
+                                </ContentPresenter>
+                            </Border>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="{x:Type menuItems:CommandItem}">
+                            <Border BorderBrush="#27282B" BorderThickness="0 2 0 0">
+                                <Button Command="{Binding Path=Command}" CommandParameter="{Binding ElementName=UserControl}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Rectangle Fill="#00000000"></Rectangle>
+                                                <TextBlock Text="{Binding Path=Name}" x:Name="CommandName"
+                                                           Foreground="#ADAEB3"
+                                                           FontFamily="/WPFUiLibrary;component/Ressources/Fonts/montserrat/#Montserrat Light"
+                                                           FontSize="16" Margin="10" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Border>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="{x:Type menuItems:ContentLoaderItem}">
+                            <Border BorderBrush="#27282B" BorderThickness="0 2 0 0">
+                                <Button Command="{Binding Path=Command}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Rectangle Fill="#00000000"></Rectangle>
+                                                <TextBlock Text="{Binding Path=Name}" x:Name="CommandName"
+                                                           Foreground="#ADAEB3"
+                                                           FontFamily="/WPFUiLibrary;component/Ressources/Fonts/montserrat/#Montserrat Light"
+                                                           FontSize="16" Margin="10" />
+                                                <Path Data="M 0 0 L 0 15 9 7.5 z" Fill="Black"
+                                                      VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                      Margin="0 0 10 0" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Border>
+                        </DataTemplate>
+
+                    </ItemsControl.Resources>
+                </ItemsControl>
+                </StackPanel>
         </Border>
     </Canvas>
 </UserControl>

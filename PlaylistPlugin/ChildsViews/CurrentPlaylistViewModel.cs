@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,6 +18,16 @@ namespace PlaylistPlugin.ChildsViews
     internal enum Loop
     {
         None, One, All
+    }
+
+    static class IndexFinder
+    {
+        public static int FindIndex<T>(this ObservableCollection<T> collection, Predicate<T> predicate)
+        {
+            for (int i = 0; i < collection.Count; i++)
+                if (predicate(collection[i])) return i;
+            return -1;
+        }
     }
 
     public sealed class CurrentPlaylistViewModel : Listener, INotifyPropertyChanged
@@ -37,7 +48,7 @@ namespace PlaylistPlugin.ChildsViews
 
         private bool _shuffled = false;
         private List<Playlist.Member> _shuffledList;
-        private List<Playlist.Member> ShuffledList => _shuffledList ?? (_shuffledList = Current?.Tracks.Shuffle());
+        private List<Playlist.Member> ShuffledList => _shuffledList ?? (_shuffledList = Current?.Tracks.Shuffle().ToList());
 
         [EventHook("Shuffle Playlist")]
         public void OnShuffle()
@@ -161,10 +172,16 @@ namespace PlaylistPlugin.ChildsViews
 
         public UiCommand LaunchTrack { get; set; }
 
-        [EventHook("Set Current Playlist")]
+        [EventHook("Playlist Plugin: Set Playlist")]
         public void SetCurrentPlaylist(Playlist playlist)
         {
             Current = playlist;
+            PlayOffset = 0;
+            if (_shuffled)
+                PlayOffset = ShuffledList.FindIndex(member => member.Position == Current.Tracks[PlayOffset].Position);
+            Current = Current;
+            Dispatch("Play", CurrentMedia);
+            RefreshDisplay();
         }
 
         [EventHook("Track Selected")]
@@ -221,7 +238,7 @@ namespace PlaylistPlugin.ChildsViews
             else if (Current.Tracks.Count - PlayOffset < 50)
                 _currentTracks.Source = !_shuffled ? Current.Tracks.Skip(Math.Max(0, Current.Tracks.Count - 50)) : ShuffledList.Skip(Math.Max(0, Current.Tracks.Count - 50));
             else
-                _currentTracks.Source = !_shuffled ? Current.Tracks : ShuffledList;
+                _currentTracks.Source = !_shuffled ? (IEnumerable<Playlist.Member>)Current.Tracks : ShuffledList;
             CurrentTracks.Refresh();
             OnPropertyChanged(nameof(CurrentTracks));
         }

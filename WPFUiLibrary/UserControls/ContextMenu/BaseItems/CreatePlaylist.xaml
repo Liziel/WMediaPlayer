@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.ContextMenu.BaseItems.CreatePlaylist"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"> 
+    <StackPanel>
+        <Grid Margin="5">
+            <Border CornerRadius="5" Background="White" x:Name="Mask"/>
+            <TextBox FontSize="22" FontFamily="/WPFUiLibrary;component/Ressources/Fonts/montserrat/#Montserrat Ultra Light" KeyDown="EscapeCatch"
+                     x:Name="TextBox">
+                <TextBox.OpacityMask>
+                    <VisualBrush Visual="{Binding ElementName=Mask}"></VisualBrush>
+                </TextBox.OpacityMask>
+            </TextBox>
+        </Grid>
+        <Button Margin="30 0 30 0" x:Name="Button">
+            <Button.Template>
+                <ControlTemplate>
+                    <Border Background="DodgerBlue" CornerRadius="20" Margin="10">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Opacity" Value="0.8"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Margin="0 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Path Data="M 0 12  L 12 12 12 0 18 0 18 12 30 12 30 18 18 18 18 30 12 30 12 18 0 18 z" StrokeLineJoin="Round" Fill="#DFE0E6" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                            <TextBlock Text="CREATE PLAYLIST" x:Name="CommandName"
+                                                           Foreground="#DFE0E6"
+                                                           FontFamily="/WPFUiLibrary;component/Ressources/Fonts/montserrat/#Montserrat Light"
+                                                           FontSize="16" Margin="9" />
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
+    </StackPanel>
+</UserControl>
+
+
+

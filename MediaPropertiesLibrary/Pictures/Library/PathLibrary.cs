@@ -8,15 +8,29 @@ namespace MediaPropertiesLibrary.Pictures.Library
     {
         #region Location
 
-        private static string AudioLibraryLocation => LibrariesLocation + "/picturesLibrary.xml";
+        private static string PictureLibraryLocation => LibrariesLocation + "/picturesLibrary.xml";
 
         #endregion
 
         #region Singleton
 
         private static readonly PathLibrary _instance = new PathLibrary();
+
         private PathLibrary()
-        { BaseLoad(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate)); }
+        {
+            try
+            {
+                using (var stream = new FileStream(PictureLibraryLocation, FileMode.OpenOrCreate))
+                    BaseLoad(stream);
+            }
+            catch (Exception)
+            {
+                _paths = new List<string> { Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) };
+            }
+
+            using (var stream = new FileStream(PictureLibraryLocation, FileMode.OpenOrCreate))
+                BaseSave(stream);
+        }
 
         #endregion
 
@@ -27,7 +41,8 @@ namespace MediaPropertiesLibrary.Pictures.Library
 
         public static void Save()
         {
-            _instance.BaseSave(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate));
+            using (var stream = new FileStream(PictureLibraryLocation, FileMode.OpenOrCreate))
+                _instance.BaseSave(stream);
         }
 
         public static void Synchronize(Dictionary<string, Action<List<string>, string>> onSynchronizedFile)

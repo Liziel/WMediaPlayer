@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="PlaylistPlugin.ChildsViews.PlaylistView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:listView="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.ListView;assembly=WPFUiLibrary"
+             xmlns:modelGenerator="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.ModelGenerator;assembly=WPFUiLibrary"
+             xmlns:models="clr-namespace:PlaylistPlugin.Models"
+             xmlns:playlistItems="clr-namespace:PlaylistPlugin.ChildsViews.PlaylistItems"
+             xmlns:childsViews="clr-namespace:PlaylistPlugin.ChildsViews"
+             mc:Ignorable="d" Name="UserControl" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <d:UserControl.DataContext>
+        <childsViews:PlaylistViewModel>
+            <childsViews:PlaylistViewModel.Playlist>
+                <models:Playlist Name="Playlist"/>
+            </childsViews:PlaylistViewModel.Playlist>
+        </childsViews:PlaylistViewModel>
+    </d:UserControl.DataContext>
+    <UserControl.Resources>
+        <playlistItems:PlaylistAccessTracks x:Key="PlaylistAccessTracks"></playlistItems:PlaylistAccessTracks>
+        <playlistItems:PlaylistAudioLaunchGenerator x:Key="PlaylistAudioLaunchGenerator"/>
+        <playlistItems:PlaylistVideoLaunchGenerator x:Key="PlaylistVideoLaunchGenerator"/>
+        <modelGenerator:GenerateListContext x:Key="GenerateListContext"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <playlistItems:PlaylistHeader Grid.Row="0" DataContext="{Binding Path=HeaderModel}"/>
+        <listView:ListView Grid.Row="2">
+            <listView:ListView.MediaPresentationColumns>
+                <GridLength>0.5*</GridLength>
+                <GridLength>2.5*</GridLength>
+                <GridLength>0*</GridLength>
+                <GridLength>2.5*</GridLength>
+                <GridLength>0.5*</GridLength>
+                <GridLength>0.5*</GridLength>
+            </listView:ListView.MediaPresentationColumns>
+            <listView:ListView.DataContext>
+                <MultiBinding Converter="{StaticResource GenerateListContext}">
+                    <Binding ElementName="UserControl" Path="DataContext.PlaylistView"
+                             Converter="{StaticResource PlaylistAccessTracks}" />
+                    <Binding ElementName="UserControl" Path="DataContext.Playlist"
+                             Converter="{StaticResource PlaylistAudioLaunchGenerator}" />
+                    <Binding ElementName="UserControl" Path="DataContext.Playlist"
+                             Converter="{StaticResource PlaylistVideoLaunchGenerator}">
+                    </Binding>
+                </MultiBinding>
+            </listView:ListView.DataContext>
+        </listView:ListView>
+        </Grid>
+</UserControl>

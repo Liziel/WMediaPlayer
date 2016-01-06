@@ -36,15 +36,15 @@ L 11.04,11.68 C 15.04,10.88 18.08,7.2 18.08,3.04 18.08,-1.28 15.04,-4.96 11.04,-
         </StackPanel>
         <Canvas x:Name="SliderContainer" Visibility="Collapsed" Grid.ZIndex="1">
             <Path Fill="#2E2F33" Data="M 0,12.5 L 12.5,0 25,12.5 z" RenderTransformOrigin="0.5,0.5">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform />
-                        <SkewTransform />
-                        <RotateTransform />
-                        <TranslateTransform Y="25" />
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
+            <Path.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform Y="25" />
+                </TransformGroup>
+            </Path.RenderTransform>
+        </Path>
             <Border Background="#2E2F33" Height="20" Width="150" CornerRadius="4" HorizontalAlignment="Left"
                     RenderTransformOrigin="0.5,0.5" StackPanel.ZIndex="1">
                 <Border.RenderTransform>

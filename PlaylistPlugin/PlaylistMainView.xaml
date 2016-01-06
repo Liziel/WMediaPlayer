@@ -8,6 +8,7 @@
              xmlns:video="clr-namespace:MediaPropertiesLibrary.Video;assembly=MediaPropertiesLibrary"
              xmlns:subViews="clr-namespace:PlaylistPlugin.SubViews"
              xmlns:childsViews="clr-namespace:PlaylistPlugin.ChildsViews"
+             xmlns:models="clr-namespace:PlaylistPlugin.Models"
              mc:Ignorable="d" d:DataContext="{local:PlaylistMainViewModel}"
              d:DesignHeight="1080" d:DesignWidth="1620">
     <UserControl.DataContext>
@@ -47,6 +48,7 @@
                     <DataTemplate DataType="{x:Type childsViews:CurrentPlaylistViewModel}">
                         <childsViews:CurrentPlaylistView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type models:Playlist}"></DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
 

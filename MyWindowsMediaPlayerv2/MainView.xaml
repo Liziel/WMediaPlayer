@@ -6,8 +6,8 @@
         xmlns:viewModel="clr-namespace:MyWindowsMediaPlayerv2.ViewModel"
         xmlns:popupManager="clr-namespace:WPFUiLibrary.UserControls.PopupManager;assembly=WPFUiLibrary"
         mc:Ignorable="d"
-        Title="{Binding WindowName}" Height="800" Width="800" Background="Black"
-        Icon="TaskbarIcons/icon.png"
+        Title="{Binding WindowName}" Height="800" Width="800" Background="Black" WindowState="{Binding Path=FullScreenState, Mode=TwoWay}"
+        Icon="TaskbarIcons/icon.png" Name="Window" WindowStyle="{Binding Path=FullScreenStyle}"
         WindowStartupLocation="CenterScreen"
         >
     <WindowChrome.WindowChrome>
@@ -23,14 +23,6 @@
     <Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
-            <DataTrigger Binding="{Binding FullScreenState}" Value="True">
-                <Setter Property="WindowState" Value="Maximized" />
-                <Setter Property="WindowStyle" Value="None" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding FullScreenState}" Value="False">
-                <Setter Property="WindowState" Value="Maximized" />
-                <Setter Property="WindowStyle" Value="SingleBorderWindow" />
-            </DataTrigger>
                 <DataTrigger Binding="{Binding Path=TaskBarHidded}" Value="False">
                     <Setter Property="TaskbarItemInfo">
                         <Setter.Value>
@@ -54,38 +46,172 @@
             </Style.Triggers>
         </Style>
     </Window.Style>
-    <Border>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <Grid>
+        <popupManager:PopUpManagerView Panel.ZIndex="1"/>
+        <Border>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Border Height="40" Background="#1C1C1F">
-                <Grid Margin="2">
-                    <Image Source="TaskbarIcons/icon.png" HorizontalAlignment="Left"/>
-                    <TextBlock Text="{Binding Path=WindowName}"
-                           Foreground="#DFE0E6"
-                           FontFamily="/MyWindowsMediaPlayerv2;component/Fonts/montserrat/#Montserrat Semi Bold"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                           />
-                </Grid>
-            </Border>
+                <Border Height="20" Background="#1C1C1F">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=Window, Path=WindowStyle}" Value="None">
+                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Image Source="TaskbarIcons/icon.png" HorizontalAlignment="Left" />
+                        <TextBlock Text="{Binding Path=WindowName}"
+                                   Foreground="#DFE0E6"
+                                   FontFamily="/MyWindowsMediaPlayerv2;component/Fonts/montserrat/#Montserrat Semi Bold"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Height="25">
+                            <Button Width="40" WindowChrome.IsHitTestVisibleInChrome="True" Name="Minimize">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Grid Name="ButtonContainer">
+                                            <Rectangle>
+                                                <Rectangle.Style>
+                                                    <Style TargetType="Rectangle">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Fill" Value="#333333"></Setter>
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="False">
+                                                                <Setter Property="Fill" Value="#00000000"></Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                            </Rectangle>
+                                            <Path Data="M 0 0 L 15 0  15 3  0 3 z" Fill="LightGray"
+                                                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Width="40" WindowChrome.IsHitTestVisibleInChrome="True" Name="MaximizeWindow">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Window, Path=WindowState}" Value="Maximized">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Grid Name="ButtonContainer">
+                                            <Rectangle>
+                                                <Rectangle.Style>
+                                                    <Style TargetType="Rectangle">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Fill" Value="#333333"></Setter>
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="False">
+                                                                <Setter Property="Fill" Value="#00000000"></Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                            </Rectangle>
+                                            <Path Data="M 0 0 L 15 0  15 3  0 3 z" Fill="LightGray"
+                                                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Width="40"  WindowChrome.IsHitTestVisibleInChrome="True" Name="RestoreWindow">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Window, Path=WindowState}" Value="Normal">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Grid Name="ButtonContainer">
+                                            <Rectangle>
+                                                <Rectangle.Style>
+                                                    <Style TargetType="Rectangle">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Fill" Value="#333333"></Setter>
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="False">
+                                                                <Setter Property="Fill" Value="#00000000"></Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                            </Rectangle>
+                                            <Path Data="M 0 0 L 15 0  15 3  0 3 z" Fill="LightGray"
+                                                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Width="40"  WindowChrome.IsHitTestVisibleInChrome="True"
+                                    Name="CloseButton" Margin="0 0 0 1">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Grid Name="ButtonContainer">
+                                            <Rectangle>
+                                                <Rectangle.Style>
+                                                    <Style TargetType="Rectangle">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ElementName=ButtonContainer, Path=IsMouseOver}" Value="True">
+                                                                <Setter Property="Fill" Value="#333333"></Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding ElementName=ButtonContainer, Path=IsMouseOver}" Value="False">
+                                                                <Setter Property="Fill" Value="#00000000" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                            </Rectangle>
+                                            <Path Data="M 0 0 L 1 0 10 9 10 10 9 10 0 1 z" Fill="#DFE0E6" Stroke="#DFE0E6"
+                                                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="6" />
+                                            <Path Data="M 9 0 L 10 0 10 1 1 10 0 10 0 9 z" Fill="#DFE0E6"
+                                                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="6" Stroke="#DFE0E6"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-            <ContentControl Grid.Row="1" Content="{Binding Path=RootElement}" Panel.ZIndex="0"/>
-            <popupManager:PopUpManagerView Grid.Row="1" Panel.ZIndex="1"/>
+                <ContentControl Grid.Row="1" Content="{Binding Path=RootElement}" Panel.ZIndex="0" />
+            </Grid>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}"
+                            Value="Maximized">
+                            <Setter Property="BorderThickness" Value="10" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}"
+                            Value="Normal">
+                            <Setter Property="BorderThickness" Value="0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
         </Grid>
-        <Border.Style>
-            <Style TargetType="Border">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}" Value="Maximized">
-                        <Setter Property="BorderThickness" Value="10"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=WindowState}" Value="Normal">
-                        <Setter Property="BorderThickness" Value="0"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-    </Border>
 </Window>

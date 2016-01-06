@@ -48,9 +48,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\EqualityCompararer.cs" />
     <Compile Include="Converters\CountToRow.cs" />
     <Compile Include="Converters\NegatingConverter.cs" />
     <Compile Include="Converters\WidthToColumnConverter.cs" />
+    <Compile Include="Resources\Fonts\BatchLinQ.cs" />
+    <Compile Include="Resources\RecursiveLinq.cs" />
+    <Compile Include="UserControls\ContextMenu\BaseItems\CreatePlaylist.xaml.cs">
+      <DependentUpon>CreatePlaylist.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ContextMenu\Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
@@ -58,22 +64,86 @@
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ContextMenu\MenuItems\CommandItem.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\ContentLoaderItem.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\CustomMenuAssociator.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\IMenuClosable.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\Item.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\ItemConfigurator.cs" />
+    <Compile Include="UserControls\ContextMenu\MenuItems\UserControlItem.cs" />
     <Compile Include="UserControls\ContextMenu\MenuModel.cs" />
     <Compile Include="UserControls\ContextMenu\Overlayable.cs" />
     <Compile Include="UserControls\DependencyTools\SliderTools.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\AccessFirstImage.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessAlbum.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessAlbumFromTrack.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessArtist.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessArtistByAlbum.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessArtistFromTrack.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessFolder.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateAccessSerieFromTrack.cs" />
+    <Compile Include="UserControls\MediaTemplates\AccessConverters\GenerateArtistSongNumber.cs" />
+    <Compile Include="UserControls\MediaTemplates\GridView\AlbumGridItem.xaml.cs">
+      <DependentUpon>AlbumGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\ArtistGridItem.xaml.cs">
+      <DependentUpon>ArtistGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\AudioTrackGridItem.xaml.cs">
+      <DependentUpon>AudioTrackGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\GridView.xaml.cs">
+      <DependentUpon>GridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\ListAndHeightToRows.cs" />
+    <Compile Include="UserControls\MediaTemplates\GridView\PictureGridItem.xaml.cs">
+      <DependentUpon>PictureGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\PicturesFolderGridItem.xaml.cs">
+      <DependentUpon>PicturesFolderGridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\GridView\WidthToColumns.cs" />
+    <Compile Include="UserControls\MediaTemplates\ListView\AudioTrackListItem.xaml.cs">
+      <DependentUpon>AudioTrackListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\ListView\ListView.xaml.cs">
+      <DependentUpon>ListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\ListView\VideoTrackListItem.xaml.cs">
+      <DependentUpon>VideoTrackListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\AlbumModelGenerator.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\ArtistModelGenerator.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\GenerateListContext.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\GenerateMenuModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\AudioTrackModelGenerator.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\PicturesFolderModelGenerator.cs" />
+    <Compile Include="UserControls\MediaTemplates\ModelGenerator\VideoTrackModelGenerator.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\AudioAlbumViewModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\AudioArtistViewModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\AudioTrackViewModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\ListModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\PicturesFolderViewModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\Models\VideoTrackViewModel.cs" />
+    <Compile Include="UserControls\MediaTemplates\PlayingConverters\GenerateAlbumListening.cs" />
+    <Compile Include="UserControls\MediaTemplates\PlayingConverters\GenerateArtistListening.cs" />
+    <Compile Include="UserControls\MediaTemplates\PlayingConverters\GenerateAudioTrackListening.cs" />
+    <Compile Include="UserControls\MediaControl\Button.xaml.cs">
+      <DependentUpon>Button.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaTemplates\PlayingConverters\GenerateVideoTrackListening.cs" />
     <Compile Include="UserControls\Pages\Page.xaml.cs">
       <DependentUpon>Page.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Pages\PagesAnchorer.xaml.cs">
       <DependentUpon>PagesAnchorer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MediaControl\Button.xaml.cs">
-      <DependentUpon>Button.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\PopupManager\Popup.cs" />
     <Compile Include="UserControls\PopupManager\PopUpManager.cs" />
     <Compile Include="UserControls\PopupManager\PopUpManagerView.xaml.cs">
       <DependentUpon>PopUpManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StaticDisplay\BackgroundRoundedImage.xaml.cs">
+      <DependentUpon>BackgroundRoundedImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\StaticDisplay\DefaultedImage.xaml.cs">
       <DependentUpon>DefaultedImage.xaml</DependentUpon>
@@ -81,36 +151,82 @@
     <Compile Include="UserControls\StaticDisplay\DiscElement.xaml.cs">
       <DependentUpon>DiscElement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\StaticDisplay\BackgroundRoundedImage.xaml.cs">
-      <DependentUpon>BackgroundRoundedImage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\StaticDisplay\MaskedUiElement.xaml.cs">
       <DependentUpon>MaskedUiElement.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\VolumeControl\Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\VolumeControl\ButtonViewModel.cs" />
     <Compile Include="UserControls\VolumeControl\Slider.xaml.cs">
       <DependentUpon>Slider.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\UiCommand.cs" />
+    <Page Include="Resources\ControlPlayButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\MusicDisplayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ScrollViewCustomization.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControl1.xaml">
+    <Page Include="UserControls\ContextMenu\BaseItems\CreatePlaylist.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="UserControls\ContextMenu\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ContextMenu\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\AlbumGridItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\ArtistGridItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\AudioTrackGridItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\GridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\PictureGridItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\GridView\PicturesFolderGridItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\ListView\AudioTrackListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\ListView\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaControl\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaTemplates\ListView\VideoTrackListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,37 +238,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\MediaControl\Button.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\PopupManager\PopUpManagerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\StaticDisplay\DefaultedImage.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="UserControls\StaticDisplay\BackgroundRoundedImage.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\StaticDisplay\DefaultedImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\StaticDisplay\DiscElement.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\StaticDisplay\BackgroundRoundedImage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\StaticDisplay\MaskedUiElement.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\VolumeControl\Button.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\VolumeControl\Slider.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +290,14 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-UltraLight.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-SemiBold.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-Regular.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-Light.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-Hairline.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-ExtraBold.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-Bold.otf" />
+    <Resource Include="Resources\Fonts\montserrat\Montserrat-Black.otf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaPropertiesLibrary\MediaPropertiesLibrary.csproj">

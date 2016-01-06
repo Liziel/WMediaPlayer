@@ -1,17 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaPropertiesLibrary.Video;
 using SidePlayer.Annotations;
 using TagLib.Matroska;
 using static DispatcherLibrary.Dispatcher;
-using File = TagLib.File;
 using Track = MediaPropertiesLibrary.Video.Track;
 
 namespace SidePlayer.MediasPlayer.Video
@@ -67,7 +66,7 @@ namespace SidePlayer.MediasPlayer.Video
         public VideoView VideoView { get { return _videoView; } set { _videoView = value; OnPropertyChanged(nameof(VideoView)); } }
         public UserControl MediaView => VideoView;
 
-        private MediaElement _video = new MediaElement {LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual};
+        private MediaElement _video;
 
         public MediaElement Video
         {
@@ -82,17 +81,18 @@ namespace SidePlayer.MediasPlayer.Video
         [EventHook("Play")]
         public void Play()
         {
-            if (Video.LoadedBehavior == MediaState.Pause)
-                Video.LoadedBehavior = MediaState.Manual;
             _video.Play();
+            _track.State = MediaPropertiesLibrary.MediaState.Playing;
             _senderTick.Start();
             Dispatch("Media Playing");
+            Dispatch("Current Media Name", _track.Name);
         }
 
         [EventHook("Pause")]
         public void Pause()
         {
             _video.Pause();
+            _track.State = MediaPropertiesLibrary.MediaState.Paused;
             _senderTick.Stop();
             Dispatch("Media Paused");
         }
@@ -101,6 +101,7 @@ namespace SidePlayer.MediasPlayer.Video
         public void Stop()
         {
             _video.Stop();
+            _track.State = MediaPropertiesLibrary.MediaState.Stopped;
             _senderTick.Stop();
             _subtitleTick.Stop();
         }
@@ -108,6 +109,12 @@ namespace SidePlayer.MediasPlayer.Video
         public void ForceSetPosition(double duration)
         {
             _video.Position = TimeSpan.FromSeconds(duration);
+        }
+
+        [EventHook("Media Volume Set")]
+        public void MediaVolumeSet(double volume)
+        {
+            _video.Volume = volume;
         }
 
         private bool _maximized = false;
@@ -170,90 +177,36 @@ namespace SidePlayer.MediasPlayer.Video
 
         #endregion
 
-        #region Subtitles Loading
-
-        private void LoadSubtitles(Uri media)
-        {
-            TagLib.File f = TagLib.File.Create(media.LocalPath);
-            bool hasSubtitle = false;
-
-            foreach (var codec in f.Properties.Codecs)
-                if (codec is SubtitleTrack)
-                    hasSubtitle = true;
-            if (!hasSubtitle)
-                return;
-            _process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = @"ffmpeg",
-                    Arguments = "-i \"" + media.LocalPath + "\" -y -an -vn -threads 4 -c:s:0 srt .currently_playing.srt",
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                },
-            };
-
-
-            _process.Exited += OnProcessOnExited;
-
-            _process.EnableRaisingEvents = true;
-            _process.Start();
-        }
-
-        private Process _process;
-
-        private void OnProcessOnExited(object o, EventArgs args)
-        {
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                lock (_subtitles)
-                    _subtitles.UpdateSubtitles(new Uri("./.currently_playing.srt", UriKind.Relative));
-                lock (_subtitles)
-                    _subtitleTick.Start();
-
-            });
-            _process.Close();
-            _process.Exited -= OnProcessOnExited;
-            _process = null;
-        }
-
-        #endregion
 
         #region Constructor
 
         public VideoPlayerPluginViewModel()
         {
+            _video = new MediaElement
+            {
+                LoadedBehavior = MediaState.Manual, UnloadedBehavior = MediaState.Manual, Stretch = Stretch.Uniform
+                
+            };
             SubtitleView = new SubtitleView(_subtitles);
             VideoView = new VideoView(this);
+            _video.MediaEnded += (o, p) =>
+            {
+                _track.State = MediaPropertiesLibrary.MediaState.End;
+            };
 
             _senderTick.Tick += OnSenderTick;
             _subtitleTick.Tick += RefreshSubtitles;
         }
 
-        public void AssignUri(Uri media, File tag)
-        {
-            if (_process != null)
-            {
-                _process.Exited -= OnProcessOnExited;
-                _process.Kill();
-            }
-            Video.Source = media;
-            _tag = tag;
-            LoadSubtitles(media);
-            InializeTitle(Path.GetFileNameWithoutExtension(media.LocalPath));
-        }
+        private Track _track;
 
         public void AssignMedia(object media)
         {
-            Track track = media as Track;
-
+            var track = media as Track;
+            _track = track;
             if (track == null)
                 return;
-            _process?.Kill();
-            _subtitles.Clear();
-            var trackUri = new Uri(track.Path);
-            Video.Source = trackUri;
-            LoadSubtitles(trackUri);
+            Video.Source = new Uri(track.Path);
             ForceSetPosition(0);
             MediaName = track.Name;
         }

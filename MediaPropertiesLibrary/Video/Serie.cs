@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 using MediaPropertiesLibrary.Annotations;
 
 namespace MediaPropertiesLibrary.Video
@@ -11,9 +12,11 @@ namespace MediaPropertiesLibrary.Video
         private MediaState _state;
 
         public string Name { get; set; }
-        public List<Track> Tracks { get; set; }
-        public BitmapImage Cover { get; set; }
+        public string Cover { get; set; }
 
+        [XmlIgnore]
+        public List<Track>  Tracks { get; set; }
+        [XmlIgnore]
         public MediaState State { get {return _state;} set { _state = value; OnPropertyChanged(nameof(State)); } }
 
         #region Notifier Properties
@@ -27,11 +30,5 @@ namespace MediaPropertiesLibrary.Video
         }
 
         #endregion
-    }
-
-    public class UserSerieDefinition
-    {
-        public string Name { get; set; }
-        public string CoverPath { get; set; }
     }
 }

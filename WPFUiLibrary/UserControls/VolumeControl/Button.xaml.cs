@@ -22,12 +22,14 @@ namespace WPFUiLibrary.UserControls.VolumeControl
             InitializeComponent();
             VolumeButton.MouseEnter += (sender, args) =>
             {
+                if (!ShowVolumeToolBar) return;
                 _temporaryToken?.Cancel();
                 _temporaryToken = new CancellationTokenSource();
                 SliderContainer.Visibility = Visibility.Visible;
             };
             VolumeButton.MouseLeave += (sender, args) =>
             {
+                if (!ShowVolumeToolBar) return;
                 Task.Run(async delegate
                 {
                     var keep = _temporaryToken;
@@ -44,14 +46,22 @@ namespace WPFUiLibrary.UserControls.VolumeControl
             else
                 SetButtonVisibility(VolumeLow);
             VolumeSlider.SetBinding(Slider.VolumeProperty,
-                new Binding("Volume") {Mode = BindingMode.TwoWay, Source = this});
+                new Binding("Volume") {Source = this, Mode = BindingMode.TwoWay});
         }
 
         #endregion
 
         #region Binded Values
 
+        public bool ShowVolumeToolBar
+        {
+            get { return (bool) GetValue(ShowVolumeToolBarProperty); }
+            set { SetValue(ShowVolumeToolBarProperty, value);}
+        }
 
+        public static readonly DependencyProperty ShowVolumeToolBarProperty
+            = DependencyProperty.Register("ShowVolumeToolBar", typeof(bool), typeof(Button), new PropertyMetadata(true));
+        
         public double Volume
         {
             get { return (double) GetValue(VolumeProperty); }
@@ -90,9 +100,7 @@ namespace WPFUiLibrary.UserControls.VolumeControl
                 if (button == null) return;
 
                 if ((bool)args.NewValue)
-                {
                     button.SetButtonVisibility(button.Muted);
-                }
                 else
                 {
                     if (button.Volume > 0.66)

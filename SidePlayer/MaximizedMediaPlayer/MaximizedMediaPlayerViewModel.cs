@@ -49,8 +49,6 @@ namespace SidePlayer.MaximizedMediaPlayer
 
         #endregion
 
-        public UiCommand Minimize { get; } = new UiCommand(delegate {Dispatch("Minimize Media View");});
-
         public MaximizedMediaPlayerViewModel(UserControl mediaDisplay, UserControl mediaControl)
         {
             MediaControl = mediaControl;

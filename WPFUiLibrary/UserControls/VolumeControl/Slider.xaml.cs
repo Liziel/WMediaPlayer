@@ -1,32 +1,43 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace WPFUiLibrary.UserControls.VolumeControl
 {
+
+    public delegate void VolumeChanged(double volume);
     /// <summary>
     /// Interaction logic for Slider.xaml
     /// </summary>
-    public sealed partial class Slider : UserControl
+    public partial class Slider : UserControl
     {
-        #region Constructor
-
         public Slider()
         {
             InitializeComponent();
-            VolumeSlider.Value = 0;
+            VolumeSlider.Value = 1.0;
         }
 
-        #endregion
 
         #region Binded Values
 
         public double Volume
         {
-            get { return (double) GetValue(VolumeProperty); }
+            get { return (double)GetValue(VolumeProperty); }
             set { SetValue(VolumeProperty, value); }
         }
 
-        public static readonly DependencyProperty VolumeProperty = DependencyProperty.Register("Volume", typeof(double), typeof(Slider), new PropertyMetadata
+        public static readonly DependencyProperty VolumeProperty = DependencyProperty.Register("Volume", typeof(double), typeof(Slider), new PropertyMetadata(1.0)
         {
             PropertyChangedCallback = (o, args) =>
             {
@@ -35,10 +46,6 @@ namespace WPFUiLibrary.UserControls.VolumeControl
         });
 
         #endregion
-
-
-
-        #region Events
 
         public event VolumeChanged VolumeChanged;
 
@@ -53,14 +60,5 @@ namespace WPFUiLibrary.UserControls.VolumeControl
             OnVolumeChanged(Volume);
         }
 
-        public void RaiseVolumeChanged(double volume)
-        {
-            Volume = volume;
-            VolumeSlider.Value = volume;
-        }
-
-        #endregion
     }
-
-    public delegate void VolumeChanged(double volume);
 }

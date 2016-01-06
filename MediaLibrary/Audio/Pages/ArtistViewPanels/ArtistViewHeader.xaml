@@ -6,12 +6,12 @@
              xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
              xmlns:staticDisplay="clr-namespace:WPFUiLibrary.UserControls.StaticDisplay;assembly=WPFUiLibrary"
              mc:Ignorable="d" Name="ArtistPageHeader"
-             d:DesignHeight="200" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary Source="../../../Ressources/MusicDisplayer.xaml"/>
     </UserControl.Resources>
     <Border BorderThickness="0 0 0 1" BorderBrush="#1B1C1E">
-        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+        <StackPanel Orientation="Horizontal" Margin="10">
             <Grid x:Name="DefaultArtist" Width="200" Height="200">
                 <StaticResource ResourceKey="DefaultArtist"/>
             </Grid>

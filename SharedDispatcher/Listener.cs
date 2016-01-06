@@ -18,6 +18,17 @@ namespace DispatcherLibrary
         internal string Hook { get; }
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
+    public class RequestHook : Attribute
+    {
+        public RequestHook(string hook)
+        {
+            Hook = hook;
+        }
+
+        internal string Hook { get; }
+    }
+
     [AttributeUsage(AttributeTargets.Property)]
     public class ForwardDispatch : Attribute
     {
@@ -32,6 +43,9 @@ namespace DispatcherLibrary
     {
         private readonly Dictionary<string, Action<object[]>> _onRunHookDictionary = new Dictionary<string, Action<object[]>>(); 
         private readonly Dictionary<string, List<MethodInfo>> _hookDictionary = new Dictionary<string, List<MethodInfo>>();
+
+        private readonly Dictionary<string, List<MethodInfo>> _requestDictionary = new Dictionary<string, List<MethodInfo>>(); 
+
         private readonly List<PropertyInfo> _forwards;
         private readonly List<PropertyInfo> _forwardsCollection;
 
@@ -49,6 +63,20 @@ namespace DispatcherLibrary
                     }
                     _hookDictionary[hook.Hook].Add(methodInfo);
                 }
+
+            foreach (var methodInfo in from methodInfo in GetType().GetMethods()
+                                       let attr = methodInfo.GetCustomAttributes(typeof(RequestHook), true)
+                                       where attr.Length > 0
+                                       select methodInfo)
+                foreach (RequestHook hook in methodInfo.GetCustomAttributes(typeof(RequestHook), true))
+                {
+                    if (!_requestDictionary.ContainsKey(hook.Hook))
+                    {
+                        _requestDictionary[hook.Hook] = new List<MethodInfo>();
+                    }
+                    _requestDictionary[hook.Hook].Add(methodInfo);
+                }
+
             _forwards = (from propertyInfo in GetType().GetProperties()
                 let attr = propertyInfo.GetCustomAttributes(typeof (ForwardDispatch), true)
                 where attr.Length > 0
@@ -82,6 +110,29 @@ namespace DispatcherLibrary
                 DispatchToMembers(propertyInfo.GetValue(this), _event, fwdparams);
             foreach (var forwards in _forwardsCollection.SelectMany(propertyInfo => (IEnumerable<object>) propertyInfo.GetValue(this)))
                 DispatchToMembers(forwards, _event, fwdparams);
+        }
+
+        private IEnumerable<object> RequestToMembers(object target, string _event, object[] fwdparams)
+        {
+            var listener = target as Listener;
+            if (listener == null) return  new List<object>();
+            return listener.RequestInternal(_event, fwdparams);
+        }
+
+        internal IEnumerable<object> RequestInternal(string _event, object[] fwdparams)
+        {
+            List< object > results = new List<object>();
+            if (_requestDictionary.ContainsKey(_event))
+                foreach (var methodInfo in _requestDictionary[_event])
+                    try
+                    { results.Add(methodInfo.Invoke(this, fwdparams)); }
+                    catch (Exception e)
+                    {/* ignored */}
+            foreach (var propertyInfo in _forwards)
+                results.AddRange(RequestToMembers(propertyInfo.GetValue(this), _event, fwdparams));
+            foreach (var forwards in _forwardsCollection.SelectMany(propertyInfo => (IEnumerable<object>)propertyInfo.GetValue(this)))
+                results.AddRange(RequestToMembers(forwards, _event, fwdparams));
+            return results;
         }
 
         protected void AttachOnRun(string _event, Action<object[]> action)

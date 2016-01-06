@@ -93,6 +93,7 @@ namespace WPFUiLibrary.UserControls.ContextMenu
             if (_currentPopUp != null && _mediaMenu.IsMouseOver == false)
             {
                 Dispatch("Remove PopUp", _currentPopUp);
+                Menu?.Reset();
                 _currentPopUp = null;
             }
         }

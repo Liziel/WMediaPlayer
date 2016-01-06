@@ -60,6 +60,11 @@
     <Compile Include="Audio\Library\Library.cs" />
     <Compile Include="Audio\Library\PathLibrary.cs" />
     <Compile Include="Audio\Track.cs" />
+    <Compile Include="Locations.cs" />
+    <Compile Include="Pictures\Folder.cs" />
+    <Compile Include="Pictures\Library\Library.cs" />
+    <Compile Include="Pictures\Picture.cs" />
+    <Compile Include="Pictures\SlideShow.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="TrackDefinition.cs" />
     <Compile Include="Pictures\Library\PathLibrary.cs" />

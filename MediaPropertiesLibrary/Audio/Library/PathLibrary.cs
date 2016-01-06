@@ -39,7 +39,8 @@ namespace MediaPropertiesLibrary.Audio.Library
 
         public static void Save()
         {
-            _instance.BaseSave(new FileStream(AudioLibraryLocation, FileMode.OpenOrCreate));
+            using (var stream = new FileStream(AudioLibraryLocation, FileMode.Truncate))
+                _instance.BaseSave(stream);
         }
 
         public static void Synchronize(Dictionary<string, Action<List<string>, string>> onSynchronizedFile)

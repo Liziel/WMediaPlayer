@@ -5,8 +5,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using MediaLibrary.Annotations;
-using MediaLibrary.UserControlTemplates.Models;
 using MediaPropertiesLibrary.Audio;
+using WPFUiLibrary.UserControls.MediaTemplates.Models;
 
 namespace MediaLibrary.Audio.Pages.ArtistViewPanels
 {
@@ -45,7 +45,7 @@ namespace MediaLibrary.Audio.Pages.ArtistViewPanels
             PlayAlbum = new PlayAlbum(album =>
             {
                 var l =
-                    MediaPropertiesLibrary.Audio.Library.Library.Tracks.Where(track => track.Artists.Contains(artist))
+                    MediaPropertiesLibrary.Audio.Library.Library.Songs.Where(track => track.Artists.Contains(artist))
                         .ToList();
                 DispatcherLibrary.Dispatcher.Dispatch("Multiple Track Selected For Play", l, l.FindIndex(track => track.Album == album));
             });

@@ -3,14 +3,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
 using DispatcherLibrary;
 using MediaLibrary.Annotations;
-using MediaLibrary.UserControlTemplates.Models;
 using MediaPropertiesLibrary;
-using MediaPropertiesLibrary.Audio;
+using WPFUiLibrary.UserControls.MediaTemplates.Models;
 using WPFUiLibrary.Utils;
 using static DispatcherLibrary.Dispatcher;
 
@@ -94,7 +91,7 @@ namespace MediaLibrary.Audio.SubViews
 
         public TrackViewModel()
         {
-            _trackCollectionView.Source = MediaPropertiesLibrary.Audio.Library.Library.Tracks;
+            _trackCollectionView.Source = MediaPropertiesLibrary.Audio.Library.Library.Songs;
             TracksView.Filter += (item) => ((MediaPropertiesLibrary.Audio.Track)item).Name.ToLower().Contains(SearchText.ToLower());
             TracksView.CustomSort = this;
             TracksView.Refresh();
@@ -123,9 +120,6 @@ namespace MediaLibrary.Audio.SubViews
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public UiCommand ShowArtist { get; } = new UiCommand(track => Dispatch("AudioLibrary: View Artist", ((MediaPropertiesLibrary.Audio.Track)track).Artists));
-        public UiCommand ShowAlbum { get; } = new UiCommand(track => Dispatch("AudioLibrary: View Album", ((MediaPropertiesLibrary.Audio.Track)track).Album));
 
         #endregion
     }

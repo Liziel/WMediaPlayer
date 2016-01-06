@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MediaLibrary.Audio"
              xmlns:pages="clr-namespace:WPFUiLibrary.UserControls.Pages;assembly=WPFUiLibrary"
              mc:Ignorable="d" d:DataContext="{local:LibraryClassViewModel}"
-             >
+             d:DesignHeight="1080" d:DesignWidth="1600">
     <UserControl.DataContext>
         <local:LibraryClassViewModel/>
     </UserControl.DataContext>
@@ -119,6 +119,5 @@
         </Grid>
         <ContentControl Content="{Binding Path=SubView}" Grid.ZIndex="0" Margin="0 50 0 0"/>
         <Rectangle Fill="#111111" Grid.ZIndex="-1"/>
-        <pages:PagesAnchorer Pages="{Binding Path=Pages}" Grid.ZIndex="2"/>
     </Grid>
 </UserControl>

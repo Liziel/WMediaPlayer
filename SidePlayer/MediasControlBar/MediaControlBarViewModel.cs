@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Input;
 using DispatcherLibrary;
 using SidePlayer.Annotations;
 using WPFUiLibrary.Utils;
@@ -184,5 +185,40 @@ namespace SidePlayer.MediaControlBar
         #endregion
 
         public UserControl MediaView { get; }
+
+        public ICommand SwitchSubtitles { get; } = new UiCommand(o => Dispatch("Switch subtitles"));
+
+        private bool _subtitlesEnabled = false;
+        public bool SubtitlesEnabled
+        {
+            get { return _subtitlesEnabled; }
+            set
+            {
+                _subtitlesEnabled = value; 
+                OnPropertyChanged(nameof(SubtitlesEnabled));
+            }
+        }
+
+        public ICommand Minimize { get; } = new UiCommand(o => Dispatch("Minimize Media View"));
+
+        [EventHook("Subtitle State Switched")]
+        public void SubtitlesState(bool state)
+        {
+            SubtitlesEnabled = state;
+        }
+
+        public double Volume { set
+            {
+                Dispatch("Media Volume Set", value);
+            }
+        }
+
+        public bool Mute
+        {
+            set
+            {
+                Dispatch("Media Volume Set", value ? 0 : 1);
+            }
+        }
     }
 }

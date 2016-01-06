@@ -67,28 +67,43 @@ namespace MyWindowsMediaPlayerv2
 
             #region Wpf Visibility
 
-            private bool _fullScreenState = false;
-
-            public bool FullScreenState
+            private WindowState _lastState;
+            private WindowState _state = WindowState.Maximized;
+            public WindowState FullScreenState
             {
-                get { return _fullScreenState; }
+                get { return _state; }
                 set
                 {
-                    _fullScreenState = value;
+                    _state = value;
                     OnPropertyChanged(nameof(FullScreenState));
                 }
             }
 
-            [EventHook("Enter Fullscreen")]
-            public void EnterFullScreen()
+            private WindowStyle _fullScreenStyle = WindowStyle.SingleBorderWindow;
+            public WindowStyle FullScreenStyle
             {
-                FullScreenState = true;
+                get { return _fullScreenStyle; }
+                set
+                {
+                    _fullScreenStyle = value;
+                    OnPropertyChanged(nameof(FullScreenStyle));
+                }
             }
 
-            [EventHook("Exit Fullscreen")]
+            [EventHook("View: Fullscreen")]
+            public void EnterFullScreen()
+            {
+                FullScreenStyle = WindowStyle.None;
+                _lastState = _state;
+                FullScreenState = WindowState.Normal;
+                FullScreenState = WindowState.Maximized;
+            }
+
+            [EventHook("View: Normal")]
             public void ExitFullScreen()
             {
-                FullScreenState = false;
+                FullScreenStyle = WindowStyle.SingleBorderWindow;
+                FullScreenState = _lastState;
             }
 
             #endregion

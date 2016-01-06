@@ -62,6 +62,7 @@ namespace SidePlayer
             _view.DataContext = _videoModel;
             Model.MediaControlBar.SetDuration(track.Duration.TotalSeconds);
             Dispatch("Attach Plugin", _view);
+            Dispatch(this, "Play");
         }
     }
 }

@@ -49,6 +49,20 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistAccessTracks.cs" />
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistHeader.xaml.cs">
+      <DependentUpon>PlaylistHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistHeaderViewModel.cs" />
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistImage.xaml.cs">
+      <DependentUpon>PlaylistImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistLaunchGenerator.cs" />
+    <Compile Include="ChildsViews\PlaylistItems\PlaylistMenuGenerator.cs" />
+    <Compile Include="ChildsViews\PlaylistView.xaml.cs">
+      <DependentUpon>PlaylistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChildsViews\PlaylistViewModel.cs" />
     <Compile Include="LoadablePlaylistPlugin.cs" />
     <Compile Include="Logo.xaml.cs">
       <DependentUpon>Logo.xaml</DependentUpon>
@@ -72,6 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Ressources\AccessAlbumCoverFromPlaylist.cs" />
     <Compile Include="Ressources\ListShuffle.cs" />
     <Compile Include="Ressources\PlaylistDurationStylized.cs" />
     <Compile Include="ChildsViews\CurrentPlaylistView.xaml.cs">
@@ -119,6 +134,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ChildsViews\PlaylistItems\PlaylistHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChildsViews\PlaylistItems\PlaylistImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChildsViews\PlaylistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Logo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

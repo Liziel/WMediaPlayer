@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace PlaylistPlugin.Ressources
@@ -15,22 +16,20 @@ namespace PlaylistPlugin.Ressources
     static class ListShuffle
     {
 
-        public static List<T> Shuffle<T>(this IList<T> list)
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> enumerable)
         {
-            var l = new List<T>(list.Count);
-            var n = list.Count;
+            var e = enumerable.ToArray();
+            var indexes = new List<int>(e.Length);
 
-            l.AddRange(list);
-
-            while (n > 1)
+            for (var i = 0; i < e.Length; i++)
+                indexes.Add(i);
+            for (var i = 0; i < e.Length; i++)
             {
-                n--;
-                int k = ThreadSafeRandom.Random.Next(n + 1);
-                var value = l[k];
-                l[k] = list[n];
-                l[n] = value;
+                int index = indexes[ThreadSafeRandom.Random.Next(indexes.Count)];
+                indexes.Remove(index);
+                yield return e[index];
             }
-            return l;
         }
+
     }
 }

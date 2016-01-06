@@ -27,18 +27,18 @@ namespace MediaLibrary.Audio.Pages
         public ArtistViewModel(Artist artist)
         {
             var genres =
-                Library.Tracks.Where(track => track.Artists.Contains(artist)).SelectMany(track => track.Genres).Distinct().ToList();
+                Library.Songs.Where(track => track.Artists.Contains(artist)).SelectMany(track => track.Genres).Distinct().ToList();
 
             var t =
-                Library.Tracks.Where(track => track.Genres.Intersect(genres).Any())
+                Library.Songs.Where(track => track.Genres.Intersect(genres).Any())
                     .SelectMany(track => track.Artists).Where(artist2 => artist2 != artist).Distinct()
-                    .OrderBy(a => Library.Tracks.Where(track => track.Artists.Contains(a)).SelectMany(track => track.Genres).Intersect(genres).Count())
+                    .OrderBy(a => Library.Songs.Where(track => track.Artists.Contains(a)).SelectMany(track => track.Genres).Intersect(genres).Count())
                     .ToList();
 
             Artist = artist;
             PopularModel = new ArtistViewPopularModel
             {
-                MostListenedTracks = Library.QueryOnTrack(track => track.Artists.Contains(artist)).OrderByDescending(track => track.UserTag.TimesListened).Take(5).ToList(),
+                MostListenedTracks = Library.Songs.Where(track => track.Artists.Contains(artist)).OrderByDescending(track => track.UserTag.TimesListened).Take(5).ToList(),
                 RelatedArtists = t.Take(7).ToList()
             };
             AlbumsModel = new ArtistAlbumsViewModel(artist);

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
 namespace MediaPropertiesLibrary.Video
@@ -14,10 +16,12 @@ namespace MediaPropertiesLibrary.Video
 
         public string Name { get; set; }
         public string Path { get; set; }
-        public UserTrackDefinition UserTrackDefinition { get; set; }
 
         [XmlElement("Duration")]
         public long SerializedDuration { get { return Duration.Ticks; } set { Duration = new TimeSpan(value); } }
+
+        [XmlArray("Subtitles")]
+        public ObservableCollection<Subtitle> Subtitles { get; } = new ObservableCollection<Subtitle>();
 
         #endregion
 
@@ -32,11 +36,15 @@ namespace MediaPropertiesLibrary.Video
         [XmlIgnore]
         public Serie Serie { get; set; }
 
+        [XmlIgnore]
+        public BitmapImage Picture { get; set; }
+
         #endregion
 
 
         #region Herited From ITracks
 
+        [XmlIgnore]
         public override string MediaLibraryKey => Path;
 
         protected override void OnStateChanged(MediaState state)
@@ -49,11 +57,13 @@ namespace MediaPropertiesLibrary.Video
         #endregion
     }
 
-    public class UserTrackDefinition
+    [Serializable]
+    public class Subtitle
     {
-        public string SerieName { get; set; }
+        public string Path { get; set; }
         public string Name { get; set; }
     }
+
 
     public class TrackAccessSerieName : IValueConverter
     {

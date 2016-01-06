@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using DispatcherLibrary;
 using PluginLibrary;
@@ -51,12 +53,27 @@ namespace SidePluginLoader
                 AttachOnRun("Loader: Call(" + loader.PluginName + ")", objects => OnPluginSelected(loader));
         }
 
+        private CenterLoadableView _centerLoadableView;
+
+        private object _view;
+        public object View
+        {
+            get { return _view; }
+            set
+            {
+                _view = value; 
+                OnPropertyChanged(nameof(View));
+            }
+        }
+
         private void OnPluginSelected(PluginLoader pluginLoader)
         {
+            if (_centerLoadableView == null)
+                Dispatch("Attach Plugin", _centerLoadableView = new CenterLoadableView() { DataContext = this });
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;
-            Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
+            View = pluginLoader.ViewPlugin;
         }
 
         [EventHook("Force Load Plugin")]
@@ -64,10 +81,31 @@ namespace SidePluginLoader
         {
             var pluginLoader = PluginLoaders.First(plugin => plugin.PluginName == pluginName);
 
+            if (_centerLoadableView == null)
+                Dispatch("Attach Plugin", _centerLoadableView = new CenterLoadableView() { DataContext = this });
             foreach (var loader in PluginLoaders)
                 loader.PluginSelected = false;
             pluginLoader.PluginSelected = true;
-            Dispatch("Attach Plugin", pluginLoader.ViewPlugin);
+            View = pluginLoader.ViewPlugin;
+        }
+
+
+
+        private ObservableCollection<UIElement> _pages = new ObservableCollection<UIElement>();
+        public ObservableCollection<UIElement> Pages
+        {
+            get { return _pages; }
+            set
+            {
+                _pages = value;
+                OnPropertyChanged(nameof(Pages));
+            }
+        }
+
+        [EventHook("Publish pages")]
+        public void PlublishPages(UIElement page)
+        {
+            Pages.Add(page);
         }
     }
 }

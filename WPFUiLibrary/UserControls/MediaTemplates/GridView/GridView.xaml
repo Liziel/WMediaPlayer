@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.MediaTemplates.GridView.GridView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.GridView"
+             xmlns:contextMenu="clr-namespace:WPFUiLibrary.UserControls.ContextMenu"
+             xmlns:audio="clr-namespace:MediaPropertiesLibrary.Audio;assembly=MediaPropertiesLibrary"
+             xmlns:models="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.Models"
+             xmlns:modelGenerator="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.ModelGenerator"
+             xmlns:pictures="clr-namespace:MediaPropertiesLibrary.Pictures;assembly=MediaPropertiesLibrary"
+             mc:Ignorable="d" Name="UserControl"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <d:UserControl.DataContext>
+        <models:ListModel />
+    </d:UserControl.DataContext>
+    <UserControl.Resources>
+        <ResourceDictionary Source="../../../Resources/ScrollViewCustomization.xaml" />
+    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Name="Viewer">
+        <ScrollViewer.Resources>
+            <modelGenerator:AudioTrackModelGenerator x:Key="TrackModelGenerator" />
+            <modelGenerator:AlbumModelGenerator x:Key="AlbumModelGenerator" />
+            <modelGenerator:ArtistModelGenerator x:Key="ArtistModelGenerator" />
+            <modelGenerator:GenerateMenuModel x:Key="GenerateMenuModel"/>
+            <modelGenerator:PicturesFolderModelGenerator x:Key="PicturesFolderModelGenerator"/>
+        </ScrollViewer.Resources>
+        <ItemsControl ItemsSource="{Binding Path=List, IsAsync=True}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsPanelTemplate.Resources>
+                        <local:ListAndHeightToRows x:Key="ListAndHeightToRows" />
+                        <local:WidthToColumns x:Key="WidthToColumns" />
+                    </ItemsPanelTemplate.Resources>
+                    <UniformGrid
+                        Columns="{Binding ElementName=Viewer, Path=ActualWidth, Converter={StaticResource WidthToColumns}}">
+                        <UniformGrid.Rows>
+                            <MultiBinding Converter="{StaticResource ListAndHeightToRows}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="DataContext.List" ElementName="UserControl" />
+                                    <Binding ElementName="Viewer" Path="ActualWidth" />
+                                    <Binding ElementName="Viewer" Path="ActualHeight" />
+                                    <Binding Path="DataContext.List.Count" ElementName="UserControl" />
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </UniformGrid.Rows>
+                    </UniformGrid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type audio:Track}">
+                    <Grid Name="Container" Panel.ZIndex="0">
+                        <contextMenu:Overlayable Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource GenerateMenuModel}}">
+                            <local:AudioTrackGridItem Margin="15">
+                                <local:AudioTrackGridItem.DataContext>
+                                    <MultiBinding Converter="{StaticResource TrackModelGenerator}">
+                                        <Binding ElementName="Container" Path="DataContext" />
+                                        <Binding ElementName="UserControl" Path="DataContext.PlayAudioTrack" />
+                                    </MultiBinding>
+                                </local:AudioTrackGridItem.DataContext>
+                            </local:AudioTrackGridItem>
+                        </contextMenu:Overlayable>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type audio:Album}">
+                    <Grid Panel.ZIndex="0" Name="Container">
+                        <contextMenu:Overlayable Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource GenerateMenuModel}}">
+                            <local:AlbumGridItem Margin="15" x:Name="GridItem">
+                                <local:AlbumGridItem.DataContext>
+                                    <MultiBinding Converter="{StaticResource AlbumModelGenerator}">
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" Path="DataContext"/>
+                                        <Binding ElementName="UserControl" Path="DataContext.PlayAlbum" />
+                                    </MultiBinding>
+                                </local:AlbumGridItem.DataContext>
+                            </local:AlbumGridItem>
+                        </contextMenu:Overlayable>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type audio:Artist}">
+                    <Grid Panel.ZIndex="0" Name="Container">
+                        <contextMenu:Overlayable Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource GenerateMenuModel}}">
+                            <local:ArtistGridItem Margin="15" x:Name="GridItem">
+                                <local:ArtistGridItem.DataContext>
+                                    <MultiBinding Converter="{StaticResource ArtistModelGenerator}">
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" Path="DataContext"/>
+                                        <Binding ElementName="UserControl" Path="DataContext.PlayAlbum" />
+                                    </MultiBinding>
+                                </local:ArtistGridItem.DataContext>
+                            </local:ArtistGridItem>
+                        </contextMenu:Overlayable>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type pictures:Folder}">
+                    <Grid Panel.ZIndex="0" Name="Container">
+                        <contextMenu:Overlayable Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource GenerateMenuModel}}">
+                            <local:PicturesFolderGridItem Margin="15" x:Name="GridItem" Menu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid}, Path=DataContext, Converter={StaticResource GenerateMenuModel}}">
+                                <local:PicturesFolderGridItem.DataContext>
+                                    <MultiBinding Converter="{StaticResource PicturesFolderModelGenerator}">
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" Path="DataContext"/>
+                                    </MultiBinding>
+                                </local:PicturesFolderGridItem.DataContext>
+                            </local:PicturesFolderGridItem>
+                        </contextMenu:Overlayable>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type pictures:Picture}">
+                    <Grid Panel.ZIndex="0" Name="Container">
+                        <local:PictureGridItem Margin="15" x:Name="GridItem">
+                            <local:PictureGridItem.Picture>
+                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" Path="DataContext" IsAsync="True" />
+                            </local:PictureGridItem.Picture>
+                        </local:PictureGridItem>
+                    </Grid>
+                </DataTemplate>
+
+            </ItemsControl.Resources>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

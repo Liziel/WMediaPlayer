@@ -28,38 +28,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+       
+        <Rectangle Fill="Black" Opacity="1.0" />
 
-        <Button Grid.ZIndex="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
-            <Button.Template>
-                <ControlTemplate>
-                    <Grid Width="40" Height="40">
-                        <Path Stretch="Fill"
-                            Data="F1 M 0,0 L 0,102.08 50.88,102.08 50.88,0 152.96,0 152.96,-50.88 50.88,-50.88
-		C 22.88,-50.88 0,-28 0,0 z
-		M 50.88,255.04 L 0,255.04 0,357.12 C 0,385.12 22.88,408 50.88,408 L 152.96,408
-		 152.96,357.12 50.88,357.12 z
-		M 408,357.12 L 305.92,357.12 305.92,408 408,408 C 436,408 458.88,385.12 458.88,357.12
-		L 458.88,255.04 408,255.04 z
-		M 408,-50.88 L 305.92,-50.88 305.92,0 408,0 408,102.08 458.88,102.08 458.88,0
-		C 458.88,-28 436,-50.88 408,-50.88 z"
-                            
-                            Fill="White" />
-                        </Grid>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-        
-        <Button Command="{Binding Path=Minimize}">
-            <Button.Template>
-                <ControlTemplate>
-                    <Rectangle Fill="Black" Opacity="1.0" />
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
         <ContentControl Grid.ZIndex="1" Content="{Binding Path=MediaDisplay}" Grid.Row="0" Grid.Column="0"/>
 
-        <ContentControl Grid.ZIndex="2" Content="{Binding Path=MediaControl}" VerticalAlignment="Bottom" MouseEnter="ControlBar_OnMouseEnter" MouseLeave="ControlBar_OnMouseLeave"
-                        Grid.Column="0" Grid.Row="0" MaxWidth="600" RenderTransformOrigin="0.5,0.5" x:Name="ControlBar"/>
+        <ContentControl Grid.ZIndex="2" VerticalAlignment="Bottom" MouseEnter="ControlBar_OnMouseEnter" MouseLeave="ControlBar_OnMouseLeave"
+                        Grid.Column="0" Grid.Row="0" MaxWidth="600" RenderTransformOrigin="0.5,0.5" x:Name="ControlBar">
+            <ContentControl.Content>
+                <Binding Path="MediaControl" />
+            </ContentControl.Content>
+        </ContentControl>
 
     </Grid>
 </UserControl>

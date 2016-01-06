@@ -65,8 +65,8 @@ namespace MyWindowsMediaPlayerv2
                 Grid.SetColumn(_rightSplitter, 3);
                 Grid.SetColumn(_rightControl, 4);
 
-                _grid.Children.Add(_allControl);
                 _grid.Children.Add(_divisedGrid);
+                _grid.Children.Add(_allControl);
 
                 _divisedGrid.Children.Add(_leftControl);
                 _divisedGrid.Children.Add(_leftSplitter);
@@ -119,7 +119,6 @@ namespace MyWindowsMediaPlayerv2
                             _rightControl.Content = viewPlugin;
                             _rightSplitter.Visibility = Visibility.Visible;
                             _divisedGrid.ColumnDefinitions[4].Width = new GridLength(250);
-                            
                         }
                         break;
                 }

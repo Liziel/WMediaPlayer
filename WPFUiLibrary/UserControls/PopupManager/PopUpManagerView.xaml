@@ -23,7 +23,7 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="popupManager:PopUp">
-                    <ContentPresenter Content="{Binding Path=PopUpElement}"/>
+                    <ContentPresenter Content="{Binding Path=PopUpElement}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

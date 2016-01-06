@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MediaLibrary.Audio"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Width="50" Height="50">
         <Path Data="F1 M 0,0 L -12,0 C -13.12,0 -14.08,0.96 -14.08,2.08 L -14.08,14.08 C -14.08,15.04 -13.12,16 -12,16
