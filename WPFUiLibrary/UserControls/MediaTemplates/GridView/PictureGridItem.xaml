@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="WPFUiLibrary.UserControls.MediaTemplates.GridView.PictureGridItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.GridView"
+             xmlns:pictures="clr-namespace:MediaPropertiesLibrary.Pictures;assembly=MediaPropertiesLibrary"
+             mc:Ignorable="d" Name="UserControl"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <d:UserControl.DataContext>
+        <pictures:Picture Name="Picture"/>
+    </d:UserControl.DataContext>
+    <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Image Height="{Binding ElementName=ImageDisplayer, Path=ActualWidth}" Stretch="UniformToFill" Name="Image"/>
+
+        <Grid Grid.Row="1" Name="ImageDisplayer">
+            <TextBlock Text="{Binding Path=Name}" Foreground="LightGray" FontSize="13" Grid.Row="0"
+                       TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" Margin="5"
+                       Width="{Binding ElementName=NamePresenter, Path=ActualWidth}" Name="Name"
+                       Height="{Binding ElementName=NamePresenter, Path=ActualHeight}"
+                       FontFamily="/MediaLibrary;component/Ressources/Fonts/montserrat/#Montserrat Extra Bold" />
+        </Grid>
+    </Grid>
+</UserControl>

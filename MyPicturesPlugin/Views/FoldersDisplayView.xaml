@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="MyPicturesPlugin.Views.FoldersDisplayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gridView="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.GridView;assembly=WPFUiLibrary"
+             xmlns:modelGenerator="clr-namespace:WPFUiLibrary.UserControls.MediaTemplates.ModelGenerator;assembly=WPFUiLibrary"
+             xmlns:views="clr-namespace:MyPicturesPlugin.Views"
+             xmlns:pictures="clr-namespace:MediaPropertiesLibrary.Pictures;assembly=MediaPropertiesLibrary"
+             mc:Ignorable="d" Name="UserControl"
+             d:DesignHeight="900" d:DesignWidth="1000">
+    <d:UserControl.DataContext>
+        <views:PicturesViewModel/>
+    </d:UserControl.DataContext>
+
+        <UserControl.Resources>
+            <modelGenerator:GenerateListContext x:Key="GenerateListContext"/>
+            <gridView:WidthToColumns x:Key="WidthToColumns"/>
+        </UserControl.Resources>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border BorderThickness="0 0 0 0" BorderBrush="#1B1C1E">
+                <Grid
+                    Margin="15">
+                <Button VerticalAlignment="Center" HorizontalAlignment="Left" Command="{Binding Path=PreviousFolder}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Path Fill="#DFE0CC" Stroke="#DFE0CC" StrokeLineJoin="Round" StrokeThickness="5"
+                                      Data="M 0 15 L 25 0 60 0 60 30 25 30 z"
+                                      />
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <TextBlock Text="{Binding Path=FolderTitle}" DockPanel.Dock="Top" Foreground="#DFE0CC"
+                               FontSize="35"
+                               VerticalAlignment="Center" HorizontalAlignment="Right"
+                               FontFamily="/MyPicturesPlugin;component/Resources/Fonts/montserrat/#Montserrat Extra Bold" />
+                </Grid>
+            </Border>
+
+            <gridView:GridView Grid.Row="1">
+                <gridView:GridView.DataContext>
+                    <MultiBinding Converter="{StaticResource GenerateListContext}">
+                        <Binding Path="FoldersView"/>
+                    </MultiBinding>
+                </gridView:GridView.DataContext>
+            </gridView:GridView>
+
+        </Grid>
+</UserControl>
